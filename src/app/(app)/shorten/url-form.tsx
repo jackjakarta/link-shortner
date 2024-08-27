@@ -3,6 +3,7 @@
 import CopyToClipboardIcon from '@/components/icons/copy';
 import { env } from '@/env';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -92,13 +93,24 @@ export default function ShortenUrlForm() {
             {errors.url && <p className="text-red-500 text-sm mt-1">{errors.url.message}</p>}
           </div>
         )}
-
-        <button
-          type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md transition-colors"
-        >
-          {shortenedUrl ? 'Shorten Another URL' : 'Shorten'}
-        </button>
+        <div className="max-w-full flex justify-center">
+          {shortenedUrl ? (
+            <Link
+              href="/shorten"
+              onClick={() => setShortenedUrl(undefined)}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold p-2 rounded-md transition-colors"
+            >
+              Shorten another URL
+            </Link>
+          ) : (
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold p-2 rounded-md transition-colors"
+            >
+              Shorten
+            </button>
+          )}
+        </div>
       </form>
     </div>
   );
