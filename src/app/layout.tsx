@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { Toaster } from 'react-hot-toast';
 
 import './globals.css';
 
@@ -17,7 +18,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Toaster
+          toastOptions={{
+            className: 'border border-[1px] rounded-none border-main-900',
+            style: {
+              borderRadius: 0,
+            },
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

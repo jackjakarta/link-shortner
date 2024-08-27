@@ -15,3 +15,10 @@ export function generateSalt(length = 30) {
 export function createPasswordHash(planePassword: string, salt: string) {
   return makeHash(`${planePassword}${salt}`);
 }
+
+export function generateRandomUrlSafeString(length: number): string {
+  const randomString = crypto.randomBytes(Math.ceil((length * 3) / 4)).toString('base64');
+  const urlSafeString = randomString.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+  return urlSafeString.substring(0, length);
+}
