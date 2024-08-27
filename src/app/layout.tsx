@@ -7,8 +7,8 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Next.js template',
-  description: 'Template by @titanom',
+  title: 'Lnkto - URL Shortener',
+  description: 'Shorten your URLs with Lnkto',
 };
 
 export default function RootLayout({

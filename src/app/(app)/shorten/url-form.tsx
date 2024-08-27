@@ -12,7 +12,7 @@ import { z } from 'zod';
 import { shortenUrl } from './actions';
 
 const urlFormSchema = z.object({
-  url: z.string().url(),
+  url: z.string().url('Invalid URL').min(1, 'URL is required'),
 });
 
 type FormValues = z.infer<typeof urlFormSchema>;
@@ -22,6 +22,7 @@ export default function ShortenUrlForm() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormValues>({
     resolver: zodResolver(urlFormSchema),
   });
@@ -36,6 +37,11 @@ export default function ShortenUrlForm() {
       toast.error('Failed to copy to clipboard');
       console.error('Error with copying:', error);
     }
+  }
+
+  function handleResetForm() {
+    reset();
+    setShortenedUrl(undefined);
   }
 
   async function onSubmit(data: FormValues) {
@@ -88,7 +94,7 @@ export default function ShortenUrlForm() {
               type="text"
               className={`w-full px-4 py-2 border ${errors.url ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400`}
               placeholder="https://example.com"
-              {...register('url', { required: 'URL is required' })}
+              {...register('url')}
             />
             {errors.url && <p className="text-red-500 text-sm mt-1">{errors.url.message}</p>}
           </div>
@@ -97,7 +103,7 @@ export default function ShortenUrlForm() {
           {shortenedUrl ? (
             <Link
               href="/shorten"
-              onClick={() => setShortenedUrl(undefined)}
+              onClick={handleResetForm}
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold p-2 rounded-md transition-colors"
             >
               Shorten another URL
