@@ -19,6 +19,7 @@ export const shortLinkTable = pgTable('short_link', {
   shortPath: text('short_path').notNull(),
   longUrl: text('long_url').notNull(),
   clickCount: integer('click_count').notNull().default(0),
+  lastClickedAt: timestamp('last_clicked_at'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 

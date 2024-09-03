@@ -1,12 +1,16 @@
 'use server';
 
-import { eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 
 import { db } from '..';
 import { shortLinkTable, type ShortLinkInsertRow, type ShortLinkRow } from '../schema';
 
 export async function dbGetLinksByUserId(userId: string): Promise<ShortLinkRow[]> {
-  const links = await db.select().from(shortLinkTable).where(eq(shortLinkTable.userId, userId));
+  const links = await db
+    .select()
+    .from(shortLinkTable)
+    .where(eq(shortLinkTable.userId, userId))
+    .orderBy(desc(shortLinkTable.createdAt));
 
   return links;
 }
