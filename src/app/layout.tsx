@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { type Metadata } from 'next';
 import { Toaster } from 'react-hot-toast';
 
-import './globals.css';
+import { aeonik } from './fonts/utils';
 
-const inter = Inter({ subsets: ['latin'] });
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Lnkto - URL Shortener',
@@ -18,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={aeonik.className}>
         <Toaster
           toastOptions={{
             className: 'border border-[1px] rounded-none border-main-900',

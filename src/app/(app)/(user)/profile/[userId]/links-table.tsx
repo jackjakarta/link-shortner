@@ -37,7 +37,7 @@ export default function LinksTable({ links }: LinksTableProps) {
         <tbody>
           {links.map((link) => (
             <tr key={link.id} className="bg-white border-b">
-              <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+              <th scope="row" className="px-6 py-4 font-normal text-gray-900 whitespace-nowrap">
                 <Link
                   className="hover:text-gray-500"
                   href={`${baseUrl}/${link.shortPath}`}
