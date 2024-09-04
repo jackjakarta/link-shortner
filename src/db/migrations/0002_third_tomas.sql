@@ -1,0 +1,1 @@
+ALTER TABLE "short_link" ADD COLUMN "last_clicked_at" timestamp;

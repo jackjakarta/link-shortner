@@ -1,7 +1,8 @@
 import LinkIcon from '@/components/icons/link';
 import { type ShortLinkRow } from '@/db/schema';
 import { env } from '@/env';
-import { formatDateToDayMonthYear } from '@/utils/date';
+import { formatDateToDayMonthYearTime } from '@/utils/date';
+import { format, isToday, isYesterday } from 'date-fns';
 import Link from 'next/link';
 
 type LinksTableProps = {
@@ -24,6 +25,9 @@ export default function LinksTable({ links }: LinksTableProps) {
             </th>
             <th scope="col" className="px-6 py-3">
               Clicks
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Last Clicked On
             </th>
             <th scope="col" className="px-6 py-3">
               Created At
@@ -54,7 +58,22 @@ export default function LinksTable({ links }: LinksTableProps) {
                 </Link>
               </td>
               <td className="px-6 py-4">{link.clickCount}</td>
-              <td className="px-6 py-4">{formatDateToDayMonthYear(link.createdAt)}</td>
+              <td className="px-6 py-4">
+                {link.lastClickedAt
+                  ? isToday(new Date(link.lastClickedAt))
+                    ? `Today at ${format(new Date(link.lastClickedAt), 'HH:mm')}`
+                    : isYesterday(new Date(link.lastClickedAt))
+                      ? `Yesterday at ${format(new Date(link.lastClickedAt), 'HH:mm')}`
+                      : formatDateToDayMonthYearTime(link.lastClickedAt)
+                  : 'Never'}
+              </td>
+              <td className="px-6 py-4">
+                {isToday(new Date(link.createdAt))
+                  ? `Today at ${format(new Date(link.createdAt), 'HH:mm')}`
+                  : isYesterday(new Date(link.createdAt))
+                    ? `Yesterday at ${format(new Date(link.createdAt), 'HH:mm')}`
+                    : formatDateToDayMonthYearTime(link.createdAt)}
+              </td>
             </tr>
           ))}
         </tbody>

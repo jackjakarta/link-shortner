@@ -2,12 +2,13 @@
 
 import { dbGetLinksByUserId } from '@/db/functions/link';
 import { getUser } from '@/utils/auth';
+import { redirect } from 'next/navigation';
 
 export async function getLinksByUserId(userId: string) {
   const user = await getUser();
 
   if (user.id !== userId) {
-    throw new Error('Unauthorized');
+    redirect('/');
   }
 
   const userLinks = await dbGetLinksByUserId(userId);

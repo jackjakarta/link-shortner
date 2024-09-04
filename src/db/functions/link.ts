@@ -40,7 +40,7 @@ export async function dbCreateLink({ userId, shortPath, longUrl }: ShortLinkInse
   return shortenedLink;
 }
 
-export async function dbUpdateLinkClickCount(linkId: string) {
+export async function dbUpdateLinkClickStats(linkId: string) {
   const link = (await db.select().from(shortLinkTable).where(eq(shortLinkTable.id, linkId)))[0];
 
   if (link === undefined) {
@@ -53,6 +53,7 @@ export async function dbUpdateLinkClickCount(linkId: string) {
     .update(shortLinkTable)
     .set({
       clickCount: updatedLinkCount,
+      lastClickedAt: new Date(),
     })
     .where(eq(shortLinkTable.id, linkId));
 }
