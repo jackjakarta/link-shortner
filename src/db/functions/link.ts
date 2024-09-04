@@ -1,12 +1,16 @@
 'use server';
 
-import { eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 
 import { db } from '..';
 import { shortLinkTable, type ShortLinkInsertRow, type ShortLinkRow } from '../schema';
 
 export async function dbGetLinksByUserId(userId: string): Promise<ShortLinkRow[]> {
-  const links = await db.select().from(shortLinkTable).where(eq(shortLinkTable.userId, userId));
+  const links = await db
+    .select()
+    .from(shortLinkTable)
+    .where(eq(shortLinkTable.userId, userId))
+    .orderBy(desc(shortLinkTable.createdAt));
 
   return links;
 }
@@ -36,7 +40,7 @@ export async function dbCreateLink({ userId, shortPath, longUrl }: ShortLinkInse
   return shortenedLink;
 }
 
-export async function dbUpdateLinkClickCount(linkId: string) {
+export async function dbUpdateLinkClickStats(linkId: string) {
   const link = (await db.select().from(shortLinkTable).where(eq(shortLinkTable.id, linkId)))[0];
 
   if (link === undefined) {
@@ -49,6 +53,7 @@ export async function dbUpdateLinkClickCount(linkId: string) {
     .update(shortLinkTable)
     .set({
       clickCount: updatedLinkCount,
+      lastClickedAt: new Date(),
     })
     .where(eq(shortLinkTable.id, linkId));
 }
