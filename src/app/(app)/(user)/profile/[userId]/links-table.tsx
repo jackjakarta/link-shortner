@@ -1,9 +1,13 @@
+'use client';
+
+import CopyToClipboardIcon from '@/components/icons/copy';
 import LinkIcon from '@/components/icons/link';
 import { type ShortLinkRow } from '@/db/schema';
 import { env } from '@/env';
 import { formatDateToDayMonthYearTime } from '@/utils/date';
 import { format, isToday, isYesterday } from 'date-fns';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 type LinksTableProps = {
   links: ShortLinkRow[];
@@ -12,6 +16,11 @@ type LinksTableProps = {
 export default function LinksTable({ links }: LinksTableProps) {
   const baseUrl = env.NEXT_PUBLIC_baseUrl;
 
+  function handleCopyToClipboard(text: string) {
+    navigator.clipboard.writeText(text);
+    toast.success('Copied to clipboard');
+  }
+
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -19,6 +28,9 @@ export default function LinksTable({ links }: LinksTableProps) {
           <tr>
             <th scope="col" className="px-6 py-3">
               Short Link
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Copy
             </th>
             <th scope="col" className="px-6 py-3">
               Original Url
@@ -49,6 +61,17 @@ export default function LinksTable({ links }: LinksTableProps) {
                   </div>
                 </Link>
               </th>
+              <td className="px-6 py-4 truncate">
+                <div>
+                  <button
+                    onClick={() => handleCopyToClipboard(`${baseUrl}/${link.shortPath}`)}
+                    className="flex items-center gap-2 hover:text-gray-500 cursor-pointer"
+                  >
+                    <CopyToClipboardIcon />
+                    Copy
+                  </button>
+                </div>
+              </td>
               <td className="px-6 py-4 truncate">
                 <Link className="hover:text-gray-500" href={link.longUrl} target="_blank">
                   <div className="flex items-center gap-2">
