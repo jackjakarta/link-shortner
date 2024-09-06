@@ -1,18 +1,20 @@
-import { dbGetUserByEmailAndPassword, dbGetUserById } from '@/db/functions/user';
+import { dbCreateUser, dbGetUserByEmail, dbGetUserByEmailAndPassword } from '@/db/functions/user';
 import { UserRow } from '@/db/schema';
+import { env } from '@/env';
 import { type AuthOptions } from 'next-auth';
 import credentialsProvider from 'next-auth/providers/credentials';
+import GitHubProvider from 'next-auth/providers/github';
 import { z } from 'zod';
 
 const credentialsSchema = z.object({
-  email: z.string(),
-  password: z.string(),
+  email: z.string().email('This must be a valid email address'),
+  password: z.string().min(4, 'You have to provide your password'),
 });
 
 export const authOptions = {
   providers: [
     credentialsProvider({
-      name: 'Credentials',
+      name: 'credentials',
       credentials: {
         email: { label: 'Email', type: 'text', placeholder: 'you@example.com' },
         password: { label: 'Password', type: 'password' },
@@ -28,23 +30,45 @@ export const authOptions = {
         }
       },
     }),
+    GitHubProvider({
+      clientId: env.githubId,
+      clientSecret: env.githubSecret,
+    }),
   ],
   session: { strategy: 'jwt' },
   callbacks: {
-    session({ token, session }) {
+    async signIn({ user, account }) {
+      if (account?.provider === 'github') {
+        try {
+          await dbGetUserByEmail({ email: user.email! });
+        } catch (e) {
+          await dbCreateUser({
+            id: user.id,
+            email: user.email!,
+            name: user.name || 'GitHub User',
+            passwordHash: '',
+            passwordSalt: '',
+            provider: account.provider,
+          });
+          console.debug(e);
+          return true;
+        }
+
+        return true;
+      }
+      return true;
+    },
+
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
       session.user = token.user as UserRow;
       return session;
-    },
-    async jwt({ token, user }) {
-      const _user = (token.user ?? user) as UserRow;
-
-      try {
-        return {
-          user: await dbGetUserById(_user.id),
-        };
-      } catch {
-        throw new Error(`Could not find user with id: ${_user.id}`);
-      }
     },
   },
   jwt: {

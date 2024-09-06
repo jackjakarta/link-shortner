@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import GithubLoginButton from './github-button';
+
 const loginFormSchema = z.object({
   email: z.string().email('This must be a valid email address'),
   password: z.string().min(4, 'You have to provide your password'),
@@ -93,6 +95,9 @@ export default function LoginForm() {
             </button>
           </div>
         </form>
+        <div className="mt-4 w-full">
+          <GithubLoginButton />{' '}
+        </div>
       </div>
     </main>
   );

@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 
 import { db } from '..';
 import { createPasswordHash, generateSalt, makeHash } from '../crypto';
-import { UserRow, userTable } from '../schema';
+import { userTable, type UserInsertRow, type UserRow } from '../schema';
 
 export async function dbGetUserById(userId: string): Promise<UserRow> {
   const user = (await db.select().from(userTable).where(eq(userTable.id, userId)))[0];
@@ -34,7 +34,12 @@ export async function dbGetUserByEmailAndPassword(
   return maybeUser;
 }
 
-export async function dbRegisterNewUser(email: string, name: string, plainPassword: string) {
+export async function dbRegisterNewUser(
+  id: string,
+  email: string,
+  name: string,
+  plainPassword: string,
+) {
   const rows = await db.select().from(userTable).where(eq(userTable.email, email));
 
   if (rows.length > 0) throw new Error('Email already exists.');
@@ -44,6 +49,7 @@ export async function dbRegisterNewUser(email: string, name: string, plainPasswo
   const passwordHash = createPasswordHash(plainPassword, passwordSalt);
 
   await db.insert(userTable).values({
+    id,
     email,
     name,
     passwordHash,
@@ -51,4 +57,20 @@ export async function dbRegisterNewUser(email: string, name: string, plainPasswo
   });
 
   return { plainPassword };
+}
+
+export async function dbCreateUser(user: UserInsertRow) {
+  const newUser = (await db.insert(userTable).values(user).returning())[0];
+
+  return newUser;
+}
+
+export async function dbGetUserByEmail({ email }: { email: string }): Promise<UserRow> {
+  const maybeUser = (await db.select().from(userTable).where(eq(userTable.email, email)))[0];
+
+  if (maybeUser === undefined) {
+    throw Error(`No user with email '${email}' found`);
+  }
+
+  return maybeUser;
 }

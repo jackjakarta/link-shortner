@@ -1,4 +1,5 @@
 import { dbRegisterNewUser } from '@/db/functions/user';
+import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -13,7 +14,9 @@ export async function POST(req: NextRequest) {
     const json = await req.json();
     const creds = registerRequestSchema.parse(json);
 
-    await dbRegisterNewUser(creds.email, creds.name, creds.password);
+    const userId = nanoid();
+
+    await dbRegisterNewUser(userId, creds.email, creds.name, creds.password);
 
     return new NextResponse(JSON.stringify({ message: 'Ok' }), {
       status: 200,
