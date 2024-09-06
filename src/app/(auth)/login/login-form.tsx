@@ -1,5 +1,6 @@
 'use client';
 
+import GithubIcon from '@/components/icons/github';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
@@ -96,7 +97,10 @@ export default function LoginForm() {
           </div>
         </form>
         <div className="mt-4 w-full">
-          <GithubLoginButton />{' '}
+          <GithubLoginButton className="flex items-center justify-center gap-4 w-full py-3 px-4 bg-gray-600 text-white rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+            <GithubIcon />
+            <span>Sign in with GitHub</span>
+          </GithubLoginButton>
         </div>
       </div>
     </main>
