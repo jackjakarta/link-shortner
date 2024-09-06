@@ -1,1 +1,0 @@
-ALTER TABLE "short_link" ADD CONSTRAINT "short_link_short_path_unique" UNIQUE("short_path");

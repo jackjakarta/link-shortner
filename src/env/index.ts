@@ -6,6 +6,8 @@ export const env = createEnv({
     databaseUrl: z.string().min(1),
     nextauthSecret: z.string().min(1),
     nextauthUrl: z.string().min(1),
+    githubId: z.string().min(1),
+    githubSecret: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_baseUrl: z.string().min(1),
@@ -15,5 +17,7 @@ export const env = createEnv({
     nextauthSecret: process.env.NEXTAUTH_SECRET,
     nextauthUrl: process.env.NEXTAUTH_URL,
     NEXT_PUBLIC_baseUrl: process.env.NEXT_PUBLIC_BASE_URL,
+    githubId: process.env.GITHUB_ID,
+    githubSecret: process.env.GITHUB_SECRET,
   },
 });
