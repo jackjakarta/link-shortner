@@ -48,6 +48,7 @@ export const authOptions = {
             name: user.name || 'GitHub User',
             passwordHash: '',
             passwordSalt: '',
+            emailVerified: true,
             provider: account.provider,
           });
           console.debug(e);

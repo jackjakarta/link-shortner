@@ -3,6 +3,10 @@ import { dbGetUserById } from '@/db/functions/user';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 
+export async function getMaybeUserSession() {
+  return await getServerSession();
+}
+
 export async function getValidSession() {
   const session = await getServerSession(authOptions);
 
@@ -13,17 +17,9 @@ export async function getValidSession() {
   return session;
 }
 
-export async function getMaybeUserSession() {
-  return await getServerSession();
-}
-
 export async function getUser() {
   const session = await getValidSession();
   const user = await dbGetUserById(session.user.id);
-
-  if (user === undefined) {
-    redirect('/login');
-  }
 
   return user;
 }
