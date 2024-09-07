@@ -20,5 +20,9 @@ export async function shortenUrl(url: string) {
     userId: user.id,
   });
 
-  return shortenedLink[0];
+  if (shortenedLink === undefined) {
+    throw new Error('Failed to shorten url');
+  }
+
+  return shortenedLink;
 }

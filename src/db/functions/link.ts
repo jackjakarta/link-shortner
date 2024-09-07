@@ -28,33 +28,27 @@ export async function dbGetLinkByShortPath(shortPath: string): Promise<ShortLink
   return link;
 }
 
-export async function dbCreateLink(
-  { userId, shortPath, longUrl }: ShortLinkInsertRow,
-  retries = 3,
-) {
-  try {
-    const shortenedLink = await db
+export async function dbCreateLink({ userId, shortPath, longUrl }: ShortLinkInsertRow) {
+  const shortenedLink = (
+    await db
       .insert(shortLinkTable)
       .values({
         userId,
         shortPath,
         longUrl,
       })
-      .returning();
+      .onConflictDoUpdate({
+        target: shortLinkTable.shortPath,
+        set: {
+          userId,
+          shortPath: generateRandomUrlSafeString(4),
+          longUrl,
+        },
+      })
+      .returning()
+  )[0];
 
-    return shortenedLink;
-  } catch (error) {
-    if (error instanceof Error && retries > 0) {
-      console.warn(`Unique constraint violation for shortPath: ${shortPath}. Retrying...`);
-
-      const newShortPath = generateRandomUrlSafeString(4);
-
-      return dbCreateLink({ userId, shortPath: newShortPath, longUrl }, retries - 1);
-    } else {
-      // Rethrow error if it's not a unique constraint violation or retry limit is exceeded
-      throw error;
-    }
-  }
+  return shortenedLink;
 }
 
 export async function dbUpdateLinkClickStats(linkId: string) {
