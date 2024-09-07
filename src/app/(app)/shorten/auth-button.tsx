@@ -13,7 +13,7 @@ export default function AuthButtons() {
   }
 
   return (
-    <Link href="/api/auth/signin" className="btn btn-primary">
+    <Link href="/login" className="btn btn-primary">
       Sign in
     </Link>
   );
