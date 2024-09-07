@@ -5,15 +5,19 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React from 'react';
 
-export default function AuthButtons() {
+type AuthButtonsProps = {
+  className?: string;
+};
+
+export default function AuthButtons({ className }: AuthButtonsProps) {
   const { data: session } = useSession();
 
   if (session) {
-    return <SignOutButton />;
+    return <SignOutButton className={className} />;
   }
 
   return (
-    <Link href="/login" className="btn btn-primary">
+    <Link href="/login" className={className}>
       Sign in
     </Link>
   );

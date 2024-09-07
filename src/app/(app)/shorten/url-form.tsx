@@ -12,7 +12,7 @@ import { z } from 'zod';
 import { shortenUrl } from './actions';
 
 const urlFormSchema = z.object({
-  url: z.string().url('Invalid URL').min(1, 'URL is required'),
+  url: z.string().url('Invalid URL'),
 });
 
 type FormValues = z.infer<typeof urlFormSchema>;
@@ -47,11 +47,6 @@ export default function ShortenUrlForm() {
   async function onSubmit(data: FormValues) {
     try {
       const shortenedUrl = await shortenUrl(data.url);
-
-      if (shortenedUrl === undefined) {
-        throw new Error('Failed to shorten URL');
-      }
-
       setShortenedUrl(`${env.NEXT_PUBLIC_baseUrl}/${shortenedUrl.shortPath}`);
       toast.success('URL shortened successfully');
     } catch (error) {
