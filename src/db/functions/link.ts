@@ -3,6 +3,7 @@
 import { desc, eq } from 'drizzle-orm';
 
 import { db } from '..';
+import { generateRandomUrlSafeString } from '../crypto';
 import { shortLinkTable, type ShortLinkInsertRow, type ShortLinkRow } from '../schema';
 
 export async function dbGetLinksByUserId(userId: string): Promise<ShortLinkRow[]> {
@@ -27,17 +28,33 @@ export async function dbGetLinkByShortPath(shortPath: string): Promise<ShortLink
   return link;
 }
 
-export async function dbCreateLink({ userId, shortPath, longUrl }: ShortLinkInsertRow) {
-  const shortenedLink = await db
-    .insert(shortLinkTable)
-    .values({
-      userId,
-      shortPath,
-      longUrl,
-    })
-    .returning();
+export async function dbCreateLink(
+  { userId, shortPath, longUrl }: ShortLinkInsertRow,
+  retries = 3,
+) {
+  try {
+    const shortenedLink = await db
+      .insert(shortLinkTable)
+      .values({
+        userId,
+        shortPath,
+        longUrl,
+      })
+      .returning();
 
-  return shortenedLink;
+    return shortenedLink;
+  } catch (error) {
+    if (error instanceof Error && retries > 0) {
+      console.warn(`Unique constraint violation for shortPath: ${shortPath}. Retrying...`);
+
+      const newShortPath = generateRandomUrlSafeString(4);
+
+      return dbCreateLink({ userId, shortPath: newShortPath, longUrl }, retries - 1);
+    } else {
+      // Rethrow error if it's not a unique constraint violation or retry limit is exceeded
+      throw error;
+    }
+  }
 }
 
 export async function dbUpdateLinkClickStats(linkId: string) {

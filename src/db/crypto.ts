@@ -1,5 +1,7 @@
 import crypto from 'crypto';
 
+import { nanoid } from 'nanoid';
+
 type HashAlgorithm = 'sha256' | 'sha512' | 'md5';
 
 export function makeHash(data: string, hashAlgorithm: HashAlgorithm = 'sha512') {
@@ -16,9 +18,8 @@ export function createPasswordHash(planePassword: string, salt: string) {
   return makeHash(`${planePassword}${salt}`);
 }
 
-export function generateRandomUrlSafeString(length: number): string {
-  const randomString = crypto.randomBytes(Math.ceil((length * 3) / 4)).toString('base64');
-  const urlSafeString = randomString.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+export function generateRandomUrlSafeString(length: number) {
+  const randomString = nanoid(length);
 
-  return urlSafeString.substring(0, length);
+  return randomString;
 }
