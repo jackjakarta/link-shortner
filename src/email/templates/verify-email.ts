@@ -196,10 +196,10 @@ const emailTemplate = `
                     "
                   >
                     <img
-                      src="https://deutschlandgpt.de/wp-content/uploads/2024/06/DGPT-01.png"
+                      src="#"
                       width="560"
                       height="168"
-                      alt="DeutschlandGPT"
+                      alt="LnkTo Logo"
                       title=""
                       style="
                         width: 140px;
@@ -231,11 +231,11 @@ const emailTemplate = `
                       margin: 0 0 20px;
                     "
                   >
-                    Bestätigen Sie Ihre Registrierung
+                    Activate your account
                   </h1>
     
                   <p style="font-size: 16px; line-height: 24px">
-                    Bitte bestätigen Sie Ihre E-Mail-Adresse, um die Registrierung abzuschließen.
+                    Please confirm your e-mail address to complete the registration.
                   </p>
     
                   <p style="margin: 24px 0 0; text-align: left">
@@ -254,25 +254,22 @@ const emailTemplate = `
                   "
                 >
                   <p>
-                    Vielen Dank, dass Sie sich für DeutschlandGPT entschieden haben.
+                    Thank you for choosing LnkTo.
                   </p>
                   <p>
                     <a class="footerLink" href="mailto:info@deutschlandgpt.de"
-                      >info@deutschlandgpt.de</a
+                      >info@lnkto.xyz</a
                     >
                     |
-                    <a class="footerLink" target="_blank" href="https://dialog.deutschlandgpt.de/agb/"
-                      >Nutzungsbedingungen</a
+                    <a class="footerLink" target="_blank" href="#"
+                      >Terms & Conditions</a
                     >
                     |
-                    <a class="footerLink" target="_blank" href="https://dialog.deutschlandgpt.de/privacy-policy/"
-                      >Datenschutz</a
+                    <a class="footerLink" target="_blank" href="#"
+                      >Privacy Policy</a
                     >
-                    |
-                    <a class="footerLink" target="_blank" href="https://www.deutschlandgpt.de/agbs/"
-                      >AGBs</a
-                    >
-                    | <a class="footerLink" target="_blank" href="https://www.deutschlandgpt.de/impressum/">Impressum</a>
+                    | 
+                    <a class="footerLink" target="_blank" href="#">Contact</a>
                   </p>
                 </div>
               </td>
