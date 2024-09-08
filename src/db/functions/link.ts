@@ -1,6 +1,6 @@
 'use server';
 
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 
 import { db } from '..';
 import { generateRandomUrlSafeString } from '../crypto';
@@ -67,4 +67,38 @@ export async function dbUpdateLinkClickStats(linkId: string) {
       lastClickedAt: new Date(),
     })
     .where(eq(shortLinkTable.id, linkId));
+}
+
+export type ClicksPerDay = {
+  date: string;
+  totalClicks: number;
+};
+
+export async function dbGetTotalClicksPerDay({
+  userId,
+}: {
+  userId: string;
+}): Promise<ClicksPerDay[]> {
+  const result = await db
+    .select({
+      date: sql<string>`DATE(${shortLinkTable.lastClickedAt})`,
+      totalClicks: sql<number>`SUM(${shortLinkTable.clickCount})`,
+    })
+    .from(shortLinkTable)
+    .where(eq(shortLinkTable.userId, userId))
+    .groupBy(sql`DATE(${shortLinkTable.lastClickedAt})`)
+    .orderBy(sql`DATE(${shortLinkTable.lastClickedAt})`);
+
+  return result;
+}
+
+export async function dbGetTotalClickCount({ userId }: { userId: string }): Promise<number> {
+  const result = await db
+    .select({
+      totalClickCount: sql<number>`SUM(${shortLinkTable.clickCount})`,
+    })
+    .from(shortLinkTable)
+    .where(eq(shortLinkTable.userId, userId));
+
+  return result[0]?.totalClickCount ?? 0;
 }
