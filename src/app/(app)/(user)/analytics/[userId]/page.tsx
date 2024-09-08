@@ -7,7 +7,7 @@ export default async function Page({ params }: { params: { userId: string } }) {
   return (
     <>
       <h1 className="text-3xl font-semibold mb-4">Analytics</h1>
-      {clicksByDay.length > 0 ? (
+      {clicksByDay.length > 0 && clicksTotal > 0 ? (
         <BarChartComponent clicksByDay={clicksByDay} clicksTotal={clicksTotal} />
       ) : (
         <p className="text-gray-500">No data to display at the moment.</p>
