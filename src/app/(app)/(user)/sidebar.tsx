@@ -40,7 +40,7 @@ export default function SidebarMenu({ user }: SidebarMenuProps) {
     {
       title: 'Analytics',
       icon: ChartsIcon,
-      href: `/profile/${user.id}/analytics`,
+      href: `/analytics/${user.id}`,
     },
     {
       title: 'Settings',
