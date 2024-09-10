@@ -15,7 +15,7 @@ export async function shortenUrl(url: string) {
   const shortPath = generateRandomUrlSafeString(4);
 
   const shortenedLink = await dbCreateLink({
-    shortPath: shortPath,
+    shortPath,
     longUrl: url,
     userId: user.id,
   });
