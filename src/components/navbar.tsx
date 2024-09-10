@@ -1,16 +1,21 @@
+'use client';
+
 import AuthButtons from '@/app/(app)/shorten/auth-button';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import * as React from 'react';
 
-const navItems = [
-  { name: 'Home', href: '/' },
-  { name: 'Profile', href: '/profile' },
-];
-
 export default function Navbar() {
+  const { data: session } = useSession();
+  const navItems = [{ name: 'Home', href: '/' }];
+
+  if (session) {
+    navItems.push({ name: 'Profile', href: '/profile' });
+  }
+
   return (
     <nav className="border-b">
       <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
