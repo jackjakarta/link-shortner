@@ -39,7 +39,7 @@ export const shortLinkTable = pgTable('short_link', {
 export type ShortLinkRow = typeof shortLinkTable.$inferSelect;
 export type ShortLinkInsertRow = typeof shortLinkTable.$inferInsert;
 
-export const tokenActionSchema = z.enum(['verify-email']);
+export const tokenActionSchema = z.enum(['verify-email', 'reset-password']);
 export const tokenActionPgEnum = pgEnum('token_action', tokenActionSchema.options);
 export type TokenAction = z.infer<typeof tokenActionSchema>;
 

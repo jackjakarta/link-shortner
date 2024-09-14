@@ -38,7 +38,7 @@ export default function RegisterForm({ error }: RegistrationProps) {
     resolver: zodResolver(registrationSchema),
   });
 
-  const onSubmit = async (data: RegistrationFormData) => {
+  async function onSubmit(data: RegistrationFormData) {
     try {
       const response = await fetch('/api/register', {
         method: 'POST',
@@ -64,7 +64,7 @@ export default function RegisterForm({ error }: RegistrationProps) {
         setError('email', { type: 'manual', message: 'An unexpected error occurred' });
       }
     }
-  };
+  }
 
   return (
     <div className="flex justify-center items-center h-screen">

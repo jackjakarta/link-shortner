@@ -1,0 +1,1 @@
+ALTER TYPE "token_action" ADD VALUE 'reset-password';

@@ -10,7 +10,8 @@ export type InformationEmailMetadata =
 
 export type MailTemplateResult = {
   success: true;
-  mailTemplate: { Subject: { Data: string }; Body: { Html: { Data: string } } };
+  subject: string;
+  mailTemplate: string;
   createdAt: Date;
 };
 

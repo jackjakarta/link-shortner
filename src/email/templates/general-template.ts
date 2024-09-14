@@ -182,22 +182,6 @@ export const generalTemplate = (bodyContent: string) => `<html>
                   margin: 0;
                 "
               >
-                <img
-                  src="https://deutschlandgpt.de/wp-content/uploads/2024/06/DGPT-01.png"
-                  width="560"
-                  height="168"
-                  alt="DeutschlandGPT"
-                  title=""
-                  style="
-                    width: 140px;
-                    height: auto;
-                    -ms-interpolation-mode: bicubic;
-                    border: 0;
-                    line-height: 100%;
-                    outline: none;
-                    text-decoration: none;
-                  "
-                />
               </p>
             </div>
 	    ${bodyContent}

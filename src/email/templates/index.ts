@@ -1,10 +1,11 @@
 import { dbInsertOrUpdateActionToken } from '@/db/functions/token';
+import { dbGetUserByEmail } from '@/db/functions/user';
 import { type TokenAction } from '@/db/schema';
 import { env } from '@/env';
 
 import { InformationEmailMetadata, MailTemplateResponse } from '../types';
 import { buildInformationEmailTemplate } from './information-template';
-// import { resetPasswordTemplate } from './reset-password';
+import { resetPasswordTemplate } from './reset-password';
 import { verifyMailTemplate } from './verify-email';
 
 export function buildActionUrl(searchParams: URLSearchParams) {
@@ -15,10 +16,10 @@ export async function createUserActionMailTemplate(
   email: string,
   action: TokenAction,
 ): Promise<MailTemplateResponse | undefined> {
-  //   if (action === 'reset-password' && (await dbGetUserByEmail(email)) === undefined) {
-  //     console.warn(`Cannot send email to non-existing user with email '${email}'`);
-  //     return undefined;
-  //   }
+  if (action === 'reset-password' && (await dbGetUserByEmail({ email })) === undefined) {
+    console.warn(`Cannot send email to non-existing user with email '${email}'`);
+    return undefined;
+  }
 
   const userActionRow = await dbInsertOrUpdateActionToken({ email, action });
 
@@ -37,36 +38,38 @@ export async function createUserActionMailTemplate(
     case 'verify-email':
       return {
         success: true,
-        mailTemplate: verifyMailTemplate(actionUrl),
+        subject: verifyMailTemplate(actionUrl).Subject.Data,
+        mailTemplate: resetPasswordTemplate(actionUrl).Body.Html.Data,
         createdAt: userActionRow.createdAt,
       };
-    // case 'reset-password':
-    //   return {
-    //     success: true,
-    //     mailTemplate: resetPasswordTemplate(actionUrl),
-    //     createdAt: userActionRow.createdAt,
-    //   };
+    case 'reset-password':
+      return {
+        success: true,
+        subject: resetPasswordTemplate(actionUrl).Subject.Data,
+        mailTemplate: resetPasswordTemplate(actionUrl).Body.Html.Data,
+        createdAt: userActionRow.createdAt,
+      };
     default:
       return undefined;
   }
 }
 
 export async function createInformationMailTemplate(
-  email: string,
+  // email: string,
   information: InformationEmailMetadata,
 ) {
   switch (information.type) {
     case 'email-verified-success':
       return buildInformationEmailTemplate(
-        'Konto aktiviert',
-        'Konto aktiviert',
-        `Ihr Konto wurde erfolgreich aktiviert.`,
+        'Account verified',
+        'Account activated',
+        `Your account has been successfully activated.`,
       );
     case 'reset-password-success':
       return buildInformationEmailTemplate(
-        'Passwort zurückgesetzt',
-        'Passwort zurückgesetzt',
-        `Ihr Passwort wurde erfolgreich zurückgesetzt.`,
+        'Password reset',
+        'Password reset',
+        `Your password has been successfully reset.`,
       );
   }
 }
