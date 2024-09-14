@@ -1,12 +1,13 @@
 'use client';
 
+import { passwordSchema } from '@/utils/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { z } from 'zod';
-
-import { passwordSchema } from './schemas';
 
 const registrationSchema = z
   .object({
@@ -28,6 +29,7 @@ type RegistrationProps = {
 
 export default function RegisterForm({ error }: RegistrationProps) {
   const [successMessage, setSuccessMessage] = React.useState('');
+  const router = useRouter();
 
   const {
     register,
@@ -57,6 +59,8 @@ export default function RegisterForm({ error }: RegistrationProps) {
       }
 
       setSuccessMessage('Registration successful! Please check your email to verify your account.');
+      router.push('/');
+      toast.success('Registration successful! Please check your email to verify your account.');
     } catch (error) {
       if (error instanceof Error) {
         setError('email', { type: 'manual', message: error.message });
