@@ -12,6 +12,8 @@ export const env = createEnv({
     awsSecretAccessKey: z.string().min(1),
     awsRegion: z.string().min(1),
     emailAccount: z.string().email(),
+    mailJetApiKey: z.string().min(1),
+    mailJetApiSecret: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_baseUrl: z.string().min(1),
@@ -27,5 +29,7 @@ export const env = createEnv({
     awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     awsRegion: process.env.AWS_REGION,
     emailAccount: process.env.EMAIL_ACCOUNT,
+    mailJetApiKey: process.env.MJ_APIKEY_PUBLIC,
+    mailJetApiSecret: process.env.MJ_APIKEY_PRIVATE,
   },
 });
