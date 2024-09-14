@@ -74,3 +74,24 @@ export async function dbGetUserByEmail({ email }: { email: string }): Promise<Us
 
   return maybeUser;
 }
+
+export async function dbUpdateUserPassword({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) {
+  const passwordSalt = makeHash(generateSalt());
+  const passwordHash = createPasswordHash(password, passwordSalt);
+
+  const user = (
+    await db
+      .update(userTable)
+      .set({ passwordHash, passwordSalt })
+      .where(eq(userTable.email, email))
+      .returning()
+  )[0];
+
+  return user;
+}
