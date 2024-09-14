@@ -7,10 +7,6 @@ import Mailjet from 'node-mailjet';
 import { createInformationMailTemplate, createUserActionMailTemplate } from './templates';
 import { EmailActionResult, InformationEmailMetadata } from './types';
 
-export type EmailMetadata = {
-  subscriptionType: null;
-};
-
 export type SendUserActionEmail = typeof sendUserActionEmail;
 
 /**
@@ -44,35 +40,30 @@ export async function sendUserActionEmail({
     };
   }
 
-  // Step 2: Extract mailTemplate data
   try {
-    // Step 3: Send email using Mailjet
     const request = await mailjet.post('send', { version: 'v3.1' }).request({
       Messages: [
         {
           From: {
-            Email: 'info@lnkto.xyz', // Use your sender email
-            Name: 'LnkTo - Link Shortener', // Use your sender name
+            Email: env.emailAccount,
+            Name: 'LnkTo - Link Shortener',
           },
           To: [
             {
-              Email: to, // Using 'to' from function argument
-              // Name: Optional, can be included if you have the user's name
+              Email: to,
             },
           ],
-          Subject: subject, // The subject of the email
-          TextPart: 'Please verify.', // Fallback to a default text if textTemplate is missing
-          HTMLPart: mailTemplate, // The HTML content of the email
+          Subject: subject,
+          TextPart: 'Please verify.',
+          HTMLPart: mailTemplate,
         },
       ],
     });
 
-    console.log('Email successfully sent:', request.body); // Logging success response
+    console.log('Email successfully sent:', request.body);
 
-    // Return success
     return { success: true };
   } catch (e: unknown) {
-    // Step 4: Handle any errors during email sending
     console.error('Email send returned the following error:', e);
 
     return {
@@ -110,7 +101,7 @@ export async function sendUserActionInformationEmail(
       Messages: [
         {
           From: {
-            Email: 'info@lnkto.xyz',
+            Email: env.emailAccount,
             Name: 'LnkTo - Link Shortener',
           },
           To: [
@@ -125,9 +116,8 @@ export async function sendUserActionInformationEmail(
       ],
     });
 
-    console.log('Email successfully sent:', request.body); // Logging success response
+    console.log('Email successfully sent:', request.body);
 
-    // Return success
     return { success: true };
   } catch (e: unknown) {
     // eslint-disable-next-line no-console
