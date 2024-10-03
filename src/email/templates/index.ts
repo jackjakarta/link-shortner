@@ -39,7 +39,7 @@ export async function createUserActionMailTemplate(
       return {
         success: true,
         subject: verifyMailTemplate(actionUrl).Subject.Data,
-        mailTemplate: resetPasswordTemplate(actionUrl).Body.Html.Data,
+        mailTemplate: verifyMailTemplate(actionUrl).Body.Html.Data,
         createdAt: userActionRow.createdAt,
       };
     case 'reset-password':

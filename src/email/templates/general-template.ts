@@ -1,42 +1,50 @@
-export const generalTemplate = (bodyContent: string) => `<html>
+export const generalTemplate = (bodyContent: string) => `
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Template</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
       rel="stylesheet"
     />
     <style type="text/css">
-      .ExternalClass,
-      .ExternalClass div,
-      .ExternalClass font,
-      .ExternalClass p,
-      .ExternalClass span,
-      .ExternalClass td,
-      img {
-        line-height: 100%;
+      body,
+      table,
+      td,
+      a {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
       }
-
-      .footerLink{
-        color: #2f3237 !important;
+      table,
+      td {
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+      }
+      img {
+        -ms-interpolation-mode: bicubic;
+        border: 0;
+        height: auto;
+        outline: none;
         text-decoration: none;
       }
-
-      #outlook a {
+      body {
+        margin: 0;
         padding: 0;
+        width: 100% !important;
+        height: 100% !important;
+        font-family: 'Inter', sans-serif;
+        background-color: #ffffff;
       }
-
-      .ExternalClass,
-      .ReadMsgBody {
-        width: 100%;
+      table {
+        border-collapse: collapse !important;
       }
-
       a {
         color: #2f3237;
-        text-decoration: double;
+        text-decoration: none;
       }
-
       .button {
         display: inline-block;
         background-color: #2f3237;
@@ -48,176 +56,118 @@ export const generalTemplate = (bodyContent: string) => `<html>
         margin-top: 20px;
         text-decoration: none;
       }
-
-      a,
-      blockquote,
-      body,
-      li,
-      p,
-      table,
-      td {
-        -webkit-text-size-adjust: 100%;
-        -ms-text-size-adjust: 100%;
-      }
-
-      table,
-      td {
-        mso-table-lspace: 0;
-        mso-table-rspace: 0;
-      }
-
-      img {
-        -ms-interpolation-mode: bicubic;
-        border: 0;
-        height: auto;
-        outline: 0;
+      .footerLink {
+        color: #2f3237 !important;
         text-decoration: none;
       }
-
-      table {
-        border-collapse: collapse !important;
-      }
-
-      #bodyCell,
-      #bodyTable,
-      body {
-        height: 100% !important;
-        margin: 0;
-        padding: 0;
-        font-family: "Inter", sans-serif;
-      }
-
-      #bodyCell {
-        padding: 20px;
-      }
-
-      #bodyTable {
-        width: 560px;
-      }
-
-      @media only screen and (max-width: 480px) {
-        #bodyTable,
-        body {
+      /* Responsive Styles */
+      @media only screen and (max-width: 600px) {
+        .email-container {
           width: 100% !important;
+          margin: auto !important;
         }
-
-        a,
-        blockquote,
-        body,
-        li,
-        p,
-        table,
-        td {
-          -webkit-text-size-adjust: none !important;
+        .stack-column,
+        .stack-column-center {
+          display: block !important;
+          width: 100% !important;
+          max-width: 100% !important;
         }
-
-        body {
-          min-width: 100% !important;
+        .stack-column-center {
+          text-align: center !important;
         }
-
-        #bodyTable {
-          max-width: 560px !important;
-        }
-
-        #signIn {
-          max-width: 280px !important;
+        .padding {
+          padding: 10px !important;
         }
       }
     </style>
   </head>
-
-  <body style="background-color: #ffffff">
+  <body>
     <center>
       <table
-        style="
-          width: 560px;
-          -webkit-text-size-adjust: 100%;
-          -ms-text-size-adjust: 100%;
-          mso-table-lspace: 0pt;
-          mso-table-rspace: 0pt;
-          margin: 0;
-          padding: 0;
-          font-family: 'Inter', sans-serif;
-          border-collapse: collapse !important;
-          height: 100% !important;
-          background-color: #ffffff;
-        "
-        align="center"
-        border="0"
-        cellpadding="0"
+        role="presentation"
         cellspacing="0"
-        height="100%"
+        cellpadding="0"
+        border="0"
         width="100%"
-        id="bodyTable"
+        style="background-color: #ffffff;"
       >
         <tr>
-          <td
-            align="center"
-            valign="top"
-            id="bodyCell"
-            style="
-              -webkit-text-size-adjust: 100%;
-              -ms-text-size-adjust: 100%;
-              mso-table-lspace: 0pt;
-              mso-table-rspace: 0pt;
-              margin: 0;
-              padding: 0;
-              font-family: 'Inter', sans-serif;
-              height: 100% !important;
-            "
-          >
-            <div
-              class="top"
-              style="
-                background-color: #ffffff;
-                color: #202123;
-                padding: 27px 20px 0 15px;
-              "
+          <td>
+            <table
+              role="presentation"
+              cellspacing="0"
+              cellpadding="0"
+              border="0"
+              width="100%"
+              class="email-container"
+              style="max-width: 600px; margin: auto;"
             >
-              <p
-                style="
-                  text-align: left;
-                  -webkit-text-size-adjust: 100%;
-                  -ms-text-size-adjust: 100%;
-                  margin: 0;
-                "
-              >
-              </p>
-            </div>
-	    ${bodyContent}
-            <div
-              class="footer"
-              style="
-                text-align: left;
-                background: #ffffff;
-                color: #6e6e80;
-                padding: 0 20px 20px;
-                font-size: 13px;
-                line-height: 1.4;
-              "
-            >
-              <p>
-                Vielen Dank, dass Sie sich für DeutschlandGPT entschieden haben.
-              </p>
-              <p>
-                <a class="footerLink" href="mailto:info@deutschlandgpt.de"
-                  >info@deutschlandgpt.de</a
+              <!-- Body Content -->
+              <tr>
+                <td
+                  style="
+                    padding: 20px;
+                    text-align: left;
+                    font-size: 16px;
+                    line-height: 1.5;
+                    color: #202123;
+                  "
                 >
-                |
-                <a class="footerLink" target="_blank" href="https://dialog.deutschlandgpt.de/agb/"
-                  >Nutzungsbedingungen</a
+                  ${bodyContent}
+                </td>
+              </tr>
+              <!-- Footer -->
+              <tr>
+                <td
+                  style="
+                    padding: 20px;
+                    background-color: #f9f9f9;
+                    text-align: left;
+                    font-size: 13px;
+                    line-height: 1.4;
+                    color: #6e6e80;
+                  "
                 >
-                |
-                <a class="footerLink" target="_blank" href="https://dialog.deutschlandgpt.de/privacy-policy/"
-                  >Datenschutz</a
-                >
-                |
-                <a class="footerLink" target="_blank" href="https://www.deutschlandgpt.de/agbs/"
-                  >AGBs</a
-                >
-                | <a class="footerLink" target="_blank" href="https://www.deutschlandgpt.de/impressum/">Impressum</a>
-              </p>
-            </div>
+                  <p>
+                    Thank you for choosing GermanyGPT.
+                  </p>
+                  <p>
+                    <a class="footerLink" href="mailto:info@deutschlandgpt.de"
+                      >info@deutschlandgpt.de</a
+                    >
+                    |
+                    <a
+                      class="footerLink"
+                      target="_blank"
+                      href="https://dialog.deutschlandgpt.de/agb/"
+                      >Terms of Use</a
+                    >
+                    |
+                    <a
+                      class="footerLink"
+                      target="_blank"
+                      href="https://dialog.deutschlandgpt.de/privacy-policy/"
+                      >Privacy Policy</a
+                    >
+                    |
+                    <a
+                      class="footerLink"
+                      target="_blank"
+                      href="https://www.deutschlandgpt.de/agbs/"
+                      >General Terms and Conditions</a
+                    >
+                    |
+                    <a
+                      class="footerLink"
+                      target="_blank"
+                      href="https://www.deutschlandgpt.de/impressum/"
+                      >Imprint</a
+                    >
+                  </p>
+                </td>
+              </tr>
+              <!-- End Footer -->
+            </table>
           </td>
         </tr>
       </table>

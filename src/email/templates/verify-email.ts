@@ -1,6 +1,6 @@
 export function verifyMailTemplate(actionUrl: string) {
   return {
-    Subject: { Data: 'Bestätigen Sie Ihre Registrierung' },
+    Subject: { Data: 'Activate your account' },
     Body: {
       Html: {
         Data: emailTemplate.replace('$REGISTER_LINK', actionUrl),
