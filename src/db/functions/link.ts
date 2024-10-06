@@ -6,6 +6,16 @@ import { db } from '..';
 import { generateRandomUrlSafeString } from '../crypto';
 import { shortLinkTable, type ShortLinkInsertRow, type ShortLinkRow } from '../schema';
 
+export async function dbGetLinkById({
+  linkId,
+}: {
+  linkId: string;
+}): Promise<ShortLinkRow | undefined> {
+  const link = (await db.select().from(shortLinkTable).where(eq(shortLinkTable.id, linkId)))[0];
+
+  return link;
+}
+
 export async function dbGetLinksByUserId(userId: string): Promise<ShortLinkRow[]> {
   const links = await db
     .select()
@@ -101,4 +111,24 @@ export async function dbGetTotalClickCount({ userId }: { userId: string }): Prom
     .where(eq(shortLinkTable.userId, userId));
 
   return result[0]?.totalClickCount ?? 0;
+}
+
+export async function dbUpdateLinkQrCodeUrl({
+  linkId,
+  qrCodeUrl,
+}: {
+  linkId: string;
+  qrCodeUrl: string;
+}) {
+  const shortLink = (
+    await db
+      .update(shortLinkTable)
+      .set({
+        qrCodeUrl,
+      })
+      .where(eq(shortLinkTable.id, linkId))
+      .returning()
+  )[0];
+
+  return shortLink;
 }

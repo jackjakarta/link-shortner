@@ -9,6 +9,9 @@ import { format, isToday, isYesterday } from 'date-fns';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
+import GenerateQrCodeButton from './generate-qr-button';
+import QrModal from './qr-modal';
+
 type LinksTableProps = {
   links: ShortLinkRow[];
 };
@@ -43,6 +46,9 @@ export default function LinksTable({ links }: LinksTableProps) {
             </th>
             <th scope="col" className="px-6 py-3">
               Created At
+            </th>
+            <th scope="col" className="px-6 py-3">
+              QR
             </th>
           </tr>
         </thead>
@@ -96,6 +102,13 @@ export default function LinksTable({ links }: LinksTableProps) {
                   : isYesterday(new Date(link.createdAt))
                     ? `Yesterday at ${format(new Date(link.createdAt), 'HH:mm')}`
                     : formatDateToDayMonthYearTime(link.createdAt)}
+              </td>
+              <td className="px-6 py-4">
+                {link.qrCodeUrl ? (
+                  <QrModal qrCodeUrl={link.qrCodeUrl} />
+                ) : (
+                  <GenerateQrCodeButton linkId={link.id} url={`${baseUrl}/${link.shortPath}`} />
+                )}
               </td>
             </tr>
           ))}
