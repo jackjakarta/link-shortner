@@ -3,8 +3,8 @@
 import CopyToClipboardIcon from '@/components/icons/copy';
 import LinkIcon from '@/components/icons/link';
 import { type ShortLinkRow } from '@/db/schema';
-import { env } from '@/env';
 import { formatDateToDayMonthYearTime } from '@/utils/date';
+import { buildRouteUrl } from '@/utils/url';
 import { format, isToday, isYesterday } from 'date-fns';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -17,8 +17,6 @@ type LinksTableProps = {
 };
 
 export default function LinksTable({ links }: LinksTableProps) {
-  const baseUrl = env.NEXT_PUBLIC_baseUrl;
-
   function handleCopyToClipboard(text: string) {
     navigator.clipboard.writeText(text);
     toast.success('Copied to clipboard');
@@ -58,11 +56,11 @@ export default function LinksTable({ links }: LinksTableProps) {
               <th scope="row" className="px-6 py-4 font-normal text-gray-900 whitespace-nowrap">
                 <Link
                   className="hover:text-gray-500"
-                  href={`${baseUrl}/${link.shortPath}`}
+                  href={buildRouteUrl({ route: link.shortPath })}
                   target="_blank"
                 >
                   <div className="flex items-center gap-2">
-                    {baseUrl}/{link.shortPath}
+                    {buildRouteUrl({ route: link.shortPath })}
                     <LinkIcon />
                   </div>
                 </Link>
@@ -70,7 +68,7 @@ export default function LinksTable({ links }: LinksTableProps) {
               <td className="px-6 py-4 truncate">
                 <div>
                   <button
-                    onClick={() => handleCopyToClipboard(`${baseUrl}/${link.shortPath}`)}
+                    onClick={() => handleCopyToClipboard(buildRouteUrl({ route: link.shortPath }))}
                     className="flex items-center gap-2 hover:text-gray-500 cursor-pointer"
                   >
                     <CopyToClipboardIcon />
@@ -107,7 +105,10 @@ export default function LinksTable({ links }: LinksTableProps) {
                 {link.qrCodeUrl ? (
                   <QrModal qrCodeUrl={link.qrCodeUrl} />
                 ) : (
-                  <GenerateQrCodeButton linkId={link.id} url={`${baseUrl}/${link.shortPath}`} />
+                  <GenerateQrCodeButton
+                    linkId={link.id}
+                    url={buildRouteUrl({ route: link.shortPath })}
+                  />
                 )}
               </td>
             </tr>
