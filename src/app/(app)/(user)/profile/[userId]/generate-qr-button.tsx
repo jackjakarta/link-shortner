@@ -17,9 +17,11 @@ export default function GenerateQrCodeButton({
 }: GenerateQrCodeButtonProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
+  const [buttonText, setButtonText] = React.useState('Generate QR Code');
 
   async function handleGenerateQrCode() {
     setIsLoading(true);
+    setButtonText('Generating...');
 
     try {
       const response = await fetch('/api/qr-code', {
@@ -36,19 +38,20 @@ export default function GenerateQrCodeButton({
         throw new Error(result.error);
       }
 
-      router.refresh();
       toast.success('QR Code generated!');
     } catch (error) {
+      setButtonText('Generate QR Code');
       toast.error('Failed to generate QR Code');
       console.error('Error generating QR Code:', error);
     } finally {
       setIsLoading(false);
+      router.refresh();
     }
   }
 
   return (
     <button className={className} onClick={handleGenerateQrCode} disabled={isLoading}>
-      {isLoading ? 'Generating...' : 'Generate QR Code'}
+      {buttonText}
     </button>
   );
 }
