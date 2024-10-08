@@ -1,13 +1,13 @@
 import { dbRegisterNewUser } from '@/db/functions/user';
 import { sendUserActionEmail } from '@/email/send';
-import { emailSchema, nameSchema, passwordSchema } from '@/utils/schemas';
+import { emailSchema, passwordSchema, userNameSchema } from '@/utils/schemas';
 import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const registerRequestSchema = z.object({
   email: emailSchema,
-  name: nameSchema,
+  name: userNameSchema,
   password: passwordSchema,
 });
 

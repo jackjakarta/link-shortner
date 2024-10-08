@@ -1,6 +1,6 @@
 'use client';
 
-import { passwordSchema } from '@/utils/schemas';
+import { emailSchema, passwordSchema, userNameSchema } from '@/utils/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -11,10 +11,10 @@ import { z } from 'zod';
 
 const registrationSchema = z
   .object({
-    name: z.string().min(1, 'Username is required'),
-    email: z.string().email('Invalid email address'),
+    name: userNameSchema,
+    email: emailSchema,
     password: passwordSchema,
-    confirmPassword: passwordSchema,
+    confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',

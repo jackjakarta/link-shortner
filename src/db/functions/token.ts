@@ -1,8 +1,7 @@
 'use server';
 
-import { randomBytes } from 'crypto';
-
 import { eq } from 'drizzle-orm';
+import { nanoid } from 'nanoid';
 
 import { db } from '..';
 import { tokenTable, userTable, type TokenAction, type TokenRow } from '../schema';
@@ -31,7 +30,7 @@ export async function dbInsertOrUpdateActionToken({
   action: TokenAction;
 }): Promise<TokenRow | undefined> {
   try {
-    const token = randomBytes(20).toString('hex');
+    const token = nanoid(48);
     const createdAt = new Date();
 
     const result = await db

@@ -43,6 +43,13 @@
       "when": 1728423957622,
       "tag": "0005_polite_johnny_storm",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1728429753425,
+      "tag": "0006_lucky_major_mapleleaf",
+      "breakpoints": true
     }
   ]
 }
