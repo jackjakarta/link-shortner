@@ -20,6 +20,7 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_baseUrl: z.string().min(1),
+    NEXT_PUBLIC_passwordValidator: z.enum(['weak', 'medium', 'strong']),
   },
   runtimeEnv: {
     databaseUrl: process.env.DATABASE_URL,
@@ -37,5 +38,6 @@ export const env = createEnv({
     awsS3EndpointUrl: process.env.AWS_S3_ENDPOINT_URL,
     awsRegion: process.env.AWS_REGION,
     awsBucketName: process.env.AWS_STORAGE_BUCKET_NAME,
+    NEXT_PUBLIC_passwordValidator: process.env.NEXT_PUBLIC_PASSWORD_VALIDATOR,
   },
 });

@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 
 import { db } from '..';
 import { createPasswordHash, generateSalt, makeHash } from '../crypto';
-import { userTable, type UserInsertRow, type UserRow } from '../schema';
+import { userProfileTable, userTable, type UserInsertRow, type UserRow } from '../schema';
 
 export async function dbGetUserById(userId: string): Promise<UserRow> {
   const user = (await db.select().from(userTable).where(eq(userTable.id, userId)))[0];
@@ -48,12 +48,18 @@ export async function dbRegisterNewUser(
 
   const passwordHash = createPasswordHash(plainPassword, passwordSalt);
 
-  await db.insert(userTable).values({
-    id,
-    email,
-    name,
-    passwordHash,
-    passwordSalt,
+  await db.transaction(async (tx) => {
+    await tx.insert(userTable).values({
+      id,
+      email,
+      name,
+      passwordHash,
+      passwordSalt,
+    });
+
+    await tx.insert(userProfileTable).values({
+      userId: id,
+    });
   });
 
   return { plainPassword };
