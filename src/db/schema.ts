@@ -21,6 +21,20 @@ export const userTable = pgTable('user', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 
+export const userProfileTable = pgTable('user_profile', {
+  userId: text('user_id')
+    .primaryKey()
+    .references(() => userTable.id),
+  bio: text('bio'),
+  avatarUrl: text('avatar_url'),
+  location: text('location'),
+  website: text('website'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export type UserProfileRow = typeof userProfileTable.$inferSelect;
+export type UserProfileInsertRow = typeof userProfileTable.$inferInsert;
+
 export type UserRow = typeof userTable.$inferSelect;
 export type UserInsertRow = typeof userTable.$inferInsert;
 
