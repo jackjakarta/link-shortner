@@ -16,7 +16,7 @@ export async function dbGetLinkById({
   return link;
 }
 
-export async function dbGetLinksByUserId(userId: string): Promise<ShortLinkRow[]> {
+export async function dbGetLinksByUserId({ userId }: { userId: string }): Promise<ShortLinkRow[]> {
   const links = await db
     .select()
     .from(shortLinkTable)
