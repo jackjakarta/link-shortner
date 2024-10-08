@@ -13,7 +13,7 @@ import { z } from 'zod';
 export const userTable = pgTable('user', {
   id: text('id').primaryKey(),
   email: text('email').notNull().unique(),
-  name: text('name').notNull(),
+  name: text('name').notNull().unique(),
   passwordHash: text('password_hash').notNull(),
   passwordSalt: text('password_salt').notNull(),
   emailVerified: boolean('email_verified').notNull().default(false),

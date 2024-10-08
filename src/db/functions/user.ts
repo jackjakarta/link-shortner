@@ -40,12 +40,13 @@ export async function dbRegisterNewUser(
   name: string,
   plainPassword: string,
 ) {
-  const rows = await db.select().from(userTable).where(eq(userTable.email, email));
+  const emailRows = await db.select().from(userTable).where(eq(userTable.email, email));
+  if (emailRows.length > 0) throw new Error('Email already exists.');
 
-  if (rows.length > 0) throw new Error('Email already exists.');
+  const nameRows = await db.select().from(userTable).where(eq(userTable.name, name));
+  if (nameRows.length > 0) throw new Error('Username already exists.');
 
   const passwordSalt = makeHash(generateSalt());
-
   const passwordHash = createPasswordHash(plainPassword, passwordSalt);
 
   await db.transaction(async (tx) => {
