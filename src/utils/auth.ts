@@ -1,8 +1,9 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/utils';
 import { dbGetUserById } from '@/db/functions/user';
-import { type UserRow } from '@/db/schema';
 import { getServerSession, type Session } from 'next-auth';
 import { redirect } from 'next/navigation';
+
+import { obscureUser, type ObscuredUser } from './user';
 
 export async function getMaybeUserSession(): Promise<Session | null> {
   const session = await getServerSession(authOptions);
@@ -20,13 +21,10 @@ export async function getValidSession(): Promise<Session> {
   return session;
 }
 
-export async function getUser(): Promise<UserRow> {
+export async function getUser(): Promise<ObscuredUser> {
   const session = await getValidSession();
   const user = await dbGetUserById(session.user.id);
+  const obscuredUser = await obscureUser({ user });
 
-  if (!user.emailVerified) {
-    redirect('/verify-email');
-  }
-
-  return user;
+  return obscuredUser;
 }

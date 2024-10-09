@@ -6,7 +6,7 @@ import { getUser } from '@/utils/auth';
 export async function getLinksByUserId({ userId }: { userId: string }) {
   const user = await getUser();
 
-  if (user.id !== userId) {
+  if (userId !== user.id) {
     throw new Error('Unauthorized');
   }
 

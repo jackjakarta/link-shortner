@@ -3,9 +3,10 @@
 import { generateRandomUrlSafeString } from '@/db/crypto';
 import { dbCreateLink } from '@/db/functions/link';
 import { getUser } from '@/utils/auth';
+import { type Url } from '@/utils/types';
 import { redirect } from 'next/navigation';
 
-export async function shortenUrl(url: string) {
+export async function shortenUrl(url: Url) {
   const user = await getUser();
 
   if (!user.emailVerified) {

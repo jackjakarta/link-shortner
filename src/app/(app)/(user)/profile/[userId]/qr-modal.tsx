@@ -6,16 +6,17 @@ import React from 'react';
 
 type QrModalProps = {
   qrCodeUrl: string;
+  buttonName?: string;
   buttonClassName?: React.ComponentProps<'button'>['className'];
 };
 
-export default function QrModal({ qrCodeUrl, buttonClassName }: QrModalProps) {
+export default function QrModal({ qrCodeUrl, buttonClassName, buttonName }: QrModalProps) {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   return (
     <>
       <button onClick={() => setIsModalOpen(true)} className={buttonClassName}>
-        View QR Code
+        {buttonName ?? 'View'}
       </button>
       <DialogWindow
         open={isModalOpen}
