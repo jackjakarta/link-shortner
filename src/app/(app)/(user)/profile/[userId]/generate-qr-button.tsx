@@ -1,5 +1,7 @@
 'use client';
 
+import { sleep } from '@/utils/sleep';
+import { cw } from '@/utils/tailwind';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import toast from 'react-hot-toast';
@@ -8,20 +10,23 @@ type GenerateQrCodeButtonProps = {
   linkId: string;
   url: string;
   className?: React.ComponentProps<'button'>['className'];
+  buttonName?: string;
+  buttonLoadingName?: string;
+  loadingState?: boolean;
 };
 
 export default function GenerateQrCodeButton({
   linkId,
   url,
   className,
+  buttonName,
 }: GenerateQrCodeButtonProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
-  const [buttonText, setButtonText] = React.useState('Generate QR Code');
 
   async function handleGenerateQrCode() {
     setIsLoading(true);
-    setButtonText('Generating...');
+    toast.loading('Generating QR Code');
 
     try {
       const response = await fetch('/api/qr-code', {
@@ -38,9 +43,10 @@ export default function GenerateQrCodeButton({
         throw new Error(result.error);
       }
 
+      await sleep(2000);
+      toast.remove();
       toast.success('QR Code generated!');
     } catch (error) {
-      setButtonText('Generate QR Code');
       toast.error('Failed to generate QR Code');
       console.error('Error generating QR Code:', error);
     } finally {
@@ -50,8 +56,12 @@ export default function GenerateQrCodeButton({
   }
 
   return (
-    <button className={className} onClick={handleGenerateQrCode} disabled={isLoading}>
-      {buttonText}
+    <button
+      className={cw(className, isLoading && 'cursor-not-allowed')}
+      onClick={handleGenerateQrCode}
+      disabled={isLoading}
+    >
+      {buttonName ?? 'Generate QR Code'}
     </button>
   );
 }

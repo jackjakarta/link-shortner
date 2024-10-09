@@ -3,14 +3,17 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { dbUpdateUserProfile } from '@/db/functions/profile';
-import { type UserRow } from '@/db/schema';
+import { Textarea } from '@/components/ui/textarea';
 import type { UserProfileRow } from '@/db/schema';
+import { sleep } from '@/utils/sleep';
+import { type ObscuredUser } from '@/utils/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
+
+import { updateProfile } from './actions';
 
 const schema = z.object({
   bio: z.string().optional(),
@@ -25,7 +28,7 @@ export default function UserProfileSettingsForm({
   user,
   profile,
 }: {
-  user: UserRow;
+  user: ObscuredUser;
   profile: UserProfileRow;
 }) {
   const {
@@ -36,20 +39,22 @@ export default function UserProfileSettingsForm({
     resolver: zodResolver(schema),
     defaultValues: {
       bio: profile.bio ?? undefined,
-      avatarUrl: profile.avatarUrl ?? undefined,
       location: profile.location ?? undefined,
       website: profile.website ?? undefined,
     },
   });
 
   async function onSubmit(data: FormData) {
+    toast.loading('Saving...');
+
     try {
-      await dbUpdateUserProfile({
+      await updateProfile({
         userId: user.id,
         ...data,
       });
+      await sleep(2000);
+      toast.remove();
       toast.success('Profile updated successfully');
-      // router.refresh();
     } catch (error) {
       toast.error('Failed to update profile');
       console.error('Error updating profile:', error);
@@ -70,23 +75,18 @@ export default function UserProfileSettingsForm({
 
       <div className="space-y-2">
         <Label htmlFor="bio">Bio</Label>
-        <Input id="bio" {...register('bio')} placeholder="Bio" disabled={isSubmitting} />
+        <Textarea
+          rows={4}
+          id="bio"
+          {...register('bio')}
+          placeholder="Bio"
+          disabled={isSubmitting}
+        />
         {errors.bio && <p className="text-red-500 text-sm">{errors.bio.message}</p>}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="avatarUrl">Avatar</Label>
-        <Input
-          id="avatarUrl"
-          {...register('avatarUrl')}
-          placeholder="Avatar"
-          disabled={isSubmitting}
-        />
-        {errors.avatarUrl && <p className="text-red-500 text-sm">{errors.avatarUrl.message}</p>}
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="location">Bio</Label>
+        <Label htmlFor="location">Location</Label>
         <Input id="location" {...register('location')} placeholder="Bio" disabled={isSubmitting} />
         {errors.location && <p className="text-red-500 text-sm">{errors.location.message}</p>}
       </div>
@@ -102,8 +102,12 @@ export default function UserProfileSettingsForm({
         {errors.website && <p className="text-red-500 text-sm">{errors.website.message}</p>}
       </div>
 
-      <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Saving...' : 'Save Changes'}
+      <Button
+        className="disabled:bg-gray-700 disabled:cursor-not-allowed"
+        type="submit"
+        disabled={isSubmitting}
+      >
+        Save Changes
       </Button>
     </form>
   );

@@ -1,12 +1,14 @@
 import { getUser } from '@/utils/auth';
-import { redirect } from 'next/navigation';
+
+import EmailVerifiedCard from './email-verified';
+import VerifyEmailPage from './verify-email-card';
 
 export default async function Page() {
   const user = await getUser();
 
   if (user.emailVerified) {
-    redirect(`/profile/${user.id}`);
+    return <EmailVerifiedCard />;
   }
 
-  return <h1>You need to verify your email.</h1>;
+  return <VerifyEmailPage />;
 }

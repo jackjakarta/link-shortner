@@ -6,14 +6,14 @@ import HamburgerIcon from '@/components/icons/hamburger';
 import LinkIcon from '@/components/icons/link';
 import LinkChainIcon from '@/components/icons/link-chain';
 import WheelIcon from '@/components/icons/wheel';
-import { type UserRow } from '@/db/schema';
 import { cw } from '@/utils/tailwind';
+import { type ObscuredUser } from '@/utils/user';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 type SidebarMenuProps = {
-  user: UserRow;
+  user: ObscuredUser;
 };
 
 type SidebarMenuItem = {

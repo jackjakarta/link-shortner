@@ -46,7 +46,7 @@ export default function LinksTable({ links }: LinksTableProps) {
               Created At
             </th>
             <th scope="col" className="px-6 py-3">
-              QR
+              QR Code
             </th>
           </tr>
         </thead>

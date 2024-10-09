@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { type PasswordValidatorLevel } from './types';
 
-export function getPasswordValidator(level: PasswordValidatorLevel) {
+export function getPasswordValidator({ level }: { level: PasswordValidatorLevel }) {
   switch (level) {
     case 'weak':
       return z.string().min(4, 'Password must be at least 4 characters');

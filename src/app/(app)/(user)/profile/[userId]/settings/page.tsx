@@ -5,7 +5,7 @@ import { getUserAvatarUrl } from '@/utils/user';
 
 import UserProfileSettingsForm from './edit-profile-form';
 
-export default async function UserProfileSettingsPage() {
+export default async function Page() {
   const user = await getUser();
   const userProfile = await dbGetUserProfileByUserId({ userId: user.id });
   const avatarUrl = await getUserAvatarUrl(user.email);
@@ -15,9 +15,14 @@ export default async function UserProfileSettingsPage() {
   }
 
   return (
-    <main className="px-3 py-2">
-      <Avatar src={avatarUrl} alt={user.email} />
-      <UserProfileSettingsForm user={user} profile={userProfile} />
+    <main className="px-8 py-1 max-w-[30rem]">
+      <div className="flex flex-col justify-center items-center space-y-4 mb-4">
+        <Avatar src={avatarUrl} alt="avatar" width={80} height={80} />
+        <span className="text-sm font-medium">You can manage your avatar with Gravatar</span>
+      </div>
+      <div className="">
+        <UserProfileSettingsForm user={user} profile={userProfile} />
+      </div>
     </main>
   );
 }

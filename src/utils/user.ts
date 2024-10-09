@@ -4,7 +4,7 @@ import { type UserRow } from '@/db/schema';
 
 export type ObscuredUser = Omit<UserRow, 'passwordHash' | 'passwordSalt'>;
 
-export function obscureUser(user: UserRow): ObscuredUser {
+export async function obscureUser({ user }: { user: UserRow }): Promise<ObscuredUser> {
   return {
     id: user.id,
     name: user.name,
@@ -15,7 +15,7 @@ export function obscureUser(user: UserRow): ObscuredUser {
   };
 }
 
-export async function getUserAvatarUrl(email: string, size = 80) {
+export async function getUserAvatarUrl(email: string, size = 200) {
   const trimmedEmail = email.trim().toLowerCase();
   const hash = crypto.createHash('sha256').update(trimmedEmail).digest('hex');
 
