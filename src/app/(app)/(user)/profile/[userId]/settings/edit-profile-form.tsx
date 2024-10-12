@@ -62,7 +62,7 @@ export default function UserProfileSettingsForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-md">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full">
       <div className="space-y-2">
         <Label htmlFor="name">Username</Label>
         <Input id="name" className="cursor-not-allowed bg-gray-100" value={user.name} readOnly />
