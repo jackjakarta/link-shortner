@@ -5,7 +5,6 @@ import { type TokenRow } from '@/db/schema';
 import { sendUserActionInformationEmail } from '@/email/send';
 import { emailSchema, passwordSchema } from '@/utils/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -42,11 +41,6 @@ export default function ResetPasswordForm({ email }: ResetPasswordFormProps) {
     const email = _email.trim().toLowerCase();
 
     await dbUpdateUserPassword({ email, password });
-    await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
     await sendUserActionInformationEmail(email, { type: 'reset-password-success' });
 
     router.push('/');
