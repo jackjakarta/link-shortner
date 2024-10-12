@@ -30,9 +30,7 @@ export default async function Page() {
           </Link>
         </span>
       </div>
-      <div className="">
-        <UserProfileSettingsForm user={user} profile={userProfile} />
-      </div>
+      <UserProfileSettingsForm user={user} profile={userProfile} />
     </main>
   );
 }

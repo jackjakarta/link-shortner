@@ -52,7 +52,7 @@ export default function UserProfileSettingsForm({
         userId: user.id,
         ...data,
       });
-      await sleep(2000);
+      await sleep(500);
       toast.remove();
       toast.success('Profile updated successfully');
     } catch (error) {
