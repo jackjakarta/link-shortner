@@ -5,7 +5,7 @@ import { getUserAvatarUrl } from '@/utils/user';
 import Link from 'next/link';
 
 import UserProfileSettingsForm from './edit-profile-form';
-import UpdatePasswordForm from './update-password-form';
+import SettingsNavbar from './settings-navbar';
 
 export default async function Page() {
   const user = await getUser();
@@ -17,24 +17,26 @@ export default async function Page() {
   }
 
   return (
-    <main className="px-8 py-1 max-w-[35rem]">
-      <div className="flex flex-col justify-center items-center space-y-4 mb-4">
-        <Avatar src={avatarUrl} alt="avatar" width={80} height={80} />
-        <span className="text-sm font-medium">
-          You can manage your avatar with{' '}
-          <Link
-            className="text-gray-900 hover:text-gray-600"
-            href="https://gravatar.com/profile"
-            target="_blank"
-          >
-            Gravatar
-          </Link>
-        </span>
-      </div>
-      <div className="flex w-full gap-4">
-        <UserProfileSettingsForm user={user} profile={userProfile} />
-        <UpdatePasswordForm userEmail={user.email} />
-      </div>
-    </main>
+    <>
+      <SettingsNavbar userId={user.id} />
+      <main className="px-8 py-1 max-w-[35rem]">
+        <div className="flex flex-col justify-center items-center space-y-4 mb-4">
+          <Avatar src={avatarUrl} alt="avatar" width={80} height={80} />
+          <span className="text-sm font-medium">
+            You can manage your avatar with{' '}
+            <Link
+              className="text-gray-900 hover:text-gray-600"
+              href="https://gravatar.com/profile"
+              target="_blank"
+            >
+              Gravatar
+            </Link>
+          </span>
+        </div>
+        <div className="flex w-full gap-4">
+          <UserProfileSettingsForm user={user} profile={userProfile} />
+        </div>
+      </main>
+    </>
   );
 }

@@ -6,9 +6,9 @@ import VerifyEmailPage from './verify-email-card';
 export default async function Page() {
   const user = await getUser();
 
-  if (user.emailVerified) {
-    return <EmailVerifiedCard />;
+  if (!user.emailVerified) {
+    return <VerifyEmailPage />;
   }
 
-  return <VerifyEmailPage />;
+  return <EmailVerifiedCard />;
 }

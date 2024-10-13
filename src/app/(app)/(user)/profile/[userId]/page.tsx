@@ -1,5 +1,5 @@
+import LinksTable from './_components/links-table';
 import { getLinksByUserId } from './actions';
-import LinksTable from './links-table';
 
 export const dynamic = 'force-dynamic';
 

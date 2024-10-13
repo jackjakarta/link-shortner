@@ -11,8 +11,6 @@ type GenerateQrCodeButtonProps = {
   url: string;
   className?: React.ComponentProps<'button'>['className'];
   buttonName?: string;
-  buttonLoadingName?: string;
-  loadingState?: boolean;
 };
 
 export default function GenerateQrCodeButton({

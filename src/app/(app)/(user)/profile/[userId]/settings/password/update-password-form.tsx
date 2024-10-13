@@ -33,11 +33,6 @@ export default function UpdatePasswordForm({ userEmail }: { userEmail: string })
     reset,
   } = useForm<FormData>({
     resolver: zodResolver(schema),
-    // defaultValues: {
-    //   bio: profile.bio ?? undefined,
-    //   location: profile.location ?? undefined,
-    //   website: profile.website ?? undefined,
-    // },
   });
 
   async function onSubmit(data: FormData) {
@@ -48,7 +43,7 @@ export default function UpdatePasswordForm({ userEmail }: { userEmail: string })
         email: userEmail,
         password: data.password,
       });
-      await sleep(500);
+      await sleep(240);
       toast.remove();
       reset();
       toast.success('Profile updated successfully');
