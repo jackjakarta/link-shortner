@@ -53,6 +53,7 @@ export default function Navbar() {
                     {item.name}
                   </Link>
                 ))}
+                <AuthButtons className="py-2 px-4 text-sm bg-black hover:bg-gray-500 text-white rounded-full" />
               </nav>
             </SheetContent>
           </Sheet>

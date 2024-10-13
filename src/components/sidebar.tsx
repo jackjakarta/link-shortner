@@ -1,5 +1,6 @@
 'use client';
 
+import AccountIcon from '@/components/icons/account';
 import ChartsIcon from '@/components/icons/charts';
 import ExitIcon from '@/components/icons/exit';
 import HamburgerIcon from '@/components/icons/hamburger';
@@ -7,13 +8,15 @@ import LinkIcon from '@/components/icons/link';
 import LinkChainIcon from '@/components/icons/link-chain';
 import WheelIcon from '@/components/icons/wheel';
 import { cw } from '@/utils/tailwind';
-import { type ObscuredUser } from '@/utils/user';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import React from 'react';
+
+import { useSidebar } from './hooks/use-sidebar';
 
 type SidebarMenuProps = {
-  user: ObscuredUser;
+  userId: string;
 };
 
 type SidebarMenuItem = {
@@ -23,8 +26,9 @@ type SidebarMenuItem = {
   onClick?: () => void;
 };
 
-export default function SidebarMenu({ user }: SidebarMenuProps) {
+export default function SidebarMenu({ userId }: SidebarMenuProps) {
   const pathname = usePathname();
+  const { isOpen, setIsOpen, sidebarRef, handleLinkClick } = useSidebar();
 
   const items: SidebarMenuItem[] = [
     {
@@ -33,28 +37,33 @@ export default function SidebarMenu({ user }: SidebarMenuProps) {
       href: '/shorten',
     },
     {
+      title: 'Account',
+      icon: AccountIcon,
+      href: `/profile/${userId}/settings`,
+    },
+    {
       title: 'Your Links',
       icon: LinkChainIcon,
-      href: `/profile/${user.id}`,
+      href: `/profile/${userId}`,
     },
     {
       title: 'Analytics',
       icon: ChartsIcon,
-      href: `/analytics/${user.id}`,
+      href: `/analytics/${userId}`,
     },
     {
       title: 'Settings',
       icon: WheelIcon,
-      href: `/profile/${user.id}/settings`,
+      href: `#`,
     },
   ];
 
   return (
     <>
       <button
-        data-drawer-target="default-sidebar"
-        data-drawer-toggle="default-sidebar"
+        onClick={() => setIsOpen(!isOpen)}
         aria-controls="default-sidebar"
+        aria-expanded={isOpen}
         type="button"
         className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
@@ -63,16 +72,19 @@ export default function SidebarMenu({ user }: SidebarMenuProps) {
       </button>
 
       <aside
+        ref={sidebarRef}
         id="default-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform bg-gray-800 ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        } sm:translate-x-0`}
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-800">
+        <div className="h-full px-3 py-4 overflow-y-auto">
           <ul className="space-y-2 font-medium">
             {items.map((item) => (
-              <li key={Math.random()}>
+              <li key={item.title}>
                 <Link
-                  onClick={item.onClick}
+                  onClick={item.onClick ?? handleLinkClick}
                   href={item.href}
                   className={cw(
                     'flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group',
