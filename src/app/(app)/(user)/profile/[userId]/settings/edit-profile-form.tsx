@@ -8,6 +8,7 @@ import type { UserProfileRow } from '@/db/schema';
 import { sleep } from '@/utils/sleep';
 import { type ObscuredUser } from '@/utils/user';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -44,6 +45,8 @@ export default function UserProfileSettingsForm({
     },
   });
 
+  const router = useRouter();
+
   async function onSubmit(data: FormData) {
     toast.loading('Saving...');
 
@@ -58,6 +61,8 @@ export default function UserProfileSettingsForm({
     } catch (error) {
       toast.error('Failed to update profile');
       console.error('Error updating profile:', error);
+    } finally {
+      router.refresh();
     }
   }
 
