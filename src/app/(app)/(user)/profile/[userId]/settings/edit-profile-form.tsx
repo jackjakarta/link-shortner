@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import type { UserProfileRow } from '@/db/schema';
+import { type UserProfileRow } from '@/db/schema';
 import { sleep } from '@/utils/sleep';
 import { type ObscuredUser } from '@/utils/user';
 import { zodResolver } from '@hookform/resolvers/zod';
