@@ -1,14 +1,14 @@
+import InfoPageCard from '@/components/info-page-card';
 import { getUser } from '@/utils/auth';
-
-import EmailVerifiedCard from './email-verified';
-import VerifyEmailPage from './verify-email-card';
 
 export default async function Page() {
   const user = await getUser();
 
   if (!user.emailVerified) {
-    return <VerifyEmailPage />;
+    return (
+      <InfoPageCard title="Verify your email" message="Please verify your email to continue" />
+    );
   }
 
-  return <EmailVerifiedCard />;
+  return <InfoPageCard title="Account active" message="Your email has already been verified" />;
 }

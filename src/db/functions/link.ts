@@ -1,9 +1,9 @@
 'use server';
 
 import { desc, eq, sql } from 'drizzle-orm';
+import { nanoid } from 'nanoid';
 
 import { db } from '..';
-import { generateRandomUrlSafeString } from '../crypto';
 import { shortLinkTable, type ShortLinkInsertRow, type ShortLinkRow } from '../schema';
 
 export async function dbGetLinkById({
@@ -51,7 +51,7 @@ export async function dbCreateLink({ userId, shortPath, longUrl }: ShortLinkInse
         target: shortLinkTable.shortPath,
         set: {
           userId,
-          shortPath: generateRandomUrlSafeString(4),
+          shortPath: nanoid(4),
           longUrl,
         },
       })

@@ -1,12 +1,13 @@
 'use client';
 
-import AuthButtons from '@/app/(app)/shorten/auth-button';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import * as React from 'react';
+
+import AuthButtons from './auth-buttons';
 
 export default function Navbar() {
   const { data: session } = useSession();

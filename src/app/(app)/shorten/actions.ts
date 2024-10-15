@@ -1,9 +1,9 @@
 'use server';
 
-import { generateRandomUrlSafeString } from '@/db/crypto';
 import { dbCreateLink } from '@/db/functions/link';
 import { getUser } from '@/utils/auth';
 import { type Url } from '@/utils/types';
+import { nanoid } from 'nanoid';
 import { redirect } from 'next/navigation';
 
 export async function shortenUrl(url: Url) {
@@ -13,7 +13,7 @@ export async function shortenUrl(url: Url) {
     redirect('/verify-email');
   }
 
-  const shortPath = generateRandomUrlSafeString(4);
+  const shortPath = nanoid(4);
 
   const shortenedLink = await dbCreateLink({
     shortPath,

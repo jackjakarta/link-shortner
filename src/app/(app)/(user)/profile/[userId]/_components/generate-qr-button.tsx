@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import toast from 'react-hot-toast';
 
+import { generateQrCode } from './actions';
+
 type GenerateQrCodeButtonProps = {
   linkId: string;
   url: string;
@@ -27,21 +29,8 @@ export default function GenerateQrCodeButton({
     toast.loading('Generating QR Code');
 
     try {
-      const response = await fetch('/api/qr-code', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ linkId, url }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error);
-      }
-
-      await sleep(2000);
+      await generateQrCode({ linkId, url });
+      await sleep(240);
       toast.remove();
       toast.success('QR Code generated!');
     } catch (error) {

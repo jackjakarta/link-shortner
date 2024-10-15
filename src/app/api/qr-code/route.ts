@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
 
     const qrCodeBuffer = await QRCode.toBuffer(parsed.data.url, { type: 'png', width: 500 });
 
-    const fileName = `qr-codes/qrcode-${nanoid(8)}.png`;
+    const fileName = `qr-codes/qrcode-${nanoid(12)}.png`;
     const qrCodeUrl = await uploadImageToS3({
       fileName,
       fileBuffer: qrCodeBuffer,
