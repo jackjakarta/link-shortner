@@ -14,6 +14,8 @@ import { usePathname } from 'next/navigation';
 import React from 'react';
 
 import { useSidebar } from './hooks/use-sidebar';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card';
+import SoonLabel from './ui/soon-label';
 
 type SidebarMenuProps = {
   userId: string;
@@ -50,11 +52,6 @@ export default function SidebarMenu({ userId }: SidebarMenuProps) {
       title: 'Analytics',
       icon: ChartsIcon,
       href: `/analytics/${userId}`,
-    },
-    {
-      title: 'Settings',
-      icon: WheelIcon,
-      href: `#`,
     },
   ];
 
@@ -103,9 +100,26 @@ export default function SidebarMenu({ userId }: SidebarMenuProps) {
               </li>
             ))}
             <li>
+              <HoverCard>
+                <HoverCardTrigger asChild>
+                  <button className="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group w-full">
+                    <WheelIcon
+                      className="w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white"
+                      aria-hidden="true"
+                    />
+                    <span className="ms-3">Settings</span>
+                    <div className="flex-grow" />
+                    <SoonLabel />
+                  </button>
+                </HoverCardTrigger>
+                <HoverCardContent className="flex w-[7rem] text-xs text-gray-600 font-light py-1">
+                  Coming soon..
+                </HoverCardContent>
+              </HoverCard>
+
               <button
                 onClick={() => signOut()}
-                className="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group w-full"
+                className="flex items-center p-2 mt-2 rounded-lg text-white hover:bg-gray-700 group w-full"
               >
                 <ExitIcon
                   className="w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white"

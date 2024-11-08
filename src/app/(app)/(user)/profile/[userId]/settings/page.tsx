@@ -1,4 +1,4 @@
-import Avatar from '@/components/common/avatar';
+import Avatar from '@/components/ui/avatar';
 import { dbGetUserProfileByUserId } from '@/db/functions/profile';
 import { getUser } from '@/utils/auth';
 import { getUserAvatarUrl } from '@/utils/user';
