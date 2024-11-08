@@ -1,6 +1,6 @@
 'use client';
 
-import DialogWindow from '@/components/common/dialog';
+import DialogWindow from '@/components/ui/dialog';
 import Image from 'next/image';
 import React from 'react';
 

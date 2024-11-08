@@ -63,7 +63,7 @@ export async function dbRegisterNewUser(
     });
   });
 
-  return { plainPassword };
+  return { id, plainPassword };
 }
 
 export async function dbGetUserByEmail({ email }: { email: string }): Promise<UserRow | undefined> {
@@ -97,4 +97,14 @@ export async function dbCreateUser(user: UserInsertRow) {
   const newUser = (await db.insert(userTable).values(user).returning())[0];
 
   return newUser;
+}
+
+export async function dbSetUserEmailVerified({
+  userId,
+  status,
+}: {
+  userId: string;
+  status: boolean;
+}) {
+  await db.update(userTable).set({ emailVerified: status }).where(eq(userTable.id, userId));
 }

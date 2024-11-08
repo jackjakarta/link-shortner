@@ -9,8 +9,9 @@ const bucketName = env.awsBucketName;
 const bucketUrl = env.awsBucketUrl;
 
 const s3 = new S3Client({
-  endpoint,
+  forcePathStyle: true,
   region,
+  endpoint,
   credentials: {
     accessKeyId,
     secretAccessKey,
@@ -24,14 +25,14 @@ export async function uploadImageToS3({
   fileName: string;
   fileBuffer: ArrayBuffer;
 }): Promise<string> {
-  await s3.send(
-    new PutObjectCommand({
-      Bucket: bucketName,
-      Key: fileName,
-      Body: Buffer.from(fileBuffer),
-      ContentType: 'image/png',
-    }),
-  );
+  const uploadCommand = new PutObjectCommand({
+    Bucket: bucketName,
+    Key: fileName,
+    Body: Buffer.from(fileBuffer),
+    ContentType: 'image/jpeg',
+  });
+
+  await s3.send(uploadCommand);
 
   return `${bucketUrl}/${fileName}`;
 }

@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'ls-cd-01.eu-central-1.linodeobjects.com',
+        hostname: 'mokoyzpbbfedsphyajre.supabase.co',
         port: '',
         pathname: '/**',
       },

@@ -75,10 +75,7 @@ export default function LoginForm() {
               {...register('password')}
               className="p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             />
-            <div className="flex justify-between items-center">
-              <Link href="/reset-password" className="text-sm text-indigo-600 hover:underline mt-2">
-                Forgot password ?
-              </Link>
+            <div className="flex justify-end items-center">
               <Link href="/register" className="text-sm text-indigo-600 hover:underline mt-2">
                 Sign up
               </Link>
