@@ -29,7 +29,7 @@ export async function dbGetUserByEmailAndPassword(
   const passwordHash = createPasswordHash(plainPassword, maybeUser.passwordSalt);
 
   if (maybeUser.passwordHash !== passwordHash) {
-    throw Error(`Passwords for user with email ${email} do not match.`);
+    throw Error(`Wrong password`);
   }
   return maybeUser;
 }
@@ -66,18 +66,8 @@ export async function dbRegisterNewUser(
   return { plainPassword };
 }
 
-export async function dbCreateUser(user: UserInsertRow) {
-  const newUser = (await db.insert(userTable).values(user).returning())[0];
-
-  return newUser;
-}
-
-export async function dbGetUserByEmail({ email }: { email: string }): Promise<UserRow> {
+export async function dbGetUserByEmail({ email }: { email: string }): Promise<UserRow | undefined> {
   const maybeUser = (await db.select().from(userTable).where(eq(userTable.email, email)))[0];
-
-  if (maybeUser === undefined) {
-    throw Error(`No user with email '${email}' found`);
-  }
 
   return maybeUser;
 }
@@ -88,7 +78,7 @@ export async function dbUpdateUserPassword({
 }: {
   email: string;
   password: string;
-}) {
+}): Promise<UserRow | undefined> {
   const passwordSalt = makeHash(generateSalt());
   const passwordHash = createPasswordHash(password, passwordSalt);
 
@@ -101,4 +91,10 @@ export async function dbUpdateUserPassword({
   )[0];
 
   return user;
+}
+
+export async function dbCreateUser(user: UserInsertRow) {
+  const newUser = (await db.insert(userTable).values(user).returning())[0];
+
+  return newUser;
 }
