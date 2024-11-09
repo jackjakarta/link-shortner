@@ -10,7 +10,7 @@ type SettingsNavbarProps = {
 
 export default function SettingsNavbar({ userId }: SettingsNavbarProps) {
   const pathname = usePathname();
-  const itemClassName = 'text-lg font-light text-gray-900 hover:text-gray-600';
+  const itemClassName = 'text-lg font-light text-gray-900 hover:text-gray-400';
 
   return (
     <nav className="flex w-full gap-4 mb-8">

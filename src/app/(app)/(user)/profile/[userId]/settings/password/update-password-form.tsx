@@ -95,11 +95,7 @@ export default function UpdatePasswordForm({ userEmail }: { userEmail: string })
         )}
       </div>
 
-      <Button
-        className="disabled:bg-gray-700 disabled:cursor-not-allowed"
-        type="submit"
-        disabled={isSubmitting}
-      >
+      <Button type="submit" disabled={isSubmitting}>
         Update Password
       </Button>
     </form>

@@ -10,7 +10,7 @@ import SettingsNavbar from './settings-navbar';
 export default async function Page() {
   const user = await getUser();
   const userProfile = await dbGetUserProfileByUserId({ userId: user.id });
-  const avatarUrl = await getUserAvatarUrl(user.email);
+  const avatarUrl = await getUserAvatarUrl({ email: user.email });
 
   if (userProfile === undefined) {
     throw new Error('User profile not found');
@@ -18,8 +18,8 @@ export default async function Page() {
 
   return (
     <>
-      <SettingsNavbar userId={user.id} />
-      <main className="px-8 py-1 max-w-[35rem]">
+      <main className="px-8 py-1 mt-4 max-w-[35rem]">
+        <SettingsNavbar userId={user.id} />
         <div className="flex flex-col justify-center items-center space-y-4 mb-4">
           <Avatar src={avatarUrl} alt="avatar" width={80} height={80} />
           <span className="text-sm font-medium">
