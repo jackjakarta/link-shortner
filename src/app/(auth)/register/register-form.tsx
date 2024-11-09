@@ -82,7 +82,7 @@ export default function RegisterForm({ error }: RegistrationProps) {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen bg-slate-900 dark:bg-gray-800">
+    <div className="flex justify-center items-center h-screen">
       <div className="w-full max-w-md p-10 bg-white rounded-xl shadow-md">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <Label htmlFor="name" className="text-2xl font-medium text-center">
