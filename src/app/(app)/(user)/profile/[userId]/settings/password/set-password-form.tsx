@@ -1,5 +1,7 @@
 'use client';
 
+import EyeClosedIcon from '@/components/icons/eye-closed';
+import EyeOpenIcon from '@/components/icons/eye-open';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -35,6 +37,8 @@ export default function SetPasswordForm({ userEmail }: { userEmail: string }) {
     resolver: zodResolver(schema),
   });
 
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = React.useState(false);
   const router = useRouter();
 
   async function onSubmit(data: FormData) {
@@ -60,27 +64,43 @@ export default function SetPasswordForm({ userEmail }: { userEmail: string }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-3/4">
-      <div className="space-y-2">
-        <Label htmlFor="Website">Set password</Label>
+      <div className="space-y-2 relative">
+        <Label htmlFor="newPassword">Set password</Label>
         <Input
-          id="password"
-          type="password"
+          id="newPassword"
+          type={isPasswordVisible ? 'text' : 'password'}
           {...register('newPassword')}
           placeholder="New Password"
+          className="border border-input"
           disabled={isSubmitting}
         />
+        <button
+          type="button"
+          onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+          className="absolute right-3 top-9"
+        >
+          {isPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
+        </button>
         {errors.newPassword && <p className="text-red-500 text-sm">{errors.newPassword.message}</p>}
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="Website">Password confirmation</Label>
+      <div className="space-y-2 relative">
+        <Label htmlFor="confirmPassword">Password confirmation</Label>
         <Input
           id="confirmPassword"
-          type="password"
+          type={isConfirmPasswordVisible ? 'text' : 'password'}
           {...register('confirmPassword')}
           placeholder="Confirm Password"
+          className="border border-input"
           disabled={isSubmitting}
         />
+        <button
+          type="button"
+          onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
+          className="absolute right-3 top-9"
+        >
+          {isConfirmPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
+        </button>
         {errors.confirmPassword && (
           <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
         )}

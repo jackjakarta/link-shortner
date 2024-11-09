@@ -68,12 +68,22 @@ export default function UserProfileSettingsForm({
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full">
       <div className="space-y-2">
         <Label htmlFor="name">Username</Label>
-        <Input id="name" className="cursor-not-allowed bg-gray-100" value={user.name} readOnly />
+        <Input
+          id="name"
+          className="cursor-not-allowed bg-gray-100 border border-input"
+          value={user.name}
+          readOnly
+        />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" className="cursor-not-allowed bg-gray-100" value={user.email} readOnly />
+        <Input
+          id="email"
+          className="cursor-not-allowed bg-gray-100 border border-input"
+          value={user.email}
+          readOnly
+        />
       </div>
 
       <div className="space-y-2">
@@ -90,7 +100,13 @@ export default function UserProfileSettingsForm({
 
       <div className="space-y-2">
         <Label htmlFor="location">Location</Label>
-        <Input id="location" {...register('location')} placeholder="Bio" disabled={isSubmitting} />
+        <Input
+          id="location"
+          {...register('location')}
+          placeholder="Location"
+          className="border border-input"
+          disabled={isSubmitting}
+        />
         {errors.location && <p className="text-red-500 text-sm">{errors.location.message}</p>}
       </div>
 
@@ -100,6 +116,7 @@ export default function UserProfileSettingsForm({
           id="website"
           {...register('website')}
           placeholder="Website"
+          className="border border-input"
           disabled={isSubmitting}
         />
         {errors.website && <p className="text-red-500 text-sm">{errors.website.message}</p>}
