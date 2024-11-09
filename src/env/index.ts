@@ -20,7 +20,7 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_baseUrl: z.string().min(1),
-    NEXT_PUBLIC_passwordValidator: z.enum(['weak', 'medium', 'strong']),
+    NEXT_PUBLIC_passwordValidator: z.enum(['weak', 'medium', 'strong']).default('medium'),
   },
   runtimeEnv: {
     databaseUrl: process.env.DATABASE_URL,

@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { type UserProfileRow } from '@/db/schema';
-import { sleep } from '@/utils/sleep';
 import { type ObscuredUser } from '@/utils/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -55,7 +54,6 @@ export default function UserProfileSettingsForm({
         userId: user.id,
         ...data,
       });
-      await sleep(500);
       toast.remove();
       toast.success('Profile updated successfully');
     } catch (error) {
@@ -107,11 +105,7 @@ export default function UserProfileSettingsForm({
         {errors.website && <p className="text-red-500 text-sm">{errors.website.message}</p>}
       </div>
 
-      <Button
-        className="disabled:bg-gray-700 disabled:cursor-not-allowed"
-        type="submit"
-        disabled={isSubmitting}
-      >
+      <Button type="submit" disabled={isSubmitting}>
         Save Changes
       </Button>
     </form>

@@ -15,9 +15,12 @@ export async function obscureUser({ user }: { user: UserRow }): Promise<Obscured
   };
 }
 
-export async function getUserAvatarUrl(email: string, size = 200) {
+export async function getUserAvatarUrl({ email, size }: { email: string; size?: number }) {
   const trimmedEmail = email.trim().toLowerCase();
-  const hash = crypto.createHash('sha256').update(trimmedEmail).digest('hex');
+  const imageSize = size ?? 200;
 
-  return `https://www.gravatar.com/avatar/${hash}?s=${size}&d=identicon`;
+  const hash = crypto.createHash('sha256').update(trimmedEmail).digest('hex');
+  const avatarUrl = `https://www.gravatar.com/avatar/${hash}?s=${imageSize}&d=identicon`;
+
+  return avatarUrl;
 }
