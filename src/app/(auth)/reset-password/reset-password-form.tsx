@@ -1,5 +1,8 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { dbDeleteActionToken } from '@/db/functions/token';
 import { dbUpdateUserPassword } from '@/db/functions/user';
 import { type TokenRow } from '@/db/schema';
@@ -56,72 +59,56 @@ export default function ResetPasswordForm({ email, token }: ResetPasswordFormPro
   }
 
   return (
-    <div className="max-w-md mx-auto bg-white p-8 border border-gray-300 rounded-md shadow-sm">
-      <h2 className="text-2xl font-bold text-center mb-6">Reset Your Password</h2>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col bg-white w-full max-w-[500px] p-8 border border-gray-300 rounded-md shadow-md space-y-6 mx-auto"
+    >
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          placeholder="Enter your email"
+          {...register('email')}
+          className={errors.email ? 'border-red-500' : 'border border-input'}
+          readOnly
+        />
+        {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+      </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            {...register('email')}
-            className={`mt-1 block w-full p-2 border ${
-              errors.email ? 'border-red-500' : 'border-gray-300'
-            } rounded-md shadow-sm`}
-            readOnly
-          />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="password">New Password</Label>
+        <Input
+          id="password"
+          type="password"
+          placeholder="Enter your new password"
+          {...register('password')}
+          className={errors.password ? 'border-red-500' : 'border border-input'}
+        />
+        {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+      </div>
 
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            New Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            {...register('password')}
-            className={`mt-1 block w-full p-2 border ${
-              errors.password ? 'border-red-500' : 'border-gray-300'
-            } rounded-md shadow-sm`}
-          />
-          {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-          )}
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="passwordConfirm">Confirm Password</Label>
+        <Input
+          id="passwordConfirm"
+          type="password"
+          placeholder="Confirm your new password"
+          {...register('passwordConfirm')}
+          className={errors.passwordConfirm ? 'border-red-500' : 'border border-input'}
+        />
+        {errors.passwordConfirm && (
+          <p className="text-red-500 text-sm mt-1">{errors.passwordConfirm.message}</p>
+        )}
+      </div>
 
-        <div>
-          <label htmlFor="passwordConfirm" className="block text-sm font-medium text-gray-700">
-            Confirm Password
-          </label>
-          <input
-            id="passwordConfirm"
-            type="password"
-            {...register('passwordConfirm')}
-            className={`mt-1 block w-full p-2 border ${
-              errors.passwordConfirm ? 'border-red-500' : 'border-gray-300'
-            } rounded-md shadow-sm`}
-          />
-          {errors.passwordConfirm && (
-            <p className="text-red-500 text-sm mt-1">{errors.passwordConfirm.message}</p>
-          )}
-        </div>
-
-        <div>
-          <button
-            type="submit"
-            className={`w-full p-2 bg-blue-500 text-white font-semibold rounded-md ${
-              isSubmitting ? 'cursor-not-allowed opacity-50' : ''
-            }`}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Resetting...' : 'Reset Password'}
-          </button>
-        </div>
-      </form>
-    </div>
+      <Button
+        type="submit"
+        className="w-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-colors duration-300"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? 'Resetting...' : 'Reset Password'}
+      </Button>
+    </form>
   );
 }

@@ -8,12 +8,12 @@ export default async function Page({ searchParams }: { searchParams?: { token?: 
   const userActionRow = maybeToken !== undefined ? await dbValidateToken(maybeToken) : undefined;
 
   return (
-    <>
+    <main className="flex justify-center items-center px-8 h-screen bg-slate-900 dark:bg-gray-800">
       {userActionRow !== undefined ? (
         <ResetPasswordForm {...userActionRow} />
       ) : (
         <InitiatePasswordResetForm />
       )}
-    </>
+    </main>
   );
 }
