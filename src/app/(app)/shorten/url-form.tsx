@@ -1,6 +1,10 @@
 'use client';
 
 import CopyToClipboardIcon from '@/components/icons/copy';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { env } from '@/env';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
@@ -56,65 +60,65 @@ export default function ShortenUrlForm() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full max-w-md px-4">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md w-full"
-      >
-        <h1 className="text-2xl font-semibold text-gray-700 dark:text-white mb-4">Shorten URL</h1>
+    <div className="flex items-center justify-center min-h-screen w-full max-w-2xl px-4">
+      <Card className="w-full border-none rounded-full bg-gradient-to-r from-gray-700 to-indigo-900 p-8 shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-white text-center text-2xl font-semibold mb-4">
+            Shorten URL
+          </CardTitle>
+        </CardHeader>
 
-        {shortenedUrl ? (
-          <div className="flex items-center justify-between mb-4">
-            <input
-              type="text"
-              value={shortenedUrl}
-              readOnly
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-white"
-            />
-            <button
-              type="button"
-              onClick={() => handleCopy(shortenedUrl)}
-              className="ml-2 p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors"
-            >
-              <CopyToClipboardIcon />
-            </button>
-          </div>
-        ) : (
-          <div className="mb-4">
-            <label htmlFor="url" className="block text-gray-600 dark:text-gray-300 mb-2">
-              Enter URL
-            </label>
-            <input
-              id="url"
-              type="text"
-              className={`w-full px-4 py-2 border ${
-                errors.url ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-              } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-white`}
-              placeholder="https://example.com"
-              {...register('url')}
-            />
-            {errors.url && <p className="text-red-500 text-sm mt-1">{errors.url.message}</p>}
-          </div>
-        )}
-        <div className="flex justify-center">
-          {shortenedUrl ? (
-            <Link
-              href="/shorten"
-              onClick={handleResetForm}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold p-2 rounded-md transition-colors dark:bg-blue-600 dark:hover:bg-blue-700"
-            >
-              Shorten another URL
-            </Link>
-          ) : (
-            <button
-              type="submit"
-              className="bg-purple-500 hover:bg-purple-600 text-white font-semibold p-2 rounded-md transition-colors dark:bg-purple-600 dark:hover:bg-purple-700"
-            >
-              Shorten
-            </button>
-          )}
-        </div>
-      </form>
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+          <CardContent>
+            {shortenedUrl ? (
+              <div className="flex items-center gap-3 mb-4">
+                <Input
+                  type="text"
+                  value={shortenedUrl}
+                  readOnly
+                  className="w-full bg-gray-900 text-white border-none ring-0"
+                />
+                <Button
+                  variant="ghost"
+                  onClick={() => handleCopy(shortenedUrl)}
+                  className="text-gray-400 hover:text-gray-300 transition-colors group"
+                >
+                  <CopyToClipboardIcon className="h-5 w-5 group-hover:text-black" />
+                </Button>
+              </div>
+            ) : (
+              <div className="mb-4">
+                <Label htmlFor="url" className="text-gray-300 mb-2 block">
+                  Enter URL
+                </Label>
+                <Input
+                  id="url"
+                  type="text"
+                  placeholder="https://example.com"
+                  className={`w-full bg-gray-900 text-white ${
+                    errors.url ? 'border-red-500' : 'border-gray-700'
+                  }`}
+                  {...register('url', {
+                    required: 'URL is required',
+                    pattern: { value: /^https?:\/\//, message: 'Enter a valid URL' },
+                  })}
+                />
+                {errors.url && <p className="text-red-500 text-sm mt-1">{errors.url.message}</p>}
+              </div>
+            )}
+          </CardContent>
+
+          <CardFooter className="flex justify-center">
+            {shortenedUrl ? (
+              <Link href="/shorten">
+                <Button onClick={handleResetForm}>Shorten another URL</Button>
+              </Link>
+            ) : (
+              <Button type="submit">Shorten</Button>
+            )}
+          </CardFooter>
+        </form>
+      </Card>
     </div>
   );
 }
