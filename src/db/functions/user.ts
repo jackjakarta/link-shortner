@@ -6,12 +6,8 @@ import { db } from '..';
 import { createPasswordHash, generateSalt, makeHash } from '../crypto';
 import { userProfileTable, userTable, type UserInsertRow, type UserRow } from '../schema';
 
-export async function dbGetUserById(userId: string): Promise<UserRow> {
+export async function dbGetUserById(userId: string): Promise<UserRow | undefined> {
   const user = (await db.select().from(userTable).where(eq(userTable.id, userId)))[0];
-
-  if (user === undefined) {
-    throw Error(`No user with id ${userId} found`);
-  }
 
   return user;
 }
