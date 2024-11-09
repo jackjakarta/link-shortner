@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-template",
+  "name": "klikr-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,6 +10,7 @@
     "types": "tsc --noEmit",
     "format:check": "prettier --check .",
     "lint": "next lint",
+    "checks": "./scripts/checks.sh",
     "db:generate": "drizzle-kit generate --config=./src/db/drizzle.config.ts",
     "db:migrate": "dotenv -e .env tsx ./src/db/migrate.ts",
     "db:introspect": "dotenv -e .env -- drizzle-kit studio --config=src/db/drizzle.config.ts"

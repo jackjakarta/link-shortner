@@ -5,10 +5,13 @@ import { aeonik } from './fonts/utils';
 
 import './globals.css';
 
-export const metadata: Metadata = {
-  title: 'Lnkto - URL Shortener',
-  description: 'Shorten your URLs with Lnkto',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Lnkto - URL Shortener',
+    description: 'Shorten your URLs with Lnkto',
+    icons: { icon: '/favicon.ico' },
+  };
+}
 
 export default function RootLayout({
   children,
