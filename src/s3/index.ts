@@ -29,7 +29,7 @@ export async function uploadImageToS3({
     Bucket: bucketName,
     Key: fileName,
     Body: Buffer.from(fileBuffer),
-    ContentType: 'image/jpeg',
+    ContentType: 'image/png',
   });
 
   await s3.send(uploadCommand);

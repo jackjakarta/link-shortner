@@ -90,7 +90,19 @@ export async function dbUpdateUserPassword({
 }
 
 export async function dbCreateUser(user: UserInsertRow) {
-  const newUser = (await db.insert(userTable).values(user).returning())[0];
+  const newUser = await db.transaction(async (tx) => {
+    const maybeUser = (await tx.insert(userTable).values(user).returning())[0];
+
+    if (maybeUser === undefined) {
+      throw new Error('Failed to create user');
+    }
+
+    await tx.insert(userProfileTable).values({
+      userId: maybeUser.id,
+    });
+
+    return maybeUser;
+  });
 
   return newUser;
 }
