@@ -58,7 +58,7 @@ export default function LoginForm() {
   };
 
   return (
-    <main className="w-full flex items-center justify-center min-h-screen bg-slate-900 dark:bg-gray-800">
+    <main className="w-full flex items-center justify-center min-h-screen">
       <div className="p-8 max-w-md w-full bg-white rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold text-center text-gray-900 mb-6">Login</h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

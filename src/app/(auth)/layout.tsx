@@ -6,5 +6,5 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   if (session !== null) redirect('/');
 
-  return <>{children}</>;
+  return <div className="bg-slate-900 dark:bg-gray-800">{children}</div>;
 }
