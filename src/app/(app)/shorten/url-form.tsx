@@ -92,6 +92,7 @@ export default function ShortenUrlForm() {
                   Enter URL
                 </Label>
                 <Input
+                  autoFocus
                   id="url"
                   type="text"
                   placeholder="https://example.com"
