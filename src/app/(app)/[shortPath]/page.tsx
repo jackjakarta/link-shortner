@@ -2,13 +2,13 @@ import { dbGetLinkByShortPath, dbUpdateLinkClickStats } from '@/db/functions/lin
 import { redirect } from 'next/navigation';
 
 export default async function Page({ params }: { params: { shortPath: string } }) {
-  const link = await dbGetLinkByShortPath(params.shortPath);
+  const link = await dbGetLinkByShortPath({ shortPath: params.shortPath });
 
   if (link === undefined) {
     redirect('/');
   }
 
-  await dbUpdateLinkClickStats(link.id);
+  await dbUpdateLinkClickStats({ linkId: link.id });
 
-  redirect(`${link.longUrl}`);
+  redirect(link.longUrl);
 }

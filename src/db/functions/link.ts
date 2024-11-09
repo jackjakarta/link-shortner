@@ -26,14 +26,14 @@ export async function dbGetLinksByUserId({ userId }: { userId: string }): Promis
   return links;
 }
 
-export async function dbGetLinkByShortPath(shortPath: string): Promise<ShortLinkRow> {
+export async function dbGetLinkByShortPath({
+  shortPath,
+}: {
+  shortPath: string;
+}): Promise<ShortLinkRow | undefined> {
   const link = (
     await db.select().from(shortLinkTable).where(eq(shortLinkTable.shortPath, shortPath))
   )[0];
-
-  if (link === undefined) {
-    throw Error(`No link with short path ${shortPath} found`);
-  }
 
   return link;
 }
@@ -61,7 +61,7 @@ export async function dbCreateLink({ userId, shortPath, longUrl }: ShortLinkInse
   return shortenedLink;
 }
 
-export async function dbUpdateLinkClickStats(linkId: string) {
+export async function dbUpdateLinkClickStats({ linkId }: { linkId: string }) {
   const link = (await db.select().from(shortLinkTable).where(eq(shortLinkTable.id, linkId)))[0];
 
   if (link === undefined) {
