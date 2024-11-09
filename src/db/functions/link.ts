@@ -1,6 +1,6 @@
 'use server';
 
-import { desc, eq, sql } from 'drizzle-orm';
+import { and, desc, eq, sql } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 
 import { db } from '..';
@@ -131,4 +131,10 @@ export async function dbUpdateLinkQrCodeUrl({
   )[0];
 
   return shortLink;
+}
+
+export async function dbDeleteLink({ linkId, userId }: { linkId: string; userId: string }) {
+  await db
+    .delete(shortLinkTable)
+    .where(and(eq(shortLinkTable.id, linkId), eq(shortLinkTable.userId, userId)));
 }

@@ -9,6 +9,7 @@ import { format, isToday, isYesterday } from 'date-fns';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
+import DeleteLinkButton from './delete-link-button';
 import GenerateQrCodeButton from './generate-qr-button';
 import QrModal from './qr-modal';
 
@@ -47,6 +48,9 @@ export default function LinksTable({ links }: LinksTableProps) {
             </th>
             <th scope="col" className="px-6 py-3">
               QR Code
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Delete
             </th>
           </tr>
         </thead>
@@ -110,6 +114,9 @@ export default function LinksTable({ links }: LinksTableProps) {
                     url={buildRouteUrl({ route: link.shortPath })}
                   />
                 )}
+              </td>
+              <td className="px-6 py-4">
+                <DeleteLinkButton linkId={link.id} />
               </td>
             </tr>
           ))}
