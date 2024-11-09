@@ -102,11 +102,7 @@ export default function ResetPasswordForm({ email, token }: ResetPasswordFormPro
         )}
       </div>
 
-      <Button
-        type="submit"
-        className="w-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-colors duration-300"
-        disabled={isSubmitting}
-      >
+      <Button type="submit" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? 'Resetting...' : 'Reset Password'}
       </Button>
     </form>
