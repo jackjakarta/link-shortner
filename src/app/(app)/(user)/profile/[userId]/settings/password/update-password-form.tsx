@@ -1,5 +1,7 @@
 'use client';
 
+import EyeClosedIcon from '@/components/icons/eye-closed';
+import EyeOpenIcon from '@/components/icons/eye-open';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -35,6 +37,10 @@ export default function UpdatePasswordForm({ userEmail }: { userEmail: string })
     resolver: zodResolver(schema),
   });
 
+  const [isOldPasswordVisible, setIsOldPasswordVisible] = React.useState(false);
+  const [isNewPasswordVisible, setIsNewPasswordVisible] = React.useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = React.useState(false);
+
   async function onSubmit(data: FormData) {
     toast.loading('Saving...');
 
@@ -58,38 +64,63 @@ export default function UpdatePasswordForm({ userEmail }: { userEmail: string })
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-3/4">
-      <div className="space-y-2">
-        <Label htmlFor="Website">Old Password</Label>
+      <div className="space-y-2 relative">
+        <Label htmlFor="oldPassword">Old Password</Label>
         <Input
           id="oldPassword"
-          type="password"
+          type={isOldPasswordVisible ? 'text' : 'password'}
           {...register('oldPassword')}
           placeholder="Old Password"
+          className="border border-input"
           disabled={isSubmitting}
         />
+        <button
+          type="button"
+          onClick={() => setIsOldPasswordVisible(!isOldPasswordVisible)}
+          className="absolute right-3 top-9"
+        >
+          {isOldPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
+        </button>
         {errors.oldPassword && <p className="text-red-500 text-sm">{errors.oldPassword.message}</p>}
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="Website">New Password</Label>
+
+      <div className="space-y-2 relative">
+        <Label htmlFor="newPassword">New Password</Label>
         <Input
-          id="password"
-          type="password"
+          id="newPassword"
+          type={isNewPasswordVisible ? 'text' : 'password'}
           {...register('newPassword')}
           placeholder="New Password"
+          className="border border-input"
           disabled={isSubmitting}
         />
+        <button
+          type="button"
+          onClick={() => setIsNewPasswordVisible(!isNewPasswordVisible)}
+          className="absolute right-3 top-9"
+        >
+          {isNewPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
+        </button>
         {errors.newPassword && <p className="text-red-500 text-sm">{errors.newPassword.message}</p>}
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="Website">Password confirmation</Label>
+      <div className="space-y-2 relative">
+        <Label htmlFor="confirmPassword">Password confirmation</Label>
         <Input
           id="confirmPassword"
-          type="password"
+          type={isConfirmPasswordVisible ? 'text' : 'password'}
           {...register('confirmPassword')}
           placeholder="Confirm Password"
+          className="border border-input"
           disabled={isSubmitting}
         />
+        <button
+          type="button"
+          onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
+          className="absolute right-3 top-9"
+        >
+          {isConfirmPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
+        </button>
         {errors.confirmPassword && (
           <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
         )}

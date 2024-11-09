@@ -1,5 +1,10 @@
 'use client';
 
+import EyeClosedIcon from '@/components/icons/eye-closed';
+import EyeOpenIcon from '@/components/icons/eye-open';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { emailSchema, passwordSchema, userNameSchema } from '@/utils/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
@@ -28,6 +33,8 @@ type RegistrationProps = {
 };
 
 export default function RegisterForm({ error }: RegistrationProps) {
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = React.useState(false);
   const [successMessage, setSuccessMessage] = React.useState('');
   const router = useRouter();
 
@@ -35,10 +42,14 @@ export default function RegisterForm({ error }: RegistrationProps) {
     register,
     handleSubmit,
     setError,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
   });
+
+  const togglePasswordVisibility = () => setIsPasswordVisible(!isPasswordVisible);
+  const toggleConfirmPasswordVisibility = () =>
+    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
 
   async function onSubmit(data: RegistrationFormData) {
     try {
@@ -71,90 +82,91 @@ export default function RegisterForm({ error }: RegistrationProps) {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="grid w-full max-w-md p-10 bg-white rounded-xl drop-shadow-overlay">
-        <form className="grid grid-cols-1 gap-y-4" onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="registration">
-            <span className="text-2xl font-medium">Registration</span>
-          </label>
+    <div className="flex justify-center items-center h-screen bg-slate-900 dark:bg-gray-800">
+      <div className="w-full max-w-md p-10 bg-white rounded-xl shadow-md">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <Label htmlFor="name" className="text-2xl font-medium text-center">
+            Registration
+          </Label>
 
-          <div className="input input-registration border rounded-lg p-2">
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="name">Username</Label>
+            <Input
+              id="name"
               type="text"
-              {...register('name')}
-              className="text-md h-full w-full text-clip bg-transparent outline-none"
               placeholder="Username"
+              {...register('name')}
+              className="border border-input"
+              disabled={isSubmitting}
             />
-            {errors.name && (
-              <p className="text-red-500" role="alert">
-                {errors.name.message}
-              </p>
-            )}
+            {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
           </div>
 
-          <div className="input input-registration border rounded-lg p-2">
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
               type="email"
-              {...register('email')}
-              className="text-md h-full w-full text-clip bg-transparent outline-none"
               placeholder="Email"
+              {...register('email')}
+              className="border border-input"
+              disabled={isSubmitting}
             />
-            {errors.email && (
-              <p className="text-red-500" role="alert">
-                {errors.email.message}
-              </p>
-            )}
+            {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
 
-          <div className="input input-registration border rounded-lg p-2">
-            <input
-              type="password"
-              {...register('password')}
-              className="text-md h-full w-full text-clip bg-transparent outline-none"
+          <div className="space-y-2 relative">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type={isPasswordVisible ? 'text' : 'password'}
               placeholder="Password"
+              {...register('password')}
+              className="border border-input"
+              disabled={isSubmitting}
             />
-            {errors.password && (
-              <p className="text-red-500" role="alert">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-
-          <div className="input input-registration border rounded-lg p-2">
-            <input
-              type="password"
-              {...register('confirmPassword')}
-              className="text-md h-full w-full text-clip bg-transparent outline-none"
-              placeholder="Confirm Password"
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-500" role="alert">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </div>
-
-          {successMessage && (
-            <p className="text-green-500" role="success">
-              {successMessage}
-            </p>
-          )}
-          {error && (
-            <p className="text-red-500" role="alert">
-              {error}
-            </p>
-          )}
-
-          <button className="btn btn-primary w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Register
-          </button>
-
-          <p className="text-gray-600 text-sm">
-            Already have an account?{' '}
-            <Link
-              href="/login"
-              className="text-grey-600 font-bold underline py-2 rounded focus:outline-none focus:shadow-outline"
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute right-3 top-9"
             >
+              {isPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
+            </button>
+            {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+          </div>
+
+          <div className="space-y-2 relative">
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <Input
+              id="confirmPassword"
+              type={isConfirmPasswordVisible ? 'text' : 'password'}
+              placeholder="Confirm Password"
+              {...register('confirmPassword')}
+              className="border border-input"
+              disabled={isSubmitting}
+            />
+            <button
+              type="button"
+              onClick={toggleConfirmPasswordVisibility}
+              className="absolute right-3 top-9"
+            >
+              {isConfirmPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
+            </button>
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
+            )}
+          </div>
+
+          {successMessage && <p className="text-green-500 text-sm">{successMessage}</p>}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            Register
+          </Button>
+
+          <p className="text-gray-600 text-sm text-center">
+            Already have an account?{' '}
+            <Link href="/login" className="text-gray-600 font-bold underline hover:text-gray-400">
               Log In
             </Link>
           </p>
