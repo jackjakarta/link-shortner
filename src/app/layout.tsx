@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'Lnkto - URL Shortener',
     description: 'Shorten your URLs with Lnkto',
-    icons: { icon: '/favicon.ico' },
+    icons: { icon: '/favicon.png' },
   };
 }
 
