@@ -46,7 +46,7 @@ export async function sendUserActionEmail({
         {
           From: {
             Email: env.emailAccount,
-            Name: 'LnkTo - Link Shortener',
+            Name: 'Klikr App',
           },
           To: [
             {
@@ -102,7 +102,7 @@ export async function sendUserActionInformationEmail(
         {
           From: {
             Email: env.emailAccount,
-            Name: 'LnkTo - Link Shortener',
+            Name: 'Klikr App',
           },
           To: [
             {
