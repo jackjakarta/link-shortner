@@ -40,19 +40,21 @@ export const authOptions = {
     async signIn({ user, account }) {
       if (account?.provider === 'github') {
         try {
-          await dbGetUserByEmail({ email: user.email! });
+          const maybeUser = await dbGetUserByEmail({ email: user.email! });
+
+          if (maybeUser === undefined) {
+            await dbCreateUser({
+              id: user.id,
+              email: user.email!,
+              name: user.name || 'GitHub User',
+              passwordHash: '',
+              passwordSalt: '',
+              emailVerified: true,
+              provider: account.provider,
+            });
+          }
         } catch (e) {
-          await dbCreateUser({
-            id: user.id,
-            email: user.email!,
-            name: user.name || 'GitHub User',
-            passwordHash: '',
-            passwordSalt: '',
-            emailVerified: true,
-            provider: account.provider,
-          });
-          console.debug(e);
-          return true;
+          console.error(e);
         }
 
         return true;

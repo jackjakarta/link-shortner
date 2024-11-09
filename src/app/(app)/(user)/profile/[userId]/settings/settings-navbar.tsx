@@ -10,22 +10,20 @@ type SettingsNavbarProps = {
 
 export default function SettingsNavbar({ userId }: SettingsNavbarProps) {
   const pathname = usePathname();
+  const itemClassName = 'text-lg font-light text-gray-900 hover:text-gray-600';
 
   return (
-    <nav className="flex w-full gap-4 mb-4">
+    <nav className="flex w-full gap-4 mb-8">
       <Link
-        className={cw(
-          'text-gray-900 hover:text-gray-600',
-          pathname === `/profile/${userId}/settings` && 'font-bold',
-        )}
+        className={cw(itemClassName, pathname === `/profile/${userId}/settings` && 'font-medium')}
         href={`/profile/${userId}/settings`}
       >
         Profile
       </Link>
       <Link
         className={cw(
-          'text-gray-900 hover:text-gray-600',
-          pathname === `/profile/${userId}/settings/password` && 'font-bold',
+          itemClassName,
+          pathname === `/profile/${userId}/settings/password` && 'font-medium',
         )}
         href={`/profile/${userId}/settings/password`}
       >

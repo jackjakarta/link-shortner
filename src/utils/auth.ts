@@ -1,14 +1,13 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/utils';
 import { dbGetUserById } from '@/db/functions/user';
+import { type UserRow } from '@/db/schema';
 import { getServerSession, type Session } from 'next-auth';
 import { redirect } from 'next/navigation';
 
-import { obscureUser, type ObscuredUser } from './user';
-
 export async function getMaybeUserSession(): Promise<Session | null> {
-  const session = await getServerSession(authOptions);
+  const maybeSession = await getServerSession(authOptions);
 
-  return session;
+  return maybeSession;
 }
 
 export async function getValidSession(): Promise<Session> {
@@ -21,10 +20,13 @@ export async function getValidSession(): Promise<Session> {
   return session;
 }
 
-export async function getUser(): Promise<ObscuredUser> {
+export async function getUser(): Promise<UserRow> {
   const session = await getValidSession();
   const user = await dbGetUserById(session.user.id);
-  const obscuredUser = await obscureUser({ user });
 
-  return obscuredUser;
+  if (user === undefined) {
+    throw new Error('User not found');
+  }
+
+  return user;
 }
