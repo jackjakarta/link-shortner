@@ -19,17 +19,17 @@ const resetPasswordBody = (url: string) =>
                   margin: 0 0 20px;
                 "
               >
-               Klicken Sie auf den Link, um ihr Passwort zurückzusetzen.
+               Click the link below to reset your password
               </h1>
               <p style="margin: 24px 0 0; text-align: left">
-                <a href="${url}" class="button">Passwort zurücksetzen</a>
+                <a href="${url}" class="button">Reset password</a>
               </p>
             </div>
 `);
 
 export function resetPasswordTemplate(actionUrl: string) {
   return {
-    Subject: { Data: 'Passwort zurücksetzen' },
+    Subject: { Data: 'Reset password' },
     Body: {
       Html: {
         Data: resetPasswordBody(actionUrl),

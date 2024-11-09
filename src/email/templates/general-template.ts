@@ -129,38 +129,34 @@ export const generalTemplate = (bodyContent: string) => `
                   "
                 >
                   <p>
-                    Thank you for choosing GermanyGPT.
+                    Thank you for choosing klikr.app.
                   </p>
                   <p>
-                    <a class="footerLink" href="mailto:info@deutschlandgpt.de"
-                      >info@deutschlandgpt.de</a
-                    >
-                    |
                     <a
                       class="footerLink"
                       target="_blank"
-                      href="https://dialog.deutschlandgpt.de/agb/"
+                      href="#"
                       >Terms of Use</a
                     >
                     |
                     <a
                       class="footerLink"
                       target="_blank"
-                      href="https://dialog.deutschlandgpt.de/privacy-policy/"
+                      href="https://klikr.app/privacy-policy/"
                       >Privacy Policy</a
                     >
                     |
                     <a
                       class="footerLink"
                       target="_blank"
-                      href="https://www.deutschlandgpt.de/agbs/"
+                      href="https://klikr.app/terms/"
                       >General Terms and Conditions</a
                     >
                     |
                     <a
                       class="footerLink"
                       target="_blank"
-                      href="https://www.deutschlandgpt.de/impressum/"
+                      href="https://klikr.app.de/contact/"
                       >Imprint</a
                     >
                   </p>
