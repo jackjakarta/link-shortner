@@ -1,16 +1,12 @@
 import { dbInsertOrUpdateActionToken } from '@/db/functions/token';
 import { dbGetUserByEmail } from '@/db/functions/user';
 import { type TokenAction } from '@/db/schema';
-import { env } from '@/env';
+import { buildUserActionUrl } from '@/utils/url';
 
-import { InformationEmailMetadata, MailTemplateResponse } from '../types';
+import { type InformationEmailMetadata, type MailTemplateResponse } from '../types';
 import { buildInformationEmailTemplate } from './information-template';
 import { resetPasswordTemplate } from './reset-password';
 import { verifyMailTemplate } from './verify-email';
-
-export function buildActionUrl(searchParams: URLSearchParams) {
-  return `${env.NEXT_PUBLIC_baseUrl}/user-action?${searchParams.toString()}`;
-}
 
 export async function createUserActionMailTemplate(
   email: string,
@@ -32,7 +28,7 @@ export async function createUserActionMailTemplate(
     token: userActionRow.token,
   });
 
-  const actionUrl = buildActionUrl(searchParams);
+  const actionUrl = buildUserActionUrl({ searchParams });
 
   switch (action) {
     case 'verify-email':

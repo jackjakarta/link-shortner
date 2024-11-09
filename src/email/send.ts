@@ -5,7 +5,7 @@ import { env } from '@/env';
 import Mailjet from 'node-mailjet';
 
 import { createInformationMailTemplate, createUserActionMailTemplate } from './templates';
-import { EmailActionResult, InformationEmailMetadata } from './types';
+import { type EmailActionResult, type InformationEmailMetadata } from './types';
 
 export type SendUserActionEmail = typeof sendUserActionEmail;
 
