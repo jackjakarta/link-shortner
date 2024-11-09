@@ -6,7 +6,6 @@ import ExitIcon from '@/components/icons/exit';
 import HamburgerIcon from '@/components/icons/hamburger';
 import LinkIcon from '@/components/icons/link';
 import LinkChainIcon from '@/components/icons/link-chain';
-import WheelIcon from '@/components/icons/wheel';
 import { cw } from '@/utils/tailwind';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
@@ -47,11 +46,6 @@ export default function SidebarMenu({ userId }: SidebarMenuProps) {
       title: 'Your Links',
       icon: LinkChainIcon,
       href: `/profile/${userId}`,
-    },
-    {
-      title: 'Analytics',
-      icon: ChartsIcon,
-      href: `/analytics/${userId}`,
     },
   ];
 
@@ -103,17 +97,17 @@ export default function SidebarMenu({ userId }: SidebarMenuProps) {
               <HoverCard>
                 <HoverCardTrigger asChild>
                   <button className="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group w-full">
-                    <WheelIcon
+                    <ChartsIcon
                       className="w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white"
                       aria-hidden="true"
                     />
-                    <span className="ms-3">Settings</span>
+                    <span className="ms-3">Analytics</span>
                     <div className="flex-grow" />
                     <SoonLabel />
                   </button>
                 </HoverCardTrigger>
                 <HoverCardContent className="flex w-[7rem] text-xs text-gray-600 font-light py-1">
-                  Coming soon..
+                  Available soon
                 </HoverCardContent>
               </HoverCard>
 
