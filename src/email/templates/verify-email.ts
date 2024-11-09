@@ -239,7 +239,7 @@ const emailTemplate = `
                   </p>
     
                   <p style="margin: 24px 0 0; text-align: left">
-                    <a href="$REGISTER_LINK" class="button" style="text-color: #fff; color: #fff">Registrierung bestätigen</a>
+                    <a href="$REGISTER_LINK" class="button" style="text-color: #fff; color: #fff">Confirm email</a>
                   </p>
                 </div>
                 <div
@@ -254,22 +254,36 @@ const emailTemplate = `
                   "
                 >
                   <p>
-                    Thank you for choosing LnkTo.
+                    Thank you for choosing klikr.app.
                   </p>
                   <p>
-                    <a class="footerLink" href="mailto:info@deutschlandgpt.de"
-                      >info@lnkto.xyz</a
+                    <a
+                      class="footerLink"
+                      target="_blank"
+                      href="#"
+                      >Terms of Use</a
                     >
                     |
-                    <a class="footerLink" target="_blank" href="#"
-                      >Terms & Conditions</a
-                    >
-                    |
-                    <a class="footerLink" target="_blank" href="#"
+                    <a
+                      class="footerLink"
+                      target="_blank"
+                      href="https://klikr.app/privacy-policy/"
                       >Privacy Policy</a
                     >
-                    | 
-                    <a class="footerLink" target="_blank" href="#">Contact</a>
+                    |
+                    <a
+                      class="footerLink"
+                      target="_blank"
+                      href="https://klikr.app/terms/"
+                      >General Terms and Conditions</a
+                    >
+                    |
+                    <a
+                      class="footerLink"
+                      target="_blank"
+                      href="https://klikr.app.de/contact/"
+                      >Imprint</a
+                    >
                   </p>
                 </div>
               </td>

@@ -1,5 +1,6 @@
 'use client';
 
+import { dbDeleteActionToken } from '@/db/functions/token';
 import { dbUpdateUserPassword } from '@/db/functions/user';
 import { type TokenRow } from '@/db/schema';
 import { sendUserActionInformationEmail } from '@/email/send';
@@ -23,7 +24,7 @@ const resetPasswordSchema = z
     path: ['passwordConfirm'],
   });
 
-export default function ResetPasswordForm({ email }: ResetPasswordFormProps) {
+export default function ResetPasswordForm({ email, token }: ResetPasswordFormProps) {
   const {
     register,
     handleSubmit,
@@ -37,14 +38,21 @@ export default function ResetPasswordForm({ email }: ResetPasswordFormProps) {
   const router = useRouter();
 
   async function onSubmit(data: z.infer<typeof resetPasswordSchema>) {
-    const { email: _email, password } = data;
-    const email = _email.trim().toLowerCase();
+    try {
+      const { email: _email, password } = data;
+      const email = _email.trim().toLowerCase();
 
-    await dbUpdateUserPassword({ email, password });
-    await sendUserActionInformationEmail(email, { type: 'reset-password-success' });
+      await dbUpdateUserPassword({ email, password });
+      await sendUserActionInformationEmail(email, { type: 'reset-password-success' });
 
-    router.push('/');
-    toast.success('Password wurde erfolgreich zurückgesetzt');
+      router.push('/');
+      toast.success('Password reset successfully');
+    } catch (error) {
+      console.error('Failed to reset password:', error);
+      toast.error('An unexpected error occurred');
+    } finally {
+      await dbDeleteActionToken({ token });
+    }
   }
 
   return (
@@ -52,7 +60,6 @@ export default function ResetPasswordForm({ email }: ResetPasswordFormProps) {
       <h2 className="text-2xl font-bold text-center mb-6">Reset Your Password</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Email */}
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">
             Email
@@ -69,7 +76,6 @@ export default function ResetPasswordForm({ email }: ResetPasswordFormProps) {
           {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
         </div>
 
-        {/* Password */}
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-gray-700">
             New Password
@@ -87,7 +93,6 @@ export default function ResetPasswordForm({ email }: ResetPasswordFormProps) {
           )}
         </div>
 
-        {/* Confirm Password */}
         <div>
           <label htmlFor="passwordConfirm" className="block text-sm font-medium text-gray-700">
             Confirm Password
@@ -105,7 +110,6 @@ export default function ResetPasswordForm({ email }: ResetPasswordFormProps) {
           )}
         </div>
 
-        {/* Submit Button */}
         <div>
           <button
             type="submit"

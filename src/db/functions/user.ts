@@ -63,7 +63,7 @@ export async function dbRegisterNewUser(
     });
   });
 
-  return { id, plainPassword };
+  return { id, plainPassword, email };
 }
 
 export async function dbGetUserByEmail({ email }: { email: string }): Promise<UserRow | undefined> {

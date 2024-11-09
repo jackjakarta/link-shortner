@@ -1,4 +1,5 @@
-import { dbRegisterNewUser, dbSetUserEmailVerified } from '@/db/functions/user';
+import { dbRegisterNewUser } from '@/db/functions/user';
+import { sendUserActionEmail } from '@/email/send';
 import { emailSchema, passwordSchema, userNameSchema } from '@/utils/schemas';
 import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
     const userId = nanoid();
 
     const user = await dbRegisterNewUser(userId, creds.email, creds.name, creds.password);
-    await dbSetUserEmailVerified({ userId: user.id, status: true });
+    await sendUserActionEmail({ to: user.email, action: 'verify-email' });
 
     return new NextResponse(JSON.stringify({ message: 'Ok' }), {
       status: 200,
