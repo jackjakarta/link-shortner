@@ -7,8 +7,8 @@ import './globals.css';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: 'Lnkto - URL Shortener',
-    description: 'Shorten your URLs with Lnkto',
+    title: 'Klikr - URL Shortener',
+    description: 'Shorten your URLs with Klikr',
     icons: { icon: '/favicon.png' },
   };
 }
