@@ -1,9 +1,11 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { dbGetUserByEmail } from '@/db/functions/user';
 import { sendUserActionEmail } from '@/email/send';
 import { emailSchema } from '@/utils/schemas';
-import { cw } from '@/utils/tailwind';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -52,29 +54,23 @@ export default function InitiatePasswordResetForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-md mx-auto bg-white p-8 border border-gray-300 rounded-md shadow-sm"
+      className="flex flex-col bg-white w-full max-w-[500px] p-8 border border-gray-300 rounded-md shadow-md space-y-6 mx-auto"
     >
-      <div className="mb-4">
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          Email
-        </label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input
           id="email"
+          type="email"
+          placeholder="Enter your email"
           {...register('email')}
-          className={cw(
-            'mt-1 block w-full p-2 border rounded-md shadow-sm',
-            errors.email ? 'border-red-500' : 'border-gray-300',
-          )}
+          className={errors.email ? 'border-red-500' : 'border border-input'}
         />
         {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
       </div>
 
-      <button
-        type="submit"
-        className="w-full bg-blue-500 text-white font-semibold p-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
-      >
+      <Button type="submit" className="w-full">
         Submit
-      </button>
+      </Button>
     </form>
   );
 }
