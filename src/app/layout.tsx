@@ -1,3 +1,4 @@
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { type Metadata } from 'next';
 import { Toaster } from 'react-hot-toast';
 
@@ -30,6 +31,7 @@ export default function RootLayout({
           }}
         />
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
