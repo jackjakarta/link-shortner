@@ -79,6 +79,7 @@ export default function ShortenUrlForm() {
                   className="w-full bg-gray-900 text-white border-none ring-0"
                 />
                 <Button
+                  type="button"
                   variant="ghost"
                   onClick={() => handleCopy(shortenedUrl)}
                   className="text-gray-400 hover:text-gray-300 transition-colors group"
