@@ -2,7 +2,6 @@
 
 import { dbGetLinksByUserId } from '@/db/functions/link';
 import { getUser } from '@/utils/auth';
-import { revalidateTag } from 'next/cache';
 
 export async function getLinksByUserId({ userId }: { userId: string }) {
   const user = await getUser();
@@ -12,7 +11,6 @@ export async function getLinksByUserId({ userId }: { userId: string }) {
   }
 
   const userLinks = await dbGetLinksByUserId({ userId });
-  revalidateTag('user-links');
 
   return userLinks;
 }
