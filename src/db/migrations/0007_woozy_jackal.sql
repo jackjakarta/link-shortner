@@ -1,0 +1,1 @@
+ALTER TABLE "user" ADD COLUMN "is_newsletter_sub" boolean DEFAULT false NOT NULL;

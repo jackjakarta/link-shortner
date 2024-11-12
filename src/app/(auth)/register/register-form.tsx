@@ -3,6 +3,7 @@
 import EyeClosedIcon from '@/components/icons/eye-closed';
 import EyeOpenIcon from '@/components/icons/eye-open';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { emailSchema, passwordSchema, userNameSchema } from '@/utils/schemas';
@@ -20,6 +21,7 @@ const registrationSchema = z
     email: emailSchema,
     password: passwordSchema,
     confirmPassword: z.string(),
+    isNewsletterSub: z.boolean(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',
@@ -28,14 +30,9 @@ const registrationSchema = z
 
 type RegistrationFormData = z.infer<typeof registrationSchema>;
 
-type RegistrationProps = {
-  error?: string;
-};
-
-export default function RegisterForm({ error }: RegistrationProps) {
+export default function RegisterForm() {
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = React.useState(false);
-  const [successMessage, setSuccessMessage] = React.useState('');
   const router = useRouter();
 
   const {
@@ -47,12 +44,17 @@ export default function RegisterForm({ error }: RegistrationProps) {
     resolver: zodResolver(registrationSchema),
   });
 
-  const togglePasswordVisibility = () => setIsPasswordVisible(!isPasswordVisible);
-  const toggleConfirmPasswordVisibility = () =>
+  function togglePasswordVisibility() {
+    setIsPasswordVisible(!isPasswordVisible);
+  }
+
+  function toggleConfirmPasswordVisibility() {
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
+  }
 
   async function onSubmit(data: RegistrationFormData) {
     try {
+      toast.loading('Registering...');
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
@@ -62,6 +64,7 @@ export default function RegisterForm({ error }: RegistrationProps) {
           email: data.email,
           name: data.name,
           password: data.password,
+          isNewsletterSub: data.isNewsletterSub,
         }),
       });
 
@@ -69,10 +72,12 @@ export default function RegisterForm({ error }: RegistrationProps) {
         throw new Error('Failed to register');
       }
 
-      setSuccessMessage('Registration successful! Please check your email to verify your account.');
       router.push('/');
+      toast.remove();
       toast.success('Registration successful! Please check your email to verify your account.');
     } catch (error) {
+      toast.remove();
+      toast.error('Failed to register');
       if (error instanceof Error) {
         setError('email', { type: 'manual', message: error.message });
       } else {
@@ -85,9 +90,7 @@ export default function RegisterForm({ error }: RegistrationProps) {
     <div className="flex justify-center items-center h-screen">
       <div className="w-full max-w-md p-10 bg-white rounded-xl shadow-md">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <Label htmlFor="name" className="text-2xl font-medium text-center">
-            Registration
-          </Label>
+          <Label className="text-2xl font-medium text-center">Registration</Label>
 
           <div className="space-y-2">
             <Label htmlFor="name">Username</Label>
@@ -157,8 +160,21 @@ export default function RegisterForm({ error }: RegistrationProps) {
             )}
           </div>
 
-          {successMessage && <p className="text-green-500 text-sm">{successMessage}</p>}
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          <div className="flex items-center gap-2">
+            <Checkbox
+              id="isNewsletterSub"
+              {...register('isNewsletterSub', {
+                setValueAs: (value: string) =>
+                  value === 'on' ? true || value === 'off' : false || value,
+              })}
+              className="bg-black"
+              disabled={isSubmitting}
+            />
+            <Label htmlFor="isNewsletterSub">Subscribe to Newsletter</Label>
+            {errors.isNewsletterSub && (
+              <p className="text-red-500 text-sm">{errors.isNewsletterSub.message}</p>
+            )}
+          </div>
 
           <Button type="submit" className="w-full" disabled={isSubmitting}>
             Register
