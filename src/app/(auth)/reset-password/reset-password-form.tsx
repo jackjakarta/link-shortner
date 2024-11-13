@@ -51,8 +51,8 @@ export default function ResetPasswordForm({ email, token }: ResetPasswordFormPro
       router.push('/');
       toast.success('Password reset successfully');
     } catch (error) {
-      console.error('Failed to reset password:', error);
       toast.error('An unexpected error occurred');
+      console.error('Failed to reset password:', error);
     } finally {
       await dbDeleteActionToken({ token });
     }

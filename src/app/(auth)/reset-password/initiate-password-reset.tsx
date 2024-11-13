@@ -7,6 +7,7 @@ import { dbGetUserByEmail } from '@/db/functions/user';
 import { sendUserActionEmail } from '@/email/send';
 import { emailSchema } from '@/utils/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -26,6 +27,7 @@ export default function InitiatePasswordResetForm() {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
+  const router = useRouter();
 
   async function onSubmit(data: FormData) {
     const { email } = data;
@@ -44,9 +46,11 @@ export default function InitiatePasswordResetForm() {
         throw new Error(result.error);
       }
 
+      router.push('/login');
       toast.success('Check your email for a password reset link');
     } catch (error) {
       toast.error(`Could not send reset password email to '${email}'`);
+      toast.error('There was an error. Please try again.');
       console.error(error);
     }
   }
