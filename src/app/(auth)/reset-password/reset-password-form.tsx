@@ -48,7 +48,7 @@ export default function ResetPasswordForm({ email, token }: ResetPasswordFormPro
       await dbUpdateUserPassword({ email, password });
       await sendUserActionInformationEmail(email, { type: 'reset-password-success' });
 
-      router.push('/');
+      router.push('/login');
       toast.success('Password reset successfully');
     } catch (error) {
       toast.error('An unexpected error occurred');
