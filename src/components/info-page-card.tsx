@@ -12,8 +12,8 @@ type InfoPageCardProps = {
 export default function InfoPageCard({ title, message }: InfoPageCardProps) {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <Card className="w-full max-w-md p-4">
-        <CardHeader>
+      <Card className="flex flex-col items-center w-full max-w-md p-4">
+        <CardHeader className="">
           <CardTitle>{title}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 text-center">

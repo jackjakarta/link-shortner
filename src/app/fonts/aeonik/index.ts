@@ -3,72 +3,72 @@ import localFont from 'next/font/local';
 export const aeonik = localFont({
   src: [
     {
-      path: './Aeonik-Air.ttf',
+      path: './files/Aeonik-Air.ttf',
       weight: '100',
       style: 'normal',
     },
     {
-      path: './Aeonik-AirItalic.ttf',
+      path: './files/Aeonik-AirItalic.ttf',
       weight: '100',
       style: 'italic',
     },
     {
-      path: './Aeonik-Thin.ttf',
+      path: './files/Aeonik-Thin.ttf',
       weight: '200',
       style: 'normal',
     },
     {
-      path: './Aeonik-ThinItalic.ttf',
+      path: './files/Aeonik-ThinItalic.ttf',
       weight: '200',
       style: 'italic',
     },
     {
-      path: './Aeonik-Light.ttf',
+      path: './files/Aeonik-Light.ttf',
       weight: '300',
       style: 'normal',
     },
     {
-      path: './Aeonik-LightItalic.ttf',
+      path: './files/Aeonik-LightItalic.ttf',
       weight: '300',
       style: 'italic',
     },
     {
-      path: './Aeonik-Regular.ttf',
+      path: './files/Aeonik-Regular.ttf',
       weight: '400',
       style: 'normal',
     },
     {
-      path: './Aeonik-RegularItalic.ttf',
+      path: './files/Aeonik-RegularItalic.ttf',
       weight: '400',
       style: 'italic',
     },
     {
-      path: './Aeonik-Medium.ttf',
+      path: './files/Aeonik-Medium.ttf',
       weight: '500',
       style: 'normal',
     },
     {
-      path: './Aeonik-MediumItalic.ttf',
+      path: './files/Aeonik-MediumItalic.ttf',
       weight: '500',
       style: 'italic',
     },
     {
-      path: './Aeonik-Bold.ttf',
+      path: './files/Aeonik-Bold.ttf',
       weight: '600',
       style: 'normal',
     },
     {
-      path: './Aeonik-BoldItalic.ttf',
+      path: './files/Aeonik-BoldItalic.ttf',
       weight: '600',
       style: 'italic',
     },
     {
-      path: './Aeonik-Black.ttf',
+      path: './files/Aeonik-Black.ttf',
       weight: '700',
       style: 'normal',
     },
     {
-      path: './Aeonik-BoldItalic.ttf',
+      path: './files/Aeonik-BoldItalic.ttf',
       weight: '700',
       style: 'italic',
     },

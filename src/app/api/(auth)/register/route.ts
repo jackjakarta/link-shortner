@@ -1,5 +1,6 @@
 import { dbRegisterNewUser } from '@/db/functions/user';
 import { sendUserActionEmail } from '@/email/send';
+import { devMode } from '@/utils/constants';
 import { emailSchema, passwordSchema, userNameSchema } from '@/utils/schemas';
 import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
@@ -9,17 +10,27 @@ const registerRequestSchema = z.object({
   email: emailSchema,
   name: userNameSchema,
   password: passwordSchema,
+  isNewsletterSub: z.boolean(),
 });
 
 export async function POST(req: NextRequest) {
   try {
     const json = await req.json();
-    const creds = registerRequestSchema.parse(json);
+    const body = registerRequestSchema.parse(json);
 
     const userId = nanoid();
 
-    const user = await dbRegisterNewUser(userId, creds.email, creds.name, creds.password);
-    await sendUserActionEmail({ to: user.email, action: 'verify-email' });
+    const user = await dbRegisterNewUser({
+      id: userId,
+      email: body.email,
+      name: body.name,
+      plainPassword: body.password,
+      isNewsletterSub: body.isNewsletterSub,
+    });
+
+    if (!devMode) {
+      await sendUserActionEmail({ to: user.email, action: 'verify-email' });
+    }
 
     return new NextResponse(JSON.stringify({ message: 'Ok' }), {
       status: 200,

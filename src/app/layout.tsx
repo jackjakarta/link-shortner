@@ -2,7 +2,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { type Metadata } from 'next';
 import { Toaster } from 'react-hot-toast';
 
-import { aeonik } from './fonts/utils';
+import { aeonik } from './fonts/aeonik';
 
 import './globals.css';
 

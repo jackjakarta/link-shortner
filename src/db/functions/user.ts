@@ -30,12 +30,19 @@ export async function dbGetUserByEmailAndPassword(
   return maybeUser;
 }
 
-export async function dbRegisterNewUser(
-  id: string,
-  email: string,
-  name: string,
-  plainPassword: string,
-) {
+export async function dbRegisterNewUser({
+  id,
+  email,
+  name,
+  plainPassword,
+  isNewsletterSub,
+}: {
+  id: string;
+  email: string;
+  name: string;
+  plainPassword: string;
+  isNewsletterSub: boolean;
+}) {
   const emailRows = await db.select().from(userTable).where(eq(userTable.email, email));
   if (emailRows.length > 0) throw new Error('Email already exists.');
 
@@ -52,6 +59,7 @@ export async function dbRegisterNewUser(
       name,
       passwordHash,
       passwordSalt,
+      isNewsletterSub,
     });
 
     await tx.insert(userProfileTable).values({
@@ -115,4 +123,14 @@ export async function dbSetUserEmailVerified({
   status: boolean;
 }) {
   await db.update(userTable).set({ emailVerified: status }).where(eq(userTable.id, userId));
+}
+
+export async function dbSetNewsletterSubscription({
+  userId,
+  status,
+}: {
+  userId: string;
+  status: boolean;
+}) {
+  await db.update(userTable).set({ isNewsletterSub: status }).where(eq(userTable.id, userId));
 }

@@ -18,6 +18,7 @@ export const userTable = pgTable('user', {
   passwordSalt: text('password_salt').notNull(),
   emailVerified: boolean('email_verified').notNull().default(false),
   provider: text('provider'),
+  isNewsletterSub: boolean('is_newsletter_sub').notNull().default(false),
   createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 

@@ -29,15 +29,13 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     setError,
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
   });
 
-  const togglePasswordVisibility = () => setIsPasswordVisible(!isPasswordVisible);
-
-  const onSubmit = async (data: LoginFormData) => {
+  async function onSubmit(data: LoginFormData) {
     const { email: _email, password } = data;
     const email = _email.trim().toLowerCase();
     const result = await signIn('credentials', {
@@ -55,7 +53,11 @@ export default function LoginForm() {
         message: 'Wrong email or password',
       });
     }
-  };
+  }
+
+  function togglePasswordVisibility() {
+    setIsPasswordVisible(!isPasswordVisible);
+  }
 
   return (
     <main className="w-full flex items-center justify-center min-h-screen">
@@ -69,6 +71,7 @@ export default function LoginForm() {
               type="text"
               placeholder="Your email"
               {...register('email')}
+              disabled={isSubmitting}
               className="border border-input"
             />
             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
@@ -80,6 +83,7 @@ export default function LoginForm() {
               type={isPasswordVisible ? 'text' : 'password'}
               placeholder="Your password"
               {...register('password')}
+              disabled={isSubmitting}
               className="border border-input"
             />
             <button

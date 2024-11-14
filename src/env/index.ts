@@ -17,6 +17,7 @@ export const env = createEnv({
     awsS3EndpointUrl: z.string().min(1),
     awsRegion: z.string().min(1),
     awsBucketName: z.string().min(1),
+    devMode: z.string().default('false'),
   },
   client: {
     NEXT_PUBLIC_baseUrl: z.string().min(1),
@@ -38,6 +39,7 @@ export const env = createEnv({
     awsS3EndpointUrl: process.env.AWS_S3_ENDPOINT_URL,
     awsRegion: process.env.AWS_REGION,
     awsBucketName: process.env.AWS_STORAGE_BUCKET_NAME,
+    devMode: process.env.DEV_MODE,
     NEXT_PUBLIC_passwordValidator: process.env.NEXT_PUBLIC_PASSWORD_VALIDATOR,
   },
 });

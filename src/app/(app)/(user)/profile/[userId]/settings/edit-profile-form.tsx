@@ -3,13 +3,14 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { type UserProfileRow } from '@/db/schema';
 import { type ObscuredUser } from '@/utils/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 
@@ -20,6 +21,7 @@ const schema = z.object({
   avatarUrl: z.string().optional(),
   location: z.string().optional(),
   website: z.string().optional(),
+  isNewsletterSub: z.boolean(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -34,6 +36,7 @@ export default function UserProfileSettingsForm({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -41,6 +44,7 @@ export default function UserProfileSettingsForm({
       bio: profile.bio ?? undefined,
       location: profile.location ?? undefined,
       website: profile.website ?? undefined,
+      isNewsletterSub: user.isNewsletterSub ?? false,
     },
   });
 
@@ -120,6 +124,21 @@ export default function UserProfileSettingsForm({
           disabled={isSubmitting}
         />
         {errors.website && <p className="text-red-500 text-sm">{errors.website.message}</p>}
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Controller
+          name="isNewsletterSub"
+          control={control}
+          render={({ field }) => (
+            <Switch
+              checked={field.value}
+              onCheckedChange={(checked) => field.onChange(checked)}
+              disabled={isSubmitting}
+            />
+          )}
+        />{' '}
+        <Label htmlFor="isNewsletterSub">Subscribe to Newsletter</Label>
       </div>
 
       <Button type="submit" disabled={isSubmitting}>

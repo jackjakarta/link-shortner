@@ -1,16 +1,20 @@
 'use server';
 
 import { dbUpdateUserProfile } from '@/db/functions/profile';
+import { dbSetNewsletterSubscription } from '@/db/functions/user';
 import { type UserProfileInsertRow, type UserProfileRow } from '@/db/schema';
 import { getUser } from '@/utils/auth';
 import { redirect } from 'next/navigation';
+
+type UpdateProfileProps = UserProfileInsertRow & { isNewsletterSub: boolean };
 
 export async function updateProfile({
   userId,
   bio,
   location,
   website,
-}: UserProfileInsertRow): Promise<UserProfileRow> {
+  isNewsletterSub,
+}: UpdateProfileProps): Promise<UserProfileRow> {
   const user = await getUser();
 
   if (userId !== user.id) {
@@ -27,6 +31,8 @@ export async function updateProfile({
     location,
     website,
   });
+
+  await dbSetNewsletterSubscription({ userId, status: isNewsletterSub });
 
   if (userProfile === undefined) {
     throw new Error('Failed to update profile');
