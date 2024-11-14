@@ -1,9 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { type UserProfileRow } from '@/db/schema';
 import { type ObscuredUser } from '@/utils/user';
@@ -21,7 +21,7 @@ const schema = z.object({
   avatarUrl: z.string().optional(),
   location: z.string().optional(),
   website: z.string().optional(),
-  isNewsletterSub: z.boolean().optional(),
+  isNewsletterSub: z.boolean(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -131,15 +131,14 @@ export default function UserProfileSettingsForm({
           name="isNewsletterSub"
           control={control}
           render={({ field }) => (
-            <Checkbox id="isNewsletterSub" checked={field.value} onCheckedChange={field.onChange} />
+            <Switch
+              checked={field.value}
+              onCheckedChange={(checked) => field.onChange(checked)}
+              disabled={isSubmitting}
+            />
           )}
-        />
-        <Label
-          htmlFor="isNewsletterSub"
-          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          Subscribe to newsletter
-        </Label>
+        />{' '}
+        <Label htmlFor="isNewsletterSub">Subscribe to Newsletter</Label>
       </div>
 
       <Button type="submit" disabled={isSubmitting}>

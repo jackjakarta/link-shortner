@@ -1,12 +1,10 @@
 import { dbRegisterNewUser } from '@/db/functions/user';
 import { sendUserActionEmail } from '@/email/send';
-import { env } from '@/env';
+import { devMode } from '@/utils/constants';
 import { emailSchema, passwordSchema, userNameSchema } from '@/utils/schemas';
 import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-
-const debugEnv = env.debug === 'true' ? true : false;
 
 const registerRequestSchema = z.object({
   email: emailSchema,
@@ -30,7 +28,7 @@ export async function POST(req: NextRequest) {
       isNewsletterSub: body.isNewsletterSub,
     });
 
-    if (!debugEnv) {
+    if (!devMode) {
       await sendUserActionEmail({ to: user.email, action: 'verify-email' });
     }
 

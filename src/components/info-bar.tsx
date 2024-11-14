@@ -1,5 +1,3 @@
-'use client';
-
 type InfoBarProps = {
   children: React.ReactNode;
   className?: string;

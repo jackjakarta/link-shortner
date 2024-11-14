@@ -124,3 +124,13 @@ export async function dbSetUserEmailVerified({
 }) {
   await db.update(userTable).set({ emailVerified: status }).where(eq(userTable.id, userId));
 }
+
+export async function dbSetNewsletterSubscription({
+  userId,
+  status,
+}: {
+  userId: string;
+  status: boolean;
+}) {
+  await db.update(userTable).set({ isNewsletterSub: status }).where(eq(userTable.id, userId));
+}
