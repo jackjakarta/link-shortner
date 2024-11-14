@@ -1,9 +1,12 @@
 import { dbRegisterNewUser } from '@/db/functions/user';
 import { sendUserActionEmail } from '@/email/send';
+import { env } from '@/env';
 import { emailSchema, passwordSchema, userNameSchema } from '@/utils/schemas';
 import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+
+const debugEnv = env.debug === 'true' ? true : false;
 
 const registerRequestSchema = z.object({
   email: emailSchema,
@@ -26,7 +29,10 @@ export async function POST(req: NextRequest) {
       plainPassword: body.password,
       isNewsletterSub: body.isNewsletterSub,
     });
-    await sendUserActionEmail({ to: user.email, action: 'verify-email' });
+
+    if (!debugEnv) {
+      await sendUserActionEmail({ to: user.email, action: 'verify-email' });
+    }
 
     return new NextResponse(JSON.stringify({ message: 'Ok' }), {
       status: 200,
