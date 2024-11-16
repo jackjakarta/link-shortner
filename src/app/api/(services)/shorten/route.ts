@@ -1,5 +1,3 @@
-import { create } from 'domain';
-
 import { dbCreateLink } from '@/db/functions/link';
 import { urlSchema } from '@/utils/schemas';
 import { buildRouteUrl } from '@/utils/url';
