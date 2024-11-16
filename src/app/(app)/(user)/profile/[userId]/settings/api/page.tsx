@@ -12,10 +12,8 @@ export default async function Page() {
   return (
     <main className="px-8 py-1 mt-4">
       <SettingsNavbar userId={user.id} />
-      <div className="flex flex-col w-full gap-4 mt-4">
+      <div className="flex flex-col w-full mt-4">
         <CreateApiKeyButton user={user} />
-      </div>
-      <div className="flex">
         <ApiKeysTable apiKeys={apiKeys} />
       </div>
     </main>
