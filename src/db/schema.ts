@@ -77,3 +77,34 @@ export const tokenTable = pgTable(
 
 export type TokenRow = typeof tokenTable.$inferSelect;
 export type InsertTokenRow = typeof tokenTable.$inferInsert;
+
+export const apiKeyStatusSchema = z.enum(['active', 'inactive', 'revoked']);
+export const apiKeyStatusPgEnum = pgEnum('api_key_status', apiKeyStatusSchema.options);
+export type ApiKeyStatus = z.infer<typeof apiKeyStatusSchema>;
+
+export const apiKeyTable = pgTable('api_key', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  name: text('name').notNull(),
+  apiKey: text('hashed_api_key').notNull(),
+  obscuredApiKey: text('obscured_api_key').notNull(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => userTable.id),
+  status: apiKeyStatusPgEnum('status').notNull().default('active'),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+});
+
+export type ApiKeyRow = typeof apiKeyTable.$inferSelect;
+export type InsertApiKeyRow = typeof apiKeyTable.$inferInsert;
+
+export const apiKeyUsageTable = pgTable('api_key_usage', {
+  apiKeyId: uuid('api_key_id')
+    .references(() => apiKeyTable.id)
+    .primaryKey(),
+  requestsCount: integer('requests_count').notNull().default(0),
+  lastUsedAt: timestamp('last_used_at'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export type ApiKeyUsageRow = typeof apiKeyUsageTable.$inferSelect;
+export type InsertApiKeyUsageRow = typeof apiKeyUsageTable.$inferInsert;
