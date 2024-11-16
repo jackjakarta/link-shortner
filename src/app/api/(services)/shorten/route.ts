@@ -1,3 +1,5 @@
+import { create } from 'domain';
+
 import { dbCreateLink } from '@/db/functions/link';
 import { urlSchema } from '@/utils/schemas';
 import { buildRouteUrl } from '@/utils/url';
@@ -45,7 +47,17 @@ export async function POST(req: NextRequest) {
 
     const shortUrl = buildRouteUrl({ route: newLink.shortPath });
 
-    return NextResponse.json({ shortUrl }, { status: 201 });
+    return NextResponse.json(
+      {
+        shortUrl,
+        longUrl: newLink.longUrl,
+        clickCount: newLink.clickCount,
+        lastClickedAt: newLink.lastClickedAt,
+        qrCodeUrl: newLink.qrCodeUrl,
+        createdAt: newLink.createdAt,
+      },
+      { status: 201 },
+    );
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: error }, { status: 500 });
