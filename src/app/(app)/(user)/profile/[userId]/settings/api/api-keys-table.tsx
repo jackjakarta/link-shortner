@@ -26,9 +26,11 @@ export default function ApiKeysTable({ apiKeys }: { apiKeys: ApiKeyRow[] }) {
   const router = useRouter();
 
   async function handleStatusChange(apiKeyId: string, status: ApiKeyStatus) {
+    const toastLoadingMessage = status === 'revoked' ? 'Deleting API key' : 'Updating API key';
     const toastSuccesMessage =
       status === 'revoked' ? 'Api key deleted' : `Api key set to ${status}`;
-    toast.loading('Updating API key');
+
+    toast.loading(toastLoadingMessage);
 
     try {
       await setApiKEyStatus({ apiKeyId, status });
