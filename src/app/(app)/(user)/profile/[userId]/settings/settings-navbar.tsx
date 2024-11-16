@@ -29,6 +29,15 @@ export default function SettingsNavbar({ userId }: SettingsNavbarProps) {
       >
         Password
       </Link>
+      <Link
+        className={cw(
+          itemClassName,
+          pathname === `/profile/${userId}/settings/api` && 'font-medium',
+        )}
+        href={`/profile/${userId}/settings/api`}
+      >
+        API Keys
+      </Link>
     </nav>
   );
 }
