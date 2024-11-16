@@ -1,10 +1,10 @@
 'use server';
 
-import { eq } from 'drizzle-orm';
+import { and, eq, ne } from 'drizzle-orm';
 
 import { db } from '..';
 import { generateAndHashApiKey, hashApiKey, obscureApiKey } from '../crypto';
-import { apiKeyTable, apiKeyUsageTable } from '../schema';
+import { apiKeyTable, apiKeyUsageTable, type ApiKeyRow, type ApiKeyStatus } from '../schema';
 
 export async function dbCreateApiKey({
   apiKeyName,
@@ -65,4 +65,28 @@ export async function dbUpdateApiKeyUsage({ apiKeyId }: { apiKeyId: string }) {
       lastUsedAt: new Date(),
     })
     .where(eq(apiKeyUsageTable.apiKeyId, apiKeyId));
+}
+
+export async function dbGetApiKeysByUserId({ userId }: { userId: string }): Promise<ApiKeyRow[]> {
+  const apiKeys = await db
+    .select()
+    .from(apiKeyTable)
+    .where(and(eq(apiKeyTable.userId, userId), ne(apiKeyTable.status, 'revoked')));
+
+  return apiKeys;
+}
+
+export async function dbSetApiKEyStatus({
+  apiKeyId,
+  status,
+  userId,
+}: {
+  apiKeyId: string;
+  status: ApiKeyStatus;
+  userId: string;
+}) {
+  await db
+    .update(apiKeyTable)
+    .set({ status })
+    .where(and(eq(apiKeyTable.id, apiKeyId), eq(apiKeyTable.userId, userId)));
 }
