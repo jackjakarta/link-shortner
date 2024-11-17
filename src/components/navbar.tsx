@@ -2,15 +2,17 @@
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { type UserRow } from '@/db/schema';
 import { Menu } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import * as React from 'react';
 
-import AuthButtons from './auth-buttons';
+import SignInButton from './auth-buttons';
 import KlikrLogo from './icons/logo';
+import ProfileMenu from './profile-menu';
 
-export default function Navbar() {
+export default function Navbar({ user }: { user: UserRow }) {
   const { data: session } = useSession();
   const navItems = [{ name: 'Home', href: '/' }];
 
@@ -35,7 +37,11 @@ export default function Navbar() {
               {item.name}
             </Link>
           ))}
-          <AuthButtons className="py-2 px-4 text-sm bg-black hover:bg-gray-800 text-white rounded-full" />
+          {!session ? (
+            <SignInButton className="py-2 px-4 text-sm bg-black hover:bg-gray-800 text-white rounded-full" />
+          ) : (
+            <ProfileMenu user={user} />
+          )}
         </div>
         <div className="flex md:hidden">
           <Sheet>
@@ -56,7 +62,7 @@ export default function Navbar() {
                     {item.name}
                   </Link>
                 ))}
-                <AuthButtons className="py-2 px-4 text-sm bg-white hover:bg-gray-100 text-black rounded-full" />
+                <SignInButton className="py-2 px-4 text-sm bg-white hover:bg-gray-100 text-black rounded-full" />
               </nav>
             </SheetContent>
           </Sheet>
