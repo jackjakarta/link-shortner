@@ -20,8 +20,8 @@ export default function ProfileMenu({ user }: { user: UserRow }) {
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center justify-center p-2 hover:bg-black/70 hover:text-white rounded-full group focus:outline-none">
-          <User className="text-black group-hover:text-white h-5 w-5" />
+        <button className="flex items-center justify-center p-2 bg-gradient-to-r from-gray-700 to-indigo-900 hover:from-gray-600 hover:to-indigo-800 text-white rounded-full group focus:outline-none">
+          <User className="text-white h-5 w-5" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>

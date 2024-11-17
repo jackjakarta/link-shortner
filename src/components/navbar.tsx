@@ -14,11 +14,10 @@ import ProfileMenu from './profile-menu';
 
 export default function Navbar({ user }: { user: UserRow }) {
   const { data: session } = useSession();
-  const navItems = [{ name: 'Home', href: '/' }];
-
-  if (session) {
-    navItems.push({ name: 'Profile', href: '/profile' });
-  }
+  const navItems = [
+    { name: 'Home', href: '/' },
+    { name: 'Contact', href: '/contact' },
+  ];
 
   return (
     <nav className="border-b-2 border-indigo-700 bg-gray-300">
@@ -62,7 +61,11 @@ export default function Navbar({ user }: { user: UserRow }) {
                     {item.name}
                   </Link>
                 ))}
-                <SignInButton className="py-2 px-4 text-sm bg-white hover:bg-gray-100 text-black rounded-full" />
+                {!session ? (
+                  <SignInButton className="py-2 px-4 text-sm bg-black hover:bg-gray-800 text-white rounded-full" />
+                ) : (
+                  <ProfileMenu user={user} />
+                )}
               </nav>
             </SheetContent>
           </Sheet>
