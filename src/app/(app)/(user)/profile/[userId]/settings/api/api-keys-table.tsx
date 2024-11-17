@@ -17,13 +17,17 @@ import {
 } from '@/components/ui/table';
 import { type ApiKeyRow, type ApiKeyStatus } from '@/db/schema';
 import { formatDateToDayMonthYearTime } from '@/utils/date';
+import { capitalizeFirstLetter } from '@/utils/format';
 import { useRouter } from 'next/navigation';
+import React from 'react';
 import toast from 'react-hot-toast';
 
 import { setApiKEyStatus } from './actions';
+import DeleteKeyButton from './delete-key-button';
 
 export default function ApiKeysTable({ apiKeys }: { apiKeys: ApiKeyRow[] }) {
   const router = useRouter();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
   async function handleStatusChange(apiKeyId: string, status: ApiKeyStatus) {
     const toastLoadingMessage = status === 'revoked' ? 'Deleting API key' : 'Updating API key';
@@ -72,7 +76,7 @@ export default function ApiKeysTable({ apiKeys }: { apiKeys: ApiKeyRow[] }) {
             <TableRow key={apiKey.id}>
               <TableCell className="font-medium">{apiKey.name}</TableCell>
               <TableCell>{apiKey.obscuredApiKey}</TableCell>
-              <TableCell>{apiKey.status}</TableCell>
+              <TableCell>{capitalizeFirstLetter({ word: apiKey.status })}</TableCell>
               <TableCell>{formatDateToDayMonthYearTime(apiKey.createdAt)}</TableCell>
               <TableCell>
                 <DropdownMenu>
@@ -93,12 +97,12 @@ export default function ApiKeysTable({ apiKeys }: { apiKeys: ApiKeyRow[] }) {
                     >
                       {apiKey.status === 'active' ? 'Deactivate' : 'Activate'}
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={async () => handleStatusChange(apiKey.id, 'revoked')}
-                    >
-                      Delete
-                    </DropdownMenuItem>
+                    <DeleteKeyButton
+                      isDeleteDialogOpen={isDeleteDialogOpen}
+                      setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+                      apiKeyId={apiKey.id}
+                      handleStatusChange={handleStatusChange}
+                    />
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
