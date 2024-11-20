@@ -32,7 +32,9 @@ export default function SettingsNavbar({ userId }: SettingsNavbarProps) {
       <Link
         className={cw(
           itemClassName,
-          pathname === `/profile/${userId}/settings/api` && 'font-medium',
+          (pathname === `/profile/${userId}/settings/api` ||
+            pathname === `/profile/${userId}/settings/api/usage`) &&
+            'font-medium',
         )}
         href={`/profile/${userId}/settings/api`}
       >
