@@ -90,3 +90,19 @@ export async function dbSetApiKEyStatus({
     .set({ status })
     .where(and(eq(apiKeyTable.id, apiKeyId), eq(apiKeyTable.userId, userId)));
 }
+
+export async function dbGetApiKeysUsageByUserId({ userId }: { userId: string }) {
+  const apiKeys = await dbGetApiKeysByUserId({ userId });
+
+  const apiKeysUsage = await Promise.all(
+    apiKeys.map(async (apiKey) => {
+      const usage = await dbGetApiKeyUsage({ apiKeyId: apiKey.id });
+      return {
+        ...apiKey,
+        usage,
+      };
+    }),
+  );
+
+  return apiKeysUsage;
+}
