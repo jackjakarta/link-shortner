@@ -1,5 +1,6 @@
 import { moderateText } from '@/app/openai';
 import { uploadImageToS3 } from '@/s3';
+import { getValidSession } from '@/utils/auth';
 import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
 import QRCode from 'qrcode';
@@ -10,6 +11,8 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  await getValidSession();
+
   try {
     const json = await request.json();
     const body = requestSchema.safeParse(json);
@@ -23,7 +26,7 @@ export async function POST(request: NextRequest) {
     if (isFlagged) {
       return NextResponse.json(
         { error: 'Your content was flagged by our moderation system.' },
-        { status: 400 },
+        { status: 418 },
       );
     }
 
@@ -38,6 +41,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ qrCodeUrl }, { status: 201 });
   } catch (error) {
     console.error('Error uploading QR code:', error);
-    return NextResponse.json({ error: 'Failed to upload QR code' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to generate QR code' }, { status: 500 });
   }
 }
