@@ -16,6 +16,7 @@ export default function Navbar({ user }: { user: UserRow }) {
   const { data: session } = useSession();
   const navItems = [
     { name: 'Home', href: '/' },
+    { name: 'QR Generator', href: '/qr-generator' },
     { name: 'Contact', href: '/contact' },
   ];
 

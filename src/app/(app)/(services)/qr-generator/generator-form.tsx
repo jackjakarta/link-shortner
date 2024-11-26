@@ -1,7 +1,12 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -53,57 +58,58 @@ export default function QrGeneratorForm() {
     }
   }
 
-  function handleCopy(value: string) {
-    try {
-      navigator.clipboard.writeText(value);
-      toast.success('Copied to clipboard');
-    } catch (error) {
-      toast.error('Failed to copy to clipboard');
-      console.error('Error with copying:', error);
-    }
-  }
-
   return (
-    <>
-      {!qrCodeUrl ? (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="flex flex-col space-y-2">
-            <label htmlFor="text" className="text-sm font-medium text-gray-700">
-              Text
-            </label>
-            <input
-              type="text"
-              id="text"
-              {...register('text')}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-            {errors.text && <p className="text-red-500">{errors.text.message}</p>}
-          </div>
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-black"
-          >
-            {isSubmitting ? 'Generating...' : 'Generate QR Code'}
-          </button>
+    <div className="flex items-center justify-center min-h-screen w-full max-w-2xl px-4">
+      <Card className="w-full border-none rounded-full bg-gradient-to-r from-gray-700 to-indigo-900 p-8 shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-white text-center text-2xl font-semibold mb-4">
+            QR Code Generator
+          </CardTitle>
+        </CardHeader>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+          <CardContent>
+            {!qrCodeUrl ? (
+              <div className="mb-4">
+                <Label htmlFor="text" className="text-gray-300 mb-2 block">
+                  Enter Text
+                </Label>
+                <Input
+                  autoFocus
+                  id="text"
+                  type="text"
+                  placeholder="Enter the text for QR code"
+                  className={`w-full bg-gray-900 text-white ${
+                    errors.text ? 'border-red-500' : 'border-gray-700'
+                  }`}
+                  {...register('text')}
+                />
+                {errors.text && <p className="text-red-500 text-sm mt-1">{errors.text.message}</p>}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-3 mb-4">
+                <Image src={qrCodeUrl} width={300} height={300} alt="Generated QR Code" />
+                <Link
+                  href={qrCodeUrl}
+                  className="text-gray-400 hover:text-gray-300 transition-colors group"
+                >
+                  Download
+                </Link>
+              </div>
+            )}
+          </CardContent>
+
+          <CardFooter className="flex justify-center">
+            {qrCodeUrl ? (
+              <Button onClick={() => window.location.reload()}>Generate Another QR Code</Button>
+            ) : (
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Generating...' : 'Generate QR Code'}
+              </Button>
+            )}
+          </CardFooter>
         </form>
-      ) : (
-        <div className="flex flex-col items-center space-y-4">
-          <Image src={qrCodeUrl} width={200} height={200} alt="Generated QR Code" />
-          <button
-            onClick={() => handleCopy(qrCodeUrl)}
-            className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Copy QR Code
-          </button>
-          <button
-            onClick={() => window.location.reload()}
-            className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-          >
-            Generate Another QR Code
-          </button>
-        </div>
-      )}
-    </>
+      </Card>
+    </div>
   );
 }
