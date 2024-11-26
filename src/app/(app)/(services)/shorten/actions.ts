@@ -2,11 +2,10 @@
 
 import { dbCreateLink } from '@/db/functions/link';
 import { getUser } from '@/utils/auth';
-import { type Url } from '@/utils/types';
 import { nanoid } from 'nanoid';
 import { redirect } from 'next/navigation';
 
-export async function shortenUrl(url: Url) {
+export async function shortenUrl({ url }: { url: string }) {
   const user = await getUser();
 
   if (!user.emailVerified) {

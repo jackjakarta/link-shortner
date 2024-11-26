@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { env } from '@/env';
+import { urlSchema } from '@/utils/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import React from 'react';
@@ -16,7 +17,7 @@ import { z } from 'zod';
 import { shortenUrl } from './actions';
 
 const urlFormSchema = z.object({
-  url: z.string().url('Invalid URL'),
+  url: urlSchema,
 });
 
 type FormValues = z.infer<typeof urlFormSchema>;
@@ -50,7 +51,7 @@ export default function ShortenUrlForm() {
 
   async function onSubmit(data: FormValues) {
     try {
-      const shortenedUrl = await shortenUrl(data.url);
+      const shortenedUrl = await shortenUrl({ url: data.url });
       setShortenedUrl(`${env.NEXT_PUBLIC_baseUrl}/${shortenedUrl.shortPath}`);
       toast.success('URL shortened successfully');
     } catch (error) {
@@ -100,10 +101,7 @@ export default function ShortenUrlForm() {
                   className={`w-full bg-gray-900 text-white ${
                     errors.url ? 'border-red-500' : 'border-gray-700'
                   }`}
-                  {...register('url', {
-                    required: 'URL is required',
-                    pattern: { value: /^https?:\/\//, message: 'Enter a valid URL' },
-                  })}
+                  {...register('url')}
                 />
                 {errors.url && <p className="text-red-500 text-sm mt-1">{errors.url.message}</p>}
               </div>
