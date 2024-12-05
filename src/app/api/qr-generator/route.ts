@@ -1,6 +1,5 @@
 import { moderateText } from '@/app/openai/moderation';
 import { uploadImageToS3 } from '@/s3';
-import { getValidSession } from '@/utils/auth';
 import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
 import QRCode from 'qrcode';
@@ -11,8 +10,6 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  await getValidSession();
-
   try {
     const json = await request.json();
     const body = requestSchema.safeParse(json);

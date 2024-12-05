@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { cw } from '@/utils/tailwind';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -101,7 +102,16 @@ export default function QrGeneratorForm() {
 
           <CardFooter className="flex justify-center">
             {qrCodeUrl ? (
-              <Button onClick={() => window.location.reload()}>Generate Another QR Code</Button>
+              <Link
+                className={cw(
+                  'h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+                  'bg-primary text-primary-foreground hover:bg-primary/80 disabled:bg-gray-700 disabled:cursor-not-allowed',
+                )}
+                href=""
+                onClick={() => window.location.reload()}
+              >
+                Generate Another QR Code
+              </Link>
             ) : (
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Generating...' : 'Generate QR Code'}
