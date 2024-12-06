@@ -80,9 +80,10 @@ export default function QrGeneratorForm() {
                   id="text"
                   type="text"
                   placeholder="Enter the text for QR code"
-                  className={`w-full bg-gray-900 text-white ${
-                    errors.text ? 'border-red-500' : 'border-gray-700'
-                  }`}
+                  className={cw(
+                    'w-full bg-gray-900 text-white',
+                    errors.text ? 'border-red-500' : 'border-gray-700',
+                  )}
                   {...register('text')}
                 />
                 {errors.text && <p className="text-red-500 text-sm mt-1">{errors.text.message}</p>}
