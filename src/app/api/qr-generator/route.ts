@@ -1,4 +1,4 @@
-import { moderateText } from '@/app/openai/moderation';
+import { moderateText } from '@/openai/moderation';
 import { uploadImageToS3 } from '@/s3';
 import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
