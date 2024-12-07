@@ -18,6 +18,8 @@ export const env = createEnv({
     awsRegion: z.string().min(1),
     awsBucketName: z.string().min(1),
     openaiApiKey: z.string().min(1),
+    discordClientId: z.string().min(1),
+    discordClientSecret: z.string().min(1),
     devMode: z.string().default('false'),
   },
   client: {
@@ -42,6 +44,8 @@ export const env = createEnv({
     awsBucketName: process.env.AWS_STORAGE_BUCKET_NAME,
     openaiApiKey: process.env.OPENAI_API_KEY,
     devMode: process.env.DEV_MODE,
+    discordClientId: process.env.DISCORD_CLIENT_ID,
+    discordClientSecret: process.env.DISCORD_CLIENT_SECRET,
     NEXT_PUBLIC_passwordValidator: process.env.NEXT_PUBLIC_PASSWORD_VALIDATOR,
   },
 });

@@ -1,5 +1,6 @@
 'use client';
 
+import DiscordIcon from '@/components/icons/discord';
 import EyeClosedIcon from '@/components/icons/eye-closed';
 import EyeOpenIcon from '@/components/icons/eye-open';
 import GithubIcon from '@/components/icons/github';
@@ -14,6 +15,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import DiscordLoginButton from './discord-button';
 import GithubLoginButton from './github-button';
 
 const loginFormSchema = z.object({
@@ -114,6 +116,12 @@ export default function LoginForm() {
             <GithubIcon />
             <span>Sign in with GitHub</span>
           </GithubLoginButton>
+        </div>
+        <div className="mt-2 w-full">
+          <DiscordLoginButton className="flex items-center justify-center gap-4 w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-500 focus:outline-none">
+            <DiscordIcon />
+            <span>Sign in with Discord</span>
+          </DiscordLoginButton>
         </div>
       </div>
     </main>
