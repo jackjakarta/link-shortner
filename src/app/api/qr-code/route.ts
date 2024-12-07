@@ -1,16 +1,20 @@
 import { dbGetLinkById, dbUpdateLinkQrCodeUrl } from '@/db/functions/link';
 import { uploadImageToS3 } from '@/s3';
+import { getValidSession } from '@/utils/auth';
+import { urlSchema } from '@/utils/schemas';
 import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
 import QRCode from 'qrcode';
 import { z } from 'zod';
 
 const urlRequestSchema = z.object({
-  linkId: z.string().min(1, 'Link ID is required'),
-  url: z.string().url('Invalid URL'),
+  linkId: z.string().uuid('Invalid link ID'),
+  url: urlSchema,
 });
 
 export async function POST(request: NextRequest) {
+  await getValidSession();
+
   try {
     const body = await request.json();
     const parsed = urlRequestSchema.safeParse(body);

@@ -78,7 +78,7 @@ export default function LinksTable({ links }: LinksTableProps) {
                       onClick={() =>
                         handleCopyToClipboard(buildRouteUrl({ route: link.shortPath }))
                       }
-                      className="flex items-center gap-2 hover:text-gray-500 cursor-pointer"
+                      className="flex items-center gap-2 hover:text-gray-900 cursor-pointer"
                     >
                       <CopyToClipboardIcon />
                       Copy
@@ -86,7 +86,7 @@ export default function LinksTable({ links }: LinksTableProps) {
                   </div>
                 </td>
                 <td className="px-6 py-4 truncate">
-                  <Link className="hover:text-gray-500" href={link.longUrl} target="_blank">
+                  <Link className="hover:text-gray-900" href={link.longUrl} target="_blank">
                     <div className="flex items-center gap-2">
                       {link.longUrl}
                       <LinkIcon />
@@ -112,9 +112,10 @@ export default function LinksTable({ links }: LinksTableProps) {
                 </td>
                 <td className="px-6 py-4">
                   {link.qrCodeUrl ? (
-                    <QrModal qrCodeUrl={link.qrCodeUrl} />
+                    <QrModal buttonClassName="hover:text-gray-900" qrCodeUrl={link.qrCodeUrl} />
                   ) : (
                     <GenerateQrCodeButton
+                      className="hover:text-gray-900"
                       linkId={link.id}
                       url={buildRouteUrl({ route: link.shortPath })}
                     />

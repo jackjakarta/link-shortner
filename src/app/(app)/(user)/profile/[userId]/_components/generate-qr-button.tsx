@@ -1,12 +1,9 @@
 'use client';
 
-import { sleep } from '@/utils/sleep';
 import { cw } from '@/utils/tailwind';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import toast from 'react-hot-toast';
-
-import { generateQrCode } from './actions';
 
 type GenerateQrCodeButtonProps = {
   linkId: string;
@@ -29,8 +26,20 @@ export default function GenerateQrCodeButton({
     toast.loading('Generating QR Code');
 
     try {
-      await generateQrCode({ linkId, url });
-      await sleep(240);
+      const response = await fetch('/api/qr-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ linkId, url }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error);
+      }
+
       toast.remove();
       toast.success('QR Code generated!');
     } catch (error) {
@@ -44,7 +53,7 @@ export default function GenerateQrCodeButton({
 
   return (
     <button
-      className={cw(className, isLoading && 'cursor-not-allowed')}
+      className={cw(className, 'disabled:cursor-not-allowed')}
       onClick={handleGenerateQrCode}
       disabled={isLoading}
     >
