@@ -3,6 +3,7 @@ import { UserRow } from '@/db/schema';
 import { env } from '@/env';
 import { type AuthOptions } from 'next-auth';
 import credentialsProvider from 'next-auth/providers/credentials';
+import DiscordProvider from 'next-auth/providers/discord';
 import GitHubProvider from 'next-auth/providers/github';
 import { z } from 'zod';
 
@@ -34,11 +35,15 @@ export const authOptions = {
       clientId: env.githubId,
       clientSecret: env.githubSecret,
     }),
+    DiscordProvider({
+      clientId: env.discordClientId,
+      clientSecret: env.discordClientSecret,
+    }),
   ],
   session: { strategy: 'jwt' },
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider === 'github') {
+      if (account?.provider === 'github' || account?.provider === 'discord') {
         try {
           const maybeUser = await dbGetUserByEmail({ email: user.email! });
 
@@ -46,7 +51,7 @@ export const authOptions = {
             await dbCreateUser({
               id: user.id,
               email: user.email!,
-              name: user.name || 'GitHub User',
+              name: user.name || 'oAuth User',
               passwordHash: '',
               passwordSalt: '',
               emailVerified: true,
