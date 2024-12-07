@@ -1,4 +1,4 @@
-# Next.js Template
+# Klikr Link Shortner - Next.js 14
 
 ## Requirements
 
