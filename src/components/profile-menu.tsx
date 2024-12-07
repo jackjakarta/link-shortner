@@ -12,10 +12,10 @@ import { type UserRow } from '@/db/schema';
 import { HelpCircle, Key, Link as LinkIcon, LogOut, User } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { useState } from 'react';
+import React from 'react';
 
 export default function ProfileMenu({ user }: { user: UserRow }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>

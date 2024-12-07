@@ -8,9 +8,9 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import * as React from 'react';
 
-import SignInButton from './auth-buttons';
 import KlikrLogo from './icons/logo';
 import ProfileMenu from './profile-menu';
+import SignInButton from './signin-button';
 
 export default function Navbar({ user }: { user: UserRow }) {
   const { data: session } = useSession();
