@@ -1,6 +1,6 @@
 'use server';
 
-import { and, eq, ne } from 'drizzle-orm';
+import { and, desc, eq, ne } from 'drizzle-orm';
 
 import { db } from '..';
 import { generateAndHashApiKey, hashApiKey, obscureApiKey } from '../crypto';
@@ -71,7 +71,8 @@ export async function dbGetApiKeysByUserId({ userId }: { userId: string }): Prom
   const apiKeys = await db
     .select()
     .from(apiKeyTable)
-    .where(and(eq(apiKeyTable.userId, userId), ne(apiKeyTable.status, 'revoked')));
+    .where(and(eq(apiKeyTable.userId, userId), ne(apiKeyTable.status, 'revoked')))
+    .orderBy(desc(apiKeyTable.createdAt));
 
   return apiKeys;
 }

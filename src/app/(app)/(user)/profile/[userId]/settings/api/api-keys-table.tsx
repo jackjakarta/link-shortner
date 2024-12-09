@@ -63,7 +63,7 @@ export default function ApiKeysTable({ apiKeys }: { apiKeys: ApiKeyRow[] }) {
       <h2 className="text-2xl font-bold mb-4">API Keys</h2>
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="hover:bg-white border-none">
             <TableHead>Name</TableHead>
             <TableHead>API Key</TableHead>
             <TableHead>Status</TableHead>
@@ -73,7 +73,7 @@ export default function ApiKeysTable({ apiKeys }: { apiKeys: ApiKeyRow[] }) {
         </TableHeader>
         <TableBody>
           {apiKeys.map((apiKey) => (
-            <TableRow key={apiKey.id}>
+            <TableRow key={apiKey.id} className="border-none">
               <TableCell className="font-medium">{apiKey.name}</TableCell>
               <TableCell>{apiKey.obscuredApiKey}</TableCell>
               <TableCell>{capitalizeFirstLetter({ word: apiKey.status })}</TableCell>
