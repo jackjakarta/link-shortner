@@ -107,18 +107,24 @@ export default function LoginForm() {
               Sign up
             </Link>
           </div>
-          <Button type="submit" className="w-full mt-4">
+          <Button type="submit" disabled={isSubmitting} className="w-full mt-4">
             Login
           </Button>
         </form>
         <div className="mt-4 w-full">
-          <GithubLoginButton className="flex items-center justify-center gap-4 w-full py-2 px-4 bg-gray-600 text-white rounded-md hover:bg-gray-500 focus:outline-none">
+          <GithubLoginButton
+            isFormSubmitting={isSubmitting}
+            className="flex items-center justify-center gap-4 w-full py-2 px-4 bg-gray-600 text-white rounded-md hover:bg-gray-500 focus:outline-none"
+          >
             <GithubIcon />
             <span>Sign in with GitHub</span>
           </GithubLoginButton>
         </div>
         <div className="mt-2 w-full">
-          <DiscordLoginButton className="flex items-center justify-center gap-4 w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-500 focus:outline-none">
+          <DiscordLoginButton
+            isFormSubmitting={isSubmitting}
+            className="flex items-center justify-center gap-4 w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-500 focus:outline-none"
+          >
             <DiscordIcon />
             <span>Sign in with Discord</span>
           </DiscordLoginButton>

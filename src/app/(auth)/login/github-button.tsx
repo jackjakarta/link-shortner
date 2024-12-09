@@ -2,15 +2,34 @@
 
 import { cw } from '@/utils/tailwind';
 import { signIn } from 'next-auth/react';
+import React from 'react';
 
 type GithubLoginButtonProps = {
   children: React.ReactNode;
+  isFormSubmitting?: boolean;
   className?: React.ComponentProps<'button'>['className'];
 };
 
-export default function GithubLoginButton({ children, className }: GithubLoginButtonProps) {
+export default function GithubLoginButton({
+  children,
+  isFormSubmitting,
+  className,
+}: GithubLoginButtonProps) {
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  function handleLogin() {
+    setIsLoading(true);
+    signIn('github');
+  }
+
+  const disabledState = isLoading || isFormSubmitting;
+
   return (
-    <button className={cw(className)} onClick={() => signIn('github')}>
+    <button
+      disabled={disabledState}
+      className={cw(className, 'disabled:cursor-not-allowed')}
+      onClick={handleLogin}
+    >
       {children}
     </button>
   );
