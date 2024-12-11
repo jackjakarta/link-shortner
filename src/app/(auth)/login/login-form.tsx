@@ -7,6 +7,7 @@ import GithubIcon from '@/components/icons/github';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { emailSchema } from '@/utils/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
@@ -19,8 +20,8 @@ import DiscordLoginButton from './discord-button';
 import GithubLoginButton from './github-button';
 
 const loginFormSchema = z.object({
-  email: z.string().email('This must be a valid email address'),
-  password: z.string().min(4, 'You have to provide your password'),
+  email: emailSchema,
+  password: z.string().min(1, 'You have to provide your password'),
 });
 
 type LoginFormData = z.infer<typeof loginFormSchema>;
