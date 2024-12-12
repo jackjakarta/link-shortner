@@ -10,3 +10,13 @@ export function buildUserActionUrl({ searchParams }: { searchParams: URLSearchPa
 
   return userActionUrl;
 }
+
+export function extractFileName(url: string | null): string | null {
+  if (url === null) {
+    return null;
+  }
+
+  const match = url.match(/[^/]+$/);
+
+  return match ? match[0] : null;
+}
