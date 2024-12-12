@@ -1,6 +1,7 @@
 import { dbGetLinkById, dbUpdateLinkQrCodeUrl } from '@/db/functions/link';
 import { uploadImageToS3 } from '@/s3';
 import { getValidSession } from '@/utils/auth';
+import { bufferToArrayBuffer } from '@/utils/files';
 import { urlSchema } from '@/utils/schemas';
 import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
@@ -34,7 +35,7 @@ export async function POST(req: NextRequest) {
 
     const qrCodeUrl = await uploadImageToS3({
       fileName,
-      fileBuffer: qrCodeBuffer,
+      fileBuffer: bufferToArrayBuffer(qrCodeBuffer),
     });
 
     await dbUpdateLinkQrCodeUrl({ linkId: link.id, qrCodeUrl });

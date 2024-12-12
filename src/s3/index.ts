@@ -1,5 +1,10 @@
 import { env } from '@/env';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+  DeleteObjectCommand,
+  DeleteObjectCommandInput,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 
 const accessKeyId = env.awsAccessKeyId;
 const secretAccessKey = env.awsSecretAccessKey;
@@ -35,4 +40,20 @@ export async function uploadImageToS3({
   await s3.send(uploadCommand);
 
   return `${bucketUrl}/${fileName}`;
+}
+
+export async function deleteFileFromS3({ key }: { key: string }) {
+  const deleteParams: DeleteObjectCommandInput = {
+    Bucket: bucketName,
+    Key: key,
+  };
+
+  try {
+    const command = new DeleteObjectCommand(deleteParams);
+    await s3.send(command);
+    console.log(`File with key ${key} deleted successfully`);
+  } catch (error) {
+    console.error('Error deleting file from S3:', error);
+    throw error;
+  }
 }
