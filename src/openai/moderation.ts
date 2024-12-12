@@ -1,8 +1,8 @@
-import { openAi } from '.';
+import { openai } from '.';
 
 export async function moderateText({ content }: { content: string }) {
   try {
-    const response = await openAi.moderations.create({
+    const response = await openai.moderations.create({
       input: content,
     });
 
