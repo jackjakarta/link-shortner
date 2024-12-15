@@ -2,12 +2,13 @@
 
 import { useSidebar } from '@/components/hooks/use-sidebar';
 import AccountIcon from '@/components/icons/account';
+import BackpackIcon from '@/components/icons/backpack';
 import ChartsIcon from '@/components/icons/charts';
 import ExitIcon from '@/components/icons/exit';
 import HamburgerIcon from '@/components/icons/hamburger';
-import LinkIcon from '@/components/icons/link';
-import LinkChainIcon from '@/components/icons/link-chain';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import UsersIcon from '@/components/icons/users';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getFirstCapitalLetter } from '@/utils/format';
 import { cw } from '@/utils/tailwind';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
@@ -23,26 +24,31 @@ type SidebarMenuItem = {
   onClick?: () => void;
 };
 
-export default function AdminSidebarMenu() {
+export default function AdminSidebarMenu({ avatarUrl }: { avatarUrl: string }) {
   const pathname = usePathname();
   const user = React.useContext(AdminContext);
   const { isOpen, setIsOpen, sidebarRef, handleLinkClick } = useSidebar();
 
   const items: SidebarMenuItem[] = [
     {
-      title: 'New Link',
-      icon: LinkIcon,
-      href: '/shorten',
-    },
-    {
-      title: 'Account',
+      title: 'Profile',
       icon: AccountIcon,
       href: `/profile/${user?.id}/settings`,
     },
     {
-      title: 'Your Links',
-      icon: LinkChainIcon,
-      href: `/profile/${user?.id}`,
+      title: 'Users',
+      icon: UsersIcon,
+      href: '/admin/users',
+    },
+    {
+      title: 'Organisations',
+      icon: BackpackIcon,
+      href: '/admin/organisations',
+    },
+    {
+      title: 'Charts',
+      icon: ChartsIcon,
+      href: '/admin/charts',
     },
   ];
 
@@ -68,7 +74,18 @@ export default function AdminSidebarMenu() {
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto">
-          <ul className="space-y-2 font-medium">
+          <div className="flex items-center gap-4">
+            <div className="flex flex-col">
+              <span className="text-white">Hello, {user?.name}!</span>
+              <span className="text-xs text-white">{user?.email}</span>
+            </div>
+            <div className="flex-grow" />
+            <Avatar className="w-9 h-9">
+              <AvatarImage src={avatarUrl} alt="@shadcn" />
+              <AvatarFallback>{getFirstCapitalLetter(user?.name ?? 'KL')}</AvatarFallback>
+            </Avatar>
+          </div>
+          <ul className="space-y-2 font-medium pt-3">
             {items.map((item) => (
               <li key={item.title}>
                 <Link
@@ -91,24 +108,8 @@ export default function AdminSidebarMenu() {
               </li>
             ))}
             <li>
-              <HoverCard>
-                <HoverCardTrigger asChild>
-                  <button className="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group w-full">
-                    <ChartsIcon
-                      className="w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white"
-                      aria-hidden="true"
-                    />
-                    <span className="ms-3">Analytics</span>
-                    <div className="flex-grow" />
-                  </button>
-                </HoverCardTrigger>
-                <HoverCardContent className="flex w-[7rem] text-xs text-gray-600 font-light py-1">
-                  Available soon
-                </HoverCardContent>
-              </HoverCard>
-
               <button
-                onClick={() => signOut()}
+                onClick={() => signOut({ callbackUrl: '/' })}
                 className="flex items-center p-2 mt-2 rounded-lg text-white hover:bg-gray-700 group w-full"
               >
                 <ExitIcon

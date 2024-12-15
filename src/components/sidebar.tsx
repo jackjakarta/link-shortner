@@ -7,18 +7,19 @@ import HamburgerIcon from '@/components/icons/hamburger';
 import LinkIcon from '@/components/icons/link';
 import LinkChainIcon from '@/components/icons/link-chain';
 import { cw } from '@/utils/tailwind';
+import { type ObscuredUser } from '@/utils/user';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
 import { useSidebar } from './hooks/use-sidebar';
+import DashboardIcon from './icons/dashboard';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card';
 import SoonLabel from './ui/soon-label';
 
-type SidebarMenuProps = {
-  userId: string;
-};
+type SidebarMenuProps = ObscuredUser & { avatarUrl: string };
 
 type SidebarMenuItem = {
   title: string;
@@ -27,8 +28,15 @@ type SidebarMenuItem = {
   onClick?: () => void;
 };
 
-export default function SidebarMenu({ userId }: SidebarMenuProps) {
+export default function SidebarMenu({
+  id,
+  name,
+  email,
+  isSuperAdmin,
+  avatarUrl,
+}: SidebarMenuProps) {
   const pathname = usePathname();
+
   const { isOpen, setIsOpen, sidebarRef, handleLinkClick } = useSidebar();
 
   const items: SidebarMenuItem[] = [
@@ -40,12 +48,12 @@ export default function SidebarMenu({ userId }: SidebarMenuProps) {
     {
       title: 'Account',
       icon: AccountIcon,
-      href: `/profile/${userId}/settings`,
+      href: `/profile/${id}/settings`,
     },
     {
       title: 'Your Links',
       icon: LinkChainIcon,
-      href: `/profile/${userId}`,
+      href: `/profile/${id}`,
     },
   ];
 
@@ -71,7 +79,37 @@ export default function SidebarMenu({ userId }: SidebarMenuProps) {
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto">
-          <ul className="space-y-2 font-medium">
+          <div className="flex items-center gap-4">
+            <div className="flex flex-col">
+              <span className="text-white">Hello, {name}!</span>
+              <span className="text-xs text-white">{email}</span>
+            </div>
+            <div className="flex-grow" />
+            <Avatar className="w-9 h-9">
+              <AvatarImage src={avatarUrl} alt="@shadcn" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </div>
+          <ul className="space-y-2 font-medium pt-3">
+            {isSuperAdmin && (
+              <li>
+                <Link
+                  onClick={handleLinkClick}
+                  href="/admin"
+                  className={cw(
+                    'flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group',
+                  )}
+                >
+                  <DashboardIcon
+                    className={cw(
+                      'w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white',
+                    )}
+                    aria-hidden="true"
+                  />
+                  <span className="ms-3">Admin</span>
+                </Link>
+              </li>
+            )}
             {items.map((item) => (
               <li key={item.title}>
                 <Link
@@ -110,9 +148,11 @@ export default function SidebarMenu({ userId }: SidebarMenuProps) {
                   Available soon
                 </HoverCardContent>
               </HoverCard>
+            </li>
 
+            <li>
               <button
-                onClick={() => signOut()}
+                onClick={() => signOut({ callbackUrl: '/' })}
                 className="flex items-center p-2 mt-2 rounded-lg text-white hover:bg-gray-700 group w-full"
               >
                 <ExitIcon

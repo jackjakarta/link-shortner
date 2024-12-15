@@ -2,13 +2,18 @@ import InfoBar from '@/components/info-bar';
 import ResendVerificationButton from '@/components/resend-verification-button';
 import SidebarMenu from '@/components/sidebar';
 import { getUser } from '@/utils/auth';
+import { getUserAvatarUrl, obscureUser } from '@/utils/user';
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const user = await getUser();
+  const [avatarUrl, obscuredUser] = await Promise.all([
+    getUserAvatarUrl({ email: user.email }),
+    obscureUser({ user }),
+  ]);
 
   return (
     <>
-      <SidebarMenu userId={user.id} />
+      <SidebarMenu {...obscuredUser} avatarUrl={avatarUrl} />
       {!user.emailVerified && (
         <InfoBar className="bg-indigo-900 text-gray-200 py-2.5 px-4">
           <h1 className="sm:ml-64">
