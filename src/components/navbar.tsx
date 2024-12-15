@@ -15,7 +15,7 @@ import SignInButton from './signin-button';
 export default function Navbar({ user }: { user: UserRow }) {
   const { data: session } = useSession();
   const navItems = [
-    { name: 'Home', href: '/' },
+    { name: 'Home', href: '/shorten' },
     { name: 'QR Generator', href: '/qr-generator' },
     { name: 'Contact', href: '/contact' },
   ];

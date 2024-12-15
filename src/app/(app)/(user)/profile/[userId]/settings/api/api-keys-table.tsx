@@ -22,22 +22,28 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import toast from 'react-hot-toast';
 
-import { setApiKEyStatus } from './actions';
+import { setApiKeyStatus } from './actions';
 import DeleteKeyButton from './delete-key-button';
 
 export default function ApiKeysTable({ apiKeys }: { apiKeys: ApiKeyRow[] }) {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
-  async function handleStatusChange(apiKeyId: string, status: ApiKeyStatus) {
-    const toastLoadingMessage = status === 'revoked' ? 'Deleting API key' : 'Updating API key';
-    const toastSuccesMessage =
-      status === 'revoked' ? 'Api key deleted' : `Api key set to ${status}`;
+  async function handleStatusChange({
+    apiKeyId,
+    status,
+  }: {
+    apiKeyId: string;
+    status: ApiKeyStatus;
+  }) {
+    const isRevoked = status === 'revoked';
+    const toastLoadingMessage = isRevoked ? 'Deleting API key' : 'Updating API key';
+    const toastSuccesMessage = isRevoked ? 'Api key deleted' : `Api key set to ${status}`;
 
     toast.loading(toastLoadingMessage);
 
     try {
-      await setApiKEyStatus({ apiKeyId, status });
+      await setApiKeyStatus({ apiKeyId, status });
       toast.remove();
       toast.success(toastSuccesMessage);
     } catch (error) {
@@ -89,10 +95,10 @@ export default function ApiKeysTable({ apiKeys }: { apiKeys: ApiKeyRow[] }) {
                     <DropdownMenuItem
                       className="cursor-pointer"
                       onClick={async () =>
-                        handleStatusChange(
-                          apiKey.id,
-                          apiKey.status === 'active' ? 'inactive' : 'active',
-                        )
+                        handleStatusChange({
+                          apiKeyId: apiKey.id,
+                          status: apiKey.status === 'active' ? 'inactive' : 'active',
+                        })
                       }
                     >
                       {apiKey.status === 'active' ? 'Deactivate' : 'Activate'}

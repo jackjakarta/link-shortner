@@ -77,7 +77,7 @@ export async function dbGetApiKeysByUserId({ userId }: { userId: string }): Prom
   return apiKeys;
 }
 
-export async function dbSetApiKEyStatus({
+export async function dbSetApiKeyStatus({
   apiKeyId,
   status,
   userId,

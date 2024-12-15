@@ -64,6 +64,13 @@
       "when": 1731776035795,
       "tag": "0008_daffy_masque",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1734292578782,
+      "tag": "0009_clever_power_man",
+      "breakpoints": true
     }
   ]
 }

@@ -9,7 +9,7 @@ export default async function Page() {
   const hasNoPassword = user.provider !== null && user.passwordSalt === '';
 
   return (
-    <main className="px-8 py-1 mt-4 max-w-[35rem]">
+    <div className="px-8 py-1 mt-4 max-w-[35rem]">
       <SettingsNavbar userId={user.id} />
       <div className="flex flex-col w-full gap-4 mt-4">
         {hasNoPassword ? (
@@ -24,6 +24,6 @@ export default async function Page() {
           </>
         )}
       </div>
-    </main>
+    </div>
   );
 }
