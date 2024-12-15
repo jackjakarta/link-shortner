@@ -31,8 +31,8 @@ export default function DialogWindow({
           </Dialog.Description>
           {children}
           <Dialog.Close asChild>
-            <button className="absolute top-2 right-2 font-semibold hover:text-gray-500">
-              <CrossIcon />
+            <button className="absolute top-2 right-2 font-semibold group hover:text-gray-500">
+              <CrossIcon className="group-hover:text-gray-500" />
             </button>
           </Dialog.Close>
         </Dialog.Content>
