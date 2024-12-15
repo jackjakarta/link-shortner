@@ -81,11 +81,11 @@ export default function AdminSidebarMenu({ avatarUrl }: { avatarUrl: string }) {
             </div>
             <div className="flex-grow" />
             <Avatar className="w-9 h-9">
-              <AvatarImage src={avatarUrl} alt="@shadcn" />
+              <AvatarImage src={avatarUrl} alt="avatar" />
               <AvatarFallback>{getFirstCapitalLetter(user?.name ?? 'KL')}</AvatarFallback>
             </Avatar>
           </div>
-          <ul className="space-y-2 font-medium pt-3">
+          <ul className="space-y-2 font-medium pt-8">
             {items.map((item) => (
               <li key={item.title}>
                 <Link
