@@ -25,6 +25,7 @@ type SidebarMenuItem = {
   title: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   href: string;
+  customPathname?: boolean;
   onClick?: () => void;
 };
 
@@ -36,7 +37,6 @@ export default function SidebarMenu({
   avatarUrl,
 }: SidebarMenuProps) {
   const pathname = usePathname();
-
   const { isOpen, setIsOpen, sidebarRef, handleLinkClick } = useSidebar();
 
   const items: SidebarMenuItem[] = [
@@ -49,6 +49,11 @@ export default function SidebarMenu({
       title: 'Account',
       icon: AccountIcon,
       href: `/profile/${id}/settings`,
+      customPathname:
+        pathname === `/profile/${id}/settings` ||
+        pathname === `/profile/${id}/settings/password` ||
+        pathname === `/profile/${id}/settings/api` ||
+        pathname === `/profile/${id}/settings/api/usage`,
     },
     {
       title: 'Your Links',
@@ -90,7 +95,7 @@ export default function SidebarMenu({
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </div>
-          <ul className="space-y-2 font-medium pt-3">
+          <ul className="space-y-2 font-medium pt-8">
             {isSuperAdmin && (
               <li>
                 <Link
@@ -117,13 +122,13 @@ export default function SidebarMenu({
                   href={item.href}
                   className={cw(
                     'flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group',
-                    pathname === item.href && 'bg-gray-700',
+                    (item.customPathname ?? pathname === item.href) && 'bg-gray-700',
                   )}
                 >
                   <item.icon
                     className={cw(
                       'w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white',
-                      pathname === item.href && 'text-white',
+                      (item.customPathname ?? pathname === item.href) && 'text-white',
                     )}
                     aria-hidden="true"
                   />
@@ -149,7 +154,6 @@ export default function SidebarMenu({
                 </HoverCardContent>
               </HoverCard>
             </li>
-
             <li>
               <button
                 onClick={() => signOut({ callbackUrl: '/' })}
