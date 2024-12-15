@@ -60,67 +60,65 @@ export default function QrGeneratorForm() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full max-w-2xl px-4">
-      <Card className="w-full border-none rounded-full bg-gradient-to-r from-gray-700 to-indigo-900 p-8 shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-white text-center text-2xl font-semibold mb-4">
-            QR Code Generator
-          </CardTitle>
-        </CardHeader>
+    <Card className="w-full max-w-2xl border-none rounded-full bg-gradient-to-r from-gray-700 to-indigo-900 p-8 shadow-lg">
+      <CardHeader>
+        <CardTitle className="text-white text-center text-2xl font-semibold mb-4">
+          QR Code Generator
+        </CardTitle>
+      </CardHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-          <CardContent>
-            {!qrCodeUrl ? (
-              <div className="mb-4">
-                <Label htmlFor="text" className="text-gray-300 mb-2 block">
-                  Enter Text
-                </Label>
-                <Input
-                  autoFocus
-                  id="text"
-                  type="text"
-                  placeholder="Enter the text for QR code"
-                  className={cw(
-                    'w-full bg-gray-900 text-white',
-                    errors.text ? 'border-red-500' : 'border-gray-700',
-                  )}
-                  {...register('text')}
-                />
-                {errors.text && <p className="text-red-500 text-sm mt-1">{errors.text.message}</p>}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center gap-3 mb-4">
-                <Image src={qrCodeUrl} width={300} height={300} alt="Generated QR Code" />
-                <Link
-                  href={qrCodeUrl}
-                  className="text-gray-400 hover:text-gray-300 transition-colors group"
-                >
-                  Download
-                </Link>
-              </div>
-            )}
-          </CardContent>
-
-          <CardFooter className="flex justify-center">
-            {qrCodeUrl ? (
-              <Link
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+        <CardContent>
+          {!qrCodeUrl ? (
+            <div className="mb-4">
+              <Label htmlFor="text" className="text-gray-300 mb-2 block">
+                Enter Text
+              </Label>
+              <Input
+                autoFocus
+                id="text"
+                type="text"
+                placeholder="Enter the text for QR code"
                 className={cw(
-                  'h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-                  'bg-primary text-primary-foreground hover:bg-primary/80 disabled:bg-gray-700 disabled:cursor-not-allowed',
+                  'w-full bg-gray-900 text-white',
+                  errors.text ? 'border-red-500' : 'border-gray-700',
                 )}
-                href=""
-                onClick={() => window.location.reload()}
+                {...register('text')}
+              />
+              {errors.text && <p className="text-red-500 text-sm mt-1">{errors.text.message}</p>}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-3 mb-4">
+              <Image src={qrCodeUrl} width={300} height={300} alt="Generated QR Code" />
+              <Link
+                href={qrCodeUrl}
+                className="text-gray-400 hover:text-gray-300 transition-colors group"
               >
-                Generate Another QR Code
+                Download
               </Link>
-            ) : (
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Generating...' : 'Generate QR Code'}
-              </Button>
-            )}
-          </CardFooter>
-        </form>
-      </Card>
-    </div>
+            </div>
+          )}
+        </CardContent>
+
+        <CardFooter className="flex justify-center">
+          {qrCodeUrl ? (
+            <Link
+              className={cw(
+                'h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+                'bg-primary text-primary-foreground hover:bg-primary/80 disabled:bg-gray-700 disabled:cursor-not-allowed',
+              )}
+              href=""
+              onClick={() => window.location.reload()}
+            >
+              Generate Another QR Code
+            </Link>
+          ) : (
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Generating...' : 'Generate QR Code'}
+            </Button>
+          )}
+        </CardFooter>
+      </form>
+    </Card>
   );
 }

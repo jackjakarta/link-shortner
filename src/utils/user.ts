@@ -12,6 +12,7 @@ export async function obscureUser({ user }: { user: UserRow }): Promise<Obscured
     emailVerified: user.emailVerified,
     provider: user.provider,
     createdAt: user.createdAt,
+    isSuperAdmin: user.isSuperAdmin,
     isNewsletterSub: user.isNewsletterSub,
   };
 }
