@@ -27,7 +27,7 @@ export default function CreateApiKeyButton({ user }: CreateApiKeyButtonProps) {
     const apiKey = await dbCreateApiKey({ userId: user.id, apiKeyName });
 
     if (apiKey === undefined) {
-      console.error('Etwas ist schiefgelaufen bei der Erstellung eines neuen API-Keys.');
+      console.error('Something went wrong while creating the API key');
       return;
     }
 
@@ -56,18 +56,19 @@ export default function CreateApiKeyButton({ user }: CreateApiKeyButtonProps) {
                   API keys are used to authenticate your requests to the API. They are unique to you
                   and should be kept secret.
                 </Dialog.Description>
-                <label className="block text-xl text-main-900 mb-2 mt-4">Name</label>
+                <label className="block text-base text-main-900 pb-2 pt-4">Name</label>
                 <input
                   className={inputClassName}
                   value={apiKeyName}
                   onChange={(e) => setApiKeyName(e.target.value)}
                 />
-                <div className="flex pt-8">
+                <div className="flex justify-between pt-8">
                   <Dialog.Close asChild>
-                    <button className="font-semibold hover:underline">Cancel</button>
+                    <button className="font-medium text-sm hover:underline">Cancel</button>
                   </Dialog.Close>
-                  <div className="flex-grow" />
-                  <Button onClick={handleApiKeyCreation}>Create</Button>
+                  <Button size="sm" onClick={handleApiKeyCreation}>
+                    Create
+                  </Button>
                 </div>
               </div>
             ) : (
@@ -89,12 +90,12 @@ export default function CreateApiKeyButton({ user }: CreateApiKeyButtonProps) {
                     className="flex items-center hover:text-gray-500 gap-1.5"
                   >
                     <CopyToClipboardIcon />
-                    Copy
+                    <span className="text-sm">Copy</span>
                   </button>
                 </div>
                 <div className="flex">
                   <div className="flex-grow" />
-                  <Button className="mt-4" onClick={handleApiKeySaveConfirm}>
+                  <Button size="sm" className="mt-4" onClick={handleApiKeySaveConfirm}>
                     Done
                   </Button>
                 </div>

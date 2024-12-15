@@ -134,3 +134,12 @@ export async function dbSetNewsletterSubscription({
 }) {
   await db.update(userTable).set({ isNewsletterSub: status }).where(eq(userTable.id, userId));
 }
+
+export async function dbGetNewsletterSubs() {
+  const users = await db
+    .select({ email: userTable.email, name: userTable.name })
+    .from(userTable)
+    .where(eq(userTable.isNewsletterSub, true));
+
+  return users;
+}

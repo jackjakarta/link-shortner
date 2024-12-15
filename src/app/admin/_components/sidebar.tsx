@@ -1,25 +1,21 @@
 'use client';
 
+import { useSidebar } from '@/components/hooks/use-sidebar';
 import AccountIcon from '@/components/icons/account';
+import BackpackIcon from '@/components/icons/backpack';
 import ChartsIcon from '@/components/icons/charts';
 import ExitIcon from '@/components/icons/exit';
 import HamburgerIcon from '@/components/icons/hamburger';
-import LinkIcon from '@/components/icons/link';
-import LinkChainIcon from '@/components/icons/link-chain';
+import UsersIcon from '@/components/icons/users';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getFirstCapitalLetter } from '@/utils/format';
 import { cw } from '@/utils/tailwind';
-import { type ObscuredUser } from '@/utils/user';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
-import { useSidebar } from './hooks/use-sidebar';
-import DashboardIcon from './icons/dashboard';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card';
-import SoonLabel from './ui/soon-label';
-
-type SidebarMenuProps = ObscuredUser & { avatarUrl: string };
+import { AdminContext } from './admin-provider';
 
 type SidebarMenuItem = {
   title: string;
@@ -28,32 +24,31 @@ type SidebarMenuItem = {
   onClick?: () => void;
 };
 
-export default function SidebarMenu({
-  id,
-  name,
-  email,
-  isSuperAdmin,
-  avatarUrl,
-}: SidebarMenuProps) {
+export default function AdminSidebarMenu({ avatarUrl }: { avatarUrl: string }) {
   const pathname = usePathname();
-
+  const user = React.useContext(AdminContext);
   const { isOpen, setIsOpen, sidebarRef, handleLinkClick } = useSidebar();
 
   const items: SidebarMenuItem[] = [
     {
-      title: 'New Link',
-      icon: LinkIcon,
-      href: '/shorten',
-    },
-    {
-      title: 'Account',
+      title: 'Profile',
       icon: AccountIcon,
-      href: `/profile/${id}/settings`,
+      href: `/profile/${user?.id}/settings`,
     },
     {
-      title: 'Your Links',
-      icon: LinkChainIcon,
-      href: `/profile/${id}`,
+      title: 'Users',
+      icon: UsersIcon,
+      href: '/admin/users',
+    },
+    {
+      title: 'Organisations',
+      icon: BackpackIcon,
+      href: '/admin/organisations',
+    },
+    {
+      title: 'Charts',
+      icon: ChartsIcon,
+      href: '/admin/charts',
     },
   ];
 
@@ -81,35 +76,16 @@ export default function SidebarMenu({
         <div className="h-full px-3 py-4 overflow-y-auto">
           <div className="flex items-center gap-4">
             <div className="flex flex-col">
-              <span className="text-white">Hello, {name}!</span>
-              <span className="text-xs text-white">{email}</span>
+              <span className="text-white">Hello, {user?.name}!</span>
+              <span className="text-xs text-white">{user?.email}</span>
             </div>
             <div className="flex-grow" />
             <Avatar className="w-9 h-9">
               <AvatarImage src={avatarUrl} alt="@shadcn" />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback>{getFirstCapitalLetter(user?.name ?? 'KL')}</AvatarFallback>
             </Avatar>
           </div>
           <ul className="space-y-2 font-medium pt-3">
-            {isSuperAdmin && (
-              <li>
-                <Link
-                  onClick={handleLinkClick}
-                  href="/admin"
-                  className={cw(
-                    'flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group',
-                  )}
-                >
-                  <DashboardIcon
-                    className={cw(
-                      'w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white',
-                    )}
-                    aria-hidden="true"
-                  />
-                  <span className="ms-3">Admin</span>
-                </Link>
-              </li>
-            )}
             {items.map((item) => (
               <li key={item.title}>
                 <Link
@@ -131,25 +107,6 @@ export default function SidebarMenu({
                 </Link>
               </li>
             ))}
-            <li>
-              <HoverCard>
-                <HoverCardTrigger asChild>
-                  <button className="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group w-full">
-                    <ChartsIcon
-                      className="w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white"
-                      aria-hidden="true"
-                    />
-                    <span className="ms-3">Analytics</span>
-                    <div className="flex-grow" />
-                    <SoonLabel />
-                  </button>
-                </HoverCardTrigger>
-                <HoverCardContent className="flex w-[7rem] text-xs text-gray-600 font-light py-1">
-                  Available soon
-                </HoverCardContent>
-              </HoverCard>
-            </li>
-
             <li>
               <button
                 onClick={() => signOut({ callbackUrl: '/' })}

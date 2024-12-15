@@ -13,7 +13,7 @@ export default function DeleteKeyButton({
   setIsDeleteDialogOpen,
 }: {
   apiKeyId: string;
-  handleStatusChange: (apiKeyId: string, status: ApiKeyStatus) => void;
+  handleStatusChange: ({ apiKeyId, status }: { apiKeyId: string; status: ApiKeyStatus }) => void;
   isDeleteDialogOpen: boolean;
   setIsDeleteDialogOpen: (value: boolean) => void;
 }) {
@@ -44,7 +44,7 @@ export default function DeleteKeyButton({
             className="bg-red-600 hover:bg-red-700 text-white"
             size="sm"
             onClick={async () => {
-              handleStatusChange(apiKeyId, 'revoked');
+              handleStatusChange({ apiKeyId, status: 'revoked' });
               setIsDeleteDialogOpen(false);
             }}
           >

@@ -10,28 +10,32 @@ type ApiNavbarProps = {
 
 export default function ApiNavbar({ userId }: ApiNavbarProps) {
   const pathname = usePathname();
-  const itemClassName = 'text-md font-light text-gray-900 hover:text-gray-400';
+
+  const menuItems = [
+    {
+      label: 'API Keys',
+      href: `/profile/${userId}/settings/api`,
+    },
+    {
+      label: 'Usage',
+      href: `/profile/${userId}/settings/api/usage`,
+    },
+  ];
 
   return (
     <nav className="flex w-full gap-4 mt-8">
-      <Link
-        className={cw(
-          itemClassName,
-          pathname === `/profile/${userId}/settings/api` && 'font-medium',
-        )}
-        href={`/profile/${userId}/settings/api`}
-      >
-        API Keys
-      </Link>
-      <Link
-        className={cw(
-          itemClassName,
-          pathname === `/profile/${userId}/settings/api/usage` && 'font-medium',
-        )}
-        href={`/profile/${userId}/settings/api/usage`}
-      >
-        Usage
-      </Link>
+      {menuItems.map((item) => (
+        <Link
+          key={item.href}
+          className={cw(
+            'text-md font-light text-gray-900 hover:text-gray-400',
+            pathname === item.href && 'font-medium',
+          )}
+          href={item.href}
+        >
+          {item.label}
+        </Link>
+      ))}
     </nav>
   );
 }

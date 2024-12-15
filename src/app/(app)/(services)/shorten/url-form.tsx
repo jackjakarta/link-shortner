@@ -61,64 +61,62 @@ export default function ShortenUrlForm() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full max-w-2xl px-4">
-      <Card className="w-full border-none rounded-full bg-gradient-to-r from-gray-700 to-indigo-900 p-8 shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-white text-center text-2xl font-semibold mb-4">
-            Shorten URL
-          </CardTitle>
-        </CardHeader>
+    <Card className="w-full max-w-2xl border-none rounded-full bg-gradient-to-r from-gray-700 to-indigo-900 p-8 shadow-lg">
+      <CardHeader>
+        <CardTitle className="text-white text-center text-2xl font-semibold mb-4">
+          Shorten URL
+        </CardTitle>
+      </CardHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-          <CardContent>
-            {shortenedUrl ? (
-              <div className="flex items-center gap-3 mb-4">
-                <Input
-                  type="text"
-                  value={shortenedUrl}
-                  readOnly
-                  className="w-full bg-gray-900 text-white border-none ring-0"
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  onClick={() => handleCopy(shortenedUrl)}
-                  className="text-gray-400 hover:text-gray-300 transition-colors group"
-                >
-                  <CopyToClipboardIcon className="h-5 w-5 group-hover:text-black" />
-                </Button>
-              </div>
-            ) : (
-              <div className="mb-4">
-                <Label htmlFor="url" className="text-gray-300 mb-2 block">
-                  Enter URL
-                </Label>
-                <Input
-                  autoFocus
-                  id="url"
-                  type="text"
-                  placeholder="https://example.com"
-                  className={`w-full bg-gray-900 text-white ${
-                    errors.url ? 'border-red-500' : 'border-gray-700'
-                  }`}
-                  {...register('url')}
-                />
-                {errors.url && <p className="text-red-500 text-sm mt-1">{errors.url.message}</p>}
-              </div>
-            )}
-          </CardContent>
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+        <CardContent>
+          {shortenedUrl ? (
+            <div className="flex items-center gap-3 mb-4">
+              <Input
+                type="text"
+                value={shortenedUrl}
+                readOnly
+                className="w-full bg-gray-900 text-white border-none ring-0"
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => handleCopy(shortenedUrl)}
+                className="text-gray-400 hover:text-gray-300 transition-colors group"
+              >
+                <CopyToClipboardIcon className="h-5 w-5 group-hover:text-black" />
+              </Button>
+            </div>
+          ) : (
+            <div className="mb-4">
+              <Label htmlFor="url" className="text-gray-300 mb-2 block">
+                Enter URL
+              </Label>
+              <Input
+                autoFocus
+                id="url"
+                type="text"
+                placeholder="https://example.com"
+                className={`w-full bg-gray-900 text-white ${
+                  errors.url ? 'border-red-500' : 'border-gray-700'
+                }`}
+                {...register('url')}
+              />
+              {errors.url && <p className="text-red-500 text-sm mt-1">{errors.url.message}</p>}
+            </div>
+          )}
+        </CardContent>
 
-          <CardFooter className="flex justify-center">
-            {shortenedUrl ? (
-              <Link href="/shorten">
-                <Button onClick={handleResetForm}>Shorten another URL</Button>
-              </Link>
-            ) : (
-              <Button type="submit">Shorten</Button>
-            )}
-          </CardFooter>
-        </form>
-      </Card>
-    </div>
+        <CardFooter className="flex justify-center">
+          {shortenedUrl ? (
+            <Link href="/shorten">
+              <Button onClick={handleResetForm}>Shorten another URL</Button>
+            </Link>
+          ) : (
+            <Button type="submit">Shorten</Button>
+          )}
+        </CardFooter>
+      </form>
+    </Card>
   );
 }
