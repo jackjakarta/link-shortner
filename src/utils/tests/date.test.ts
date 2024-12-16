@@ -23,7 +23,7 @@ describe('formatDateToDayMonthYear', () => {
 
 describe('formatDateToDayMonthYearTime', () => {
   test('should format a valid date to "day month year, time" format', () => {
-    const date = new Date('2023-12-16T09:30:00Z');
+    const date = new Date('2023-12-16T10:30:00Z');
     const result = formatDateToDayMonthYearTime(date);
 
     expect(result).toBe('16 December 2023 at 10:30');
@@ -35,7 +35,7 @@ describe('formatDateToDayMonthYearTime', () => {
   });
 
   test('should handle different time zones correctly', () => {
-    const date = new Date('2023-12-16T22:59:00Z');
+    const date = new Date('2023-12-16T23:59:00Z');
     const result = formatDateToDayMonthYearTime(date);
 
     expect(result).toBe('16 December 2023 at 23:59');
