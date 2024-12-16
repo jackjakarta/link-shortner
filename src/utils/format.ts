@@ -3,12 +3,17 @@ export function capitalizeFirstLetter({ word }: { word: string }): string {
     return '';
   }
 
-  return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+  const trimmedWord = word.trim();
+  return trimmedWord.charAt(0).toUpperCase() + trimmedWord.slice(1).toLowerCase();
 }
 
 export function getFirstCapitalLetter(input: string): string {
   if (typeof input !== 'string' || input.length === 0) {
     return '';
   }
-  return input.trim().charAt(0).toUpperCase();
+
+  const trimmedInput = input.trim();
+  const firstAlphabetic = trimmedInput.match(/[a-zA-Z]/);
+
+  return firstAlphabetic ? firstAlphabetic[0].toUpperCase() : '';
 }
