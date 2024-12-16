@@ -10,7 +10,7 @@
     "types": "tsc --noEmit",
     "format:check": "prettier --check .",
     "lint": "next lint",
-    "test": "jest",
+    "test": "jest --verbose",
     "checks": "./scripts/checks.sh",
     "db:generate": "drizzle-kit generate --config=./src/db/drizzle.config.ts",
     "db:migrate": "dotenv -e .env tsx ./src/db/migrate.ts",

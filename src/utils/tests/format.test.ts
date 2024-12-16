@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter, getFirstCapitalLetter } from './format';
+import { capitalizeFirstLetter, getFirstCapitalLetter } from '../format';
 
 describe('capitalizeFirstLetter', () => {
   test('should capitalize the first letter of a word', () => {
