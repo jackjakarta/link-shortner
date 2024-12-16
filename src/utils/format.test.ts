@@ -1,6 +1,5 @@
 import { capitalizeFirstLetter, getFirstCapitalLetter } from './format';
 
-// Unit tests for capitalizeFirstLetter
 describe('capitalizeFirstLetter', () => {
   test('should capitalize the first letter of a word', () => {
     expect(capitalizeFirstLetter({ word: 'hello' })).toBe('Hello');
@@ -23,7 +22,6 @@ describe('capitalizeFirstLetter', () => {
   });
 });
 
-// Unit tests for getFirstCapitalLetter
 describe('getFirstCapitalLetter', () => {
   test('should return the first capitalized letter of a string', () => {
     expect(getFirstCapitalLetter('hello')).toBe('H');
