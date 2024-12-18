@@ -10,6 +10,10 @@ import {
 } from 'drizzle-orm/pg-core';
 import { z } from 'zod';
 
+export const authProviderSchema = z.enum(['email', 'discord', 'github']);
+export const authProviderPgEnum = pgEnum('auth_provider', authProviderSchema.options);
+export type AuthProvider = z.infer<typeof authProviderSchema>;
+
 export const userTable = pgTable('user', {
   id: text('id').primaryKey(),
   email: text('email').notNull().unique(),
@@ -17,7 +21,7 @@ export const userTable = pgTable('user', {
   passwordHash: text('password_hash').notNull(),
   passwordSalt: text('password_salt').notNull(),
   emailVerified: boolean('email_verified').notNull().default(false),
-  provider: text('provider'),
+  authProvider: text('provider').notNull().default('email'),
   isSuperAdmin: boolean('is_super_admin').notNull().default(false),
   isNewsletterSub: boolean('is_newsletter_sub').notNull().default(false),
   createdAt: timestamp('created_at').notNull().defaultNow(),
