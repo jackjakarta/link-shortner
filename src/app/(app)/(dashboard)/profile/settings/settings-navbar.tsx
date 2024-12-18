@@ -4,10 +4,6 @@ import { cw } from '@/utils/tailwind';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-type SettingsNavbarProps = {
-  userId: string;
-};
-
 export default function SettingsNavbar() {
   const pathname = usePathname();
   const itemClassName = 'text-lg font-light text-gray-900 hover:text-gray-400';

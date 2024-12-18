@@ -10,7 +10,7 @@ export default async function Page() {
 
   return (
     <div className="px-8 py-1 mt-4 max-w-[35rem]">
-      <SettingsNavbar userId={user.id} />
+      <SettingsNavbar />
       <div className="flex flex-col w-full gap-4 mt-4">
         {hasNoPassword ? (
           <>

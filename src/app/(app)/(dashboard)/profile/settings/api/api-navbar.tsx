@@ -4,10 +4,6 @@ import { cw } from '@/utils/tailwind';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-type ApiNavbarProps = {
-  userId: string;
-};
-
 export default function ApiNavbar() {
   const pathname = usePathname();
 
