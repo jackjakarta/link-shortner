@@ -1,3 +1,4 @@
+import { cw } from '@/utils/tailwind';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { type Metadata } from 'next';
 import { Toaster } from 'react-hot-toast';
@@ -21,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={aeonik.className}>
+      <body className={cw(aeonik.className, 'bg-slate-900 dark:bg-gray-800')}>
         <Toaster
           toastOptions={{
             className: 'border border-[1px] rounded-none border-main-900',
