@@ -4,7 +4,7 @@ export default function Footer() {
   const footerItems = [
     {
       title: 'API Docs',
-      href: '/docs/api',
+      href: '#',
     },
     {
       title: 'Terms of Service',
@@ -12,7 +12,7 @@ export default function Footer() {
     },
     {
       title: 'Privacy Policy',
-      href: '/privacy',
+      href: '/privacy-policy',
     },
   ];
 

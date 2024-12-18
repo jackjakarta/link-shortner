@@ -6,10 +6,9 @@ import { type UserProfileInsertRow, type UserProfileRow } from '@/db/schema';
 import { getUser } from '@/utils/auth';
 import { redirect } from 'next/navigation';
 
-type UpdateProfileProps = UserProfileInsertRow & { isNewsletterSub: boolean };
+type UpdateProfileProps = Omit<UserProfileInsertRow, 'userId'> & { isNewsletterSub: boolean };
 
 export async function updateProfile({
-  userId,
   bio,
   location,
   website,
@@ -17,22 +16,18 @@ export async function updateProfile({
 }: UpdateProfileProps): Promise<UserProfileRow> {
   const user = await getUser();
 
-  if (userId !== user.id) {
-    throw new Error('Unauthorized');
-  }
-
   if (!user.emailVerified) {
     redirect('/verify-email');
   }
 
   const userProfile = await dbUpdateUserProfile({
-    userId,
+    userId: user.id,
     bio,
     location,
     website,
   });
 
-  await dbSetNewsletterSubscription({ userId, status: isNewsletterSub });
+  await dbSetNewsletterSubscription({ userId: user.id, status: isNewsletterSub });
 
   if (userProfile === undefined) {
     throw new Error('Failed to update profile');

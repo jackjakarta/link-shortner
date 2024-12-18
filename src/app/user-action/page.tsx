@@ -5,12 +5,13 @@ import { notFound, redirect } from 'next/navigation';
 import EmailVerifySuccess from './email-verify-success';
 import TokenVerifyFail from './token-verify-fail';
 
-export const metadata: Metadata = {
-  title: 'LnkTo - Email Verification',
-  description: 'Verifizieren Sie Ihre E-Mail-Adresse',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Klikr App - Email Verification',
+  };
+}
 
-export default async function UserActionPage({
+export default async function Page({
   searchParams,
 }: {
   searchParams?: {

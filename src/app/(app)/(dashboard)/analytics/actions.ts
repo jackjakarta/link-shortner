@@ -3,16 +3,12 @@
 import { dbGetTotalClickCount, dbGetTotalClicksPerDay } from '@/db/functions/link';
 import { getUser } from '@/utils/auth';
 
-export async function getLinkStats(userId: string) {
+export async function getLinkStats() {
   const user = await getUser();
 
-  if (user.id !== userId) {
-    throw new Error('Unauthorized');
-  }
-
   const [clicksByDay, clicksTotal] = await Promise.all([
-    await dbGetTotalClicksPerDay({ userId }),
-    await dbGetTotalClickCount({ userId }),
+    await dbGetTotalClicksPerDay({ userId: user.id }),
+    await dbGetTotalClickCount({ userId: user.id }),
   ]);
 
   return { clicksByDay, clicksTotal };

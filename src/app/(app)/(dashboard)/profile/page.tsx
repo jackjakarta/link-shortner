@@ -3,8 +3,8 @@ import { getLinksByUserId } from './actions';
 
 export const dynamic = 'force-dynamic';
 
-export default async function Page({ params }: { params: { userId: string } }) {
-  const links = await getLinksByUserId({ userId: params.userId });
+export default async function Page() {
+  const links = await getLinksByUserId();
 
   return <LinksTable links={links} />;
 }

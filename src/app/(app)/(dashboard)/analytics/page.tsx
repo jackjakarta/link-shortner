@@ -1,8 +1,8 @@
 import { getLinkStats } from './actions';
 import BarChartComponent from './bar-chart';
 
-export default async function Page({ params }: { params: { userId: string } }) {
-  const { clicksByDay, clicksTotal } = await getLinkStats(params.userId);
+export default async function Page() {
+  const { clicksByDay, clicksTotal } = await getLinkStats();
 
   return (
     <>

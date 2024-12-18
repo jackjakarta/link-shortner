@@ -55,7 +55,6 @@ export default function UserProfileSettingsForm({
 
     try {
       await updateProfile({
-        userId: user.id,
         ...data,
       });
       toast.remove();
