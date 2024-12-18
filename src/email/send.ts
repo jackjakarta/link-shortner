@@ -2,8 +2,8 @@
 
 import { type TokenAction } from '@/db/schema';
 import { env } from '@/env';
-import Mailjet from 'node-mailjet';
 
+import { mailjet } from './client';
 import { createInformationMailTemplate, createUserActionMailTemplate } from './templates';
 import { type EmailActionResult, type InformationEmailMetadata } from './types';
 
@@ -21,7 +21,7 @@ export async function sendUserActionEmail({
   to: string;
   action: TokenAction;
 }): Promise<EmailActionResult> {
-  const mailjet = Mailjet.apiConnect(env.mailJetApiKey, env.mailJetApiSecret);
+  // const mailjet = Mailjet.apiConnect(env.mailJetApiKey, env.mailJetApiSecret);
   const result = await createUserActionMailTemplate(to, action);
 
   if (!result || !result.success) {
@@ -83,7 +83,6 @@ export async function sendUserActionInformationEmail(
   to: string,
   information: InformationEmailMetadata,
 ) {
-  const mailjet = Mailjet.apiConnect(env.mailJetApiKey, env.mailJetApiSecret);
   const mailTemplate = await createInformationMailTemplate(information);
 
   if (mailTemplate === undefined) {

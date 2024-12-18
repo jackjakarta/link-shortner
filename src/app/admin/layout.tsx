@@ -1,8 +1,8 @@
+import { AdminProvider } from '@/components/hooks/use-admin';
 import { getUser } from '@/utils/auth';
 import { getUserAvatarUrl, obscureUser } from '@/utils/user';
 import { notFound } from 'next/navigation';
 
-import AdminProvider from './_components/admin-provider';
 import AdminSidebarMenu from './_components/sidebar';
 
 export default async function Layout({ children }: { children: React.ReactNode }) {

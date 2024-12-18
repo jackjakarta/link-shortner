@@ -1,5 +1,6 @@
 'use client';
 
+import { useAdmin } from '@/components/hooks/use-admin';
 import { useSidebar } from '@/components/hooks/use-sidebar';
 import AccountIcon from '@/components/icons/account';
 import BackpackIcon from '@/components/icons/backpack';
@@ -15,8 +16,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
-import { AdminContext } from './admin-provider';
-
 type SidebarMenuItem = {
   title: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -26,14 +25,14 @@ type SidebarMenuItem = {
 
 export default function AdminSidebarMenu({ avatarUrl }: { avatarUrl: string }) {
   const pathname = usePathname();
-  const user = React.useContext(AdminContext);
+  const user = useAdmin();
   const { isOpen, setIsOpen, sidebarRef, handleLinkClick } = useSidebar();
 
   const items: SidebarMenuItem[] = [
     {
       title: 'Profile',
       icon: AccountIcon,
-      href: `/profile/${user?.id}/settings`,
+      href: `/profile/settings`,
     },
     {
       title: 'Users',

@@ -5,7 +5,7 @@ import React from 'react';
 
 export const AdminContext = React.createContext<ObscuredUser | undefined>(undefined);
 
-export default function AdminProvider({
+export function AdminProvider({
   children,
   user,
 }: {
@@ -13,4 +13,14 @@ export default function AdminProvider({
   user: ObscuredUser;
 }) {
   return <AdminContext.Provider value={user}>{children}</AdminContext.Provider>;
+}
+
+export function useAdmin() {
+  const context = React.useContext(AdminContext);
+
+  if (context === undefined) {
+    throw new Error('useAdmin must be used within an AdminProvider');
+  }
+
+  return context;
 }
