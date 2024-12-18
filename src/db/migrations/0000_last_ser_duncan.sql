@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS "user" (
 	"password_hash" text NOT NULL,
 	"password_salt" text NOT NULL,
 	"email_verified" boolean DEFAULT false NOT NULL,
-	"provider" text DEFAULT 'email' NOT NULL,
+	"provider" "auth_provider" DEFAULT 'email' NOT NULL,
 	"is_super_admin" boolean DEFAULT false NOT NULL,
 	"is_newsletter_sub" boolean DEFAULT false NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,

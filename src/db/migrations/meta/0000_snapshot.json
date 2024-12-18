@@ -1,5 +1,5 @@
 {
-  "id": "ec136508-b100-4a17-85e5-e2cb0ee51a35",
+  "id": "d1b06b70-7098-4717-9211-4962229ee492",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -342,7 +342,8 @@
         },
         "provider": {
           "name": "provider",
-          "type": "text",
+          "type": "auth_provider",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'email'"
