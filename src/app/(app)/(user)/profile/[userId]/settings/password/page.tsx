@@ -6,7 +6,7 @@ import UpdatePasswordForm from './update-password-form';
 
 export default async function Page() {
   const user = await getUser();
-  const hasNoPassword = user.authProvider !== null && user.passwordSalt === '';
+  const hasNoPassword = user.authProvider !== 'email' && user.passwordSalt === '';
 
   return (
     <div className="px-8 py-1 mt-4 max-w-[35rem]">

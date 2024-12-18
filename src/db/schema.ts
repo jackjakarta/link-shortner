@@ -21,7 +21,7 @@ export const userTable = pgTable('user', {
   passwordHash: text('password_hash').notNull(),
   passwordSalt: text('password_salt').notNull(),
   emailVerified: boolean('email_verified').notNull().default(false),
-  authProvider: text('provider').notNull().default('email'),
+  authProvider: authProviderPgEnum('provider').notNull().default('email'),
   isSuperAdmin: boolean('is_super_admin').notNull().default(false),
   isNewsletterSub: boolean('is_newsletter_sub').notNull().default(false),
   createdAt: timestamp('created_at').notNull().defaultNow(),
