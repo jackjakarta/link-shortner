@@ -32,7 +32,7 @@ export default function ProfileMenu({ user }: { user: UserRow }) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <Link href={`/profile/${user.id}/settings`}>
+        <Link href={`/profile/settings`}>
           <DropdownMenuItem className="cursor-pointer">
             <User className="mr-2 h-4 w-4" />
             <span>Account</span>
@@ -44,7 +44,7 @@ export default function ProfileMenu({ user }: { user: UserRow }) {
             <span>Your links</span>
           </DropdownMenuItem>
         </Link>
-        <Link href={`/profile/${user.id}/settings/api`}>
+        <Link href={`/profile/settings/api`}>
           <DropdownMenuItem className="cursor-pointer">
             <Key className="mr-2 h-4 w-4" />
             <span>API Keys</span>

@@ -8,17 +8,17 @@ type ApiNavbarProps = {
   userId: string;
 };
 
-export default function ApiNavbar({ userId }: ApiNavbarProps) {
+export default function ApiNavbar() {
   const pathname = usePathname();
 
   const menuItems = [
     {
       label: 'API Keys',
-      href: `/profile/${userId}/settings/api`,
+      href: `/profile/settings/api`,
     },
     {
       label: 'Usage',
-      href: `/profile/${userId}/settings/api/usage`,
+      href: `/profile/settings/api/usage`,
     },
   ];
 
