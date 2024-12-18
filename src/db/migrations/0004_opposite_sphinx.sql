@@ -1,1 +1,0 @@
-ALTER TABLE "short_link" ADD COLUMN "qr_code_url" text;

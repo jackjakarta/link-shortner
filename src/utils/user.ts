@@ -10,7 +10,7 @@ export async function obscureUser({ user }: { user: UserRow }): Promise<Obscured
     name: user.name,
     email: user.email,
     emailVerified: user.emailVerified,
-    provider: user.provider,
+    authProvider: user.authProvider,
     createdAt: user.createdAt,
     isSuperAdmin: user.isSuperAdmin,
     isNewsletterSub: user.isNewsletterSub,

@@ -55,7 +55,7 @@ export const authOptions = {
               passwordHash: '',
               passwordSalt: '',
               emailVerified: true,
-              provider: account.provider,
+              authProvider: account.provider,
             });
           }
         } catch (e) {
