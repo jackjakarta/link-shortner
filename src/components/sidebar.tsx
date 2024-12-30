@@ -29,13 +29,7 @@ type SidebarMenuItem = {
   onClick?: () => void;
 };
 
-export default function SidebarMenu({
-  id,
-  name,
-  email,
-  isSuperAdmin,
-  avatarUrl,
-}: SidebarMenuProps) {
+export default function SidebarMenu({ name, email, isSuperAdmin, avatarUrl }: SidebarMenuProps) {
   const pathname = usePathname();
   const { isOpen, setIsOpen, sidebarRef, handleLinkClick } = useSidebar();
 
@@ -48,17 +42,17 @@ export default function SidebarMenu({
     {
       title: 'Account',
       icon: AccountIcon,
-      href: `/profile/${id}/settings`,
+      href: `/profile/settings`,
       customPathname:
-        pathname === `/profile/${id}/settings` ||
-        pathname === `/profile/${id}/settings/password` ||
-        pathname === `/profile/${id}/settings/api` ||
-        pathname === `/profile/${id}/settings/api/usage`,
+        pathname === `/profile/settings` ||
+        pathname === `/profile/settings/password` ||
+        pathname === `/profile/settings/api` ||
+        pathname === `/profile/settings/api/usage`,
     },
     {
       title: 'Your Links',
       icon: LinkChainIcon,
-      href: `/profile/${id}`,
+      href: `/profile`,
     },
   ];
 
