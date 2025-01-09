@@ -1,5 +1,3 @@
-'use server';
-
 import { and, desc, eq, ne } from 'drizzle-orm';
 
 import { db } from '..';

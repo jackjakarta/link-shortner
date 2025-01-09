@@ -3,7 +3,6 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { dbGetUserByEmail } from '@/db/functions/user';
 import { sendUserActionEmail } from '@/email/send';
 import { emailSchema } from '@/utils/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,6 +11,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
+
+import { getUserByEmail } from './actions';
 
 const schema = z.object({
   email: emailSchema,
@@ -31,7 +32,7 @@ export default function InitiatePasswordResetForm() {
 
   async function onSubmit(data: FormData) {
     const { email } = data;
-    const user = await dbGetUserByEmail({ email });
+    const user = await getUserByEmail({ email });
 
     if (user === undefined) {
       toast.error(`User with email '${email}' not found`);
