@@ -3,14 +3,14 @@
 import { signOut } from 'next-auth/react';
 import React from 'react';
 
-type SignOutButtonProps = {
-  className?: React.ComponentProps<'button'>['className'];
+type SignOutButtonProps = React.ComponentProps<'button'> & {
+  children?: React.ReactNode;
 };
 
-export default function SignOutButton({ className }: SignOutButtonProps) {
+export default function SignOutButton({ children, ...props }: SignOutButtonProps) {
   return (
-    <button onClick={() => void signOut({ callbackUrl: '/' })} className={className}>
-      Logout
+    <button onClick={() => signOut({ callbackUrl: '/' })} {...props}>
+      {children ?? 'Sign out'}
     </button>
   );
 }

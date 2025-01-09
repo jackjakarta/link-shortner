@@ -1,4 +1,3 @@
-import { AdminProvider } from '@/components/hooks/use-admin';
 import { getUser } from '@/utils/auth';
 import { getUserAvatarUrl, obscureUser } from '@/utils/user';
 import { notFound } from 'next/navigation';
@@ -18,9 +17,9 @@ export default async function Layout({ children }: { children: React.ReactNode }
   ]);
 
   return (
-    <AdminProvider user={obscuredUser}>
-      <AdminSidebarMenu avatarUrl={avatarUrl} />
+    <>
+      <AdminSidebarMenu avatarUrl={avatarUrl} {...obscuredUser} />
       <main className="p-4 sm:pl-64">{children}</main>
-    </AdminProvider>
+    </>
   );
 }

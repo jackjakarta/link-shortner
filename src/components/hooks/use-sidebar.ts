@@ -1,8 +1,10 @@
+import { usePathname } from 'next/navigation';
 import React from 'react';
 
 export function useSidebar() {
   const [isOpen, setIsOpen] = React.useState(false);
   const sidebarRef = React.useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   function handleLinkClick() {
     setIsOpen(false);
@@ -26,5 +28,5 @@ export function useSidebar() {
     };
   }, [isOpen]);
 
-  return { isOpen, setIsOpen, sidebarRef, handleLinkClick };
+  return { isOpen, setIsOpen, sidebarRef, handleLinkClick, pathname };
 }

@@ -1,6 +1,5 @@
 'use client';
 
-import { useAdmin } from '@/components/hooks/use-admin';
 import { useSidebar } from '@/components/hooks/use-sidebar';
 import AccountIcon from '@/components/icons/account';
 import BackpackIcon from '@/components/icons/backpack';
@@ -13,7 +12,6 @@ import { getFirstCapitalLetter } from '@/utils/format';
 import { cw } from '@/utils/tailwind';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import React from 'react';
 
 type SidebarMenuItem = {
@@ -23,10 +21,14 @@ type SidebarMenuItem = {
   onClick?: () => void;
 };
 
-export default function AdminSidebarMenu({ avatarUrl }: { avatarUrl: string }) {
-  const pathname = usePathname();
-  const user = useAdmin();
-  const { isOpen, setIsOpen, sidebarRef, handleLinkClick } = useSidebar();
+type SidebarMenuProps = {
+  name: string;
+  email: string;
+  avatarUrl: string;
+};
+
+export default function AdminSidebarMenu({ name, email, avatarUrl }: SidebarMenuProps) {
+  const { isOpen, setIsOpen, sidebarRef, handleLinkClick, pathname } = useSidebar();
 
   const items: SidebarMenuItem[] = [
     {
@@ -75,13 +77,13 @@ export default function AdminSidebarMenu({ avatarUrl }: { avatarUrl: string }) {
         <div className="h-full px-3 py-4 overflow-y-auto">
           <div className="flex items-center gap-4">
             <div className="flex flex-col">
-              <span className="text-white">Hello, {user?.name}!</span>
-              <span className="text-xs text-white">{user?.email}</span>
+              <span className="text-white">Hello, {name}!</span>
+              <span className="text-xs text-white">{email}</span>
             </div>
             <div className="flex-grow" />
             <Avatar className="w-9 h-9">
               <AvatarImage src={avatarUrl} alt="avatar" />
-              <AvatarFallback>{getFirstCapitalLetter(user?.name ?? 'KL')}</AvatarFallback>
+              <AvatarFallback>{getFirstCapitalLetter(name)}</AvatarFallback>
             </Avatar>
           </div>
           <ul className="space-y-2 font-medium pt-8">
@@ -92,13 +94,13 @@ export default function AdminSidebarMenu({ avatarUrl }: { avatarUrl: string }) {
                   href={item.href}
                   className={cw(
                     'flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group',
-                    pathname === item.href && 'bg-gray-700',
+                    pathname.includes(item.href) && 'bg-gray-700',
                   )}
                 >
                   <item.icon
                     className={cw(
                       'w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white',
-                      pathname === item.href && 'text-white',
+                      pathname.includes(item.href) && 'text-white',
                     )}
                     aria-hidden="true"
                   />
