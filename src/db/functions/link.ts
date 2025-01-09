@@ -1,5 +1,3 @@
-'use server';
-
 import { and, desc, eq, sql } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 

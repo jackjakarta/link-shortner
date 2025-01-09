@@ -3,28 +3,24 @@
 import CopyToClipboardIcon from '@/components/icons/copy';
 import CrossIcon from '@/components/icons/cross';
 import { Button } from '@/components/ui/button';
-import { dbCreateApiKey } from '@/db/functions/api-key';
-import { ObscuredUser } from '@/utils/user';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import toast from 'react-hot-toast';
 
-type CreateApiKeyButtonProps = {
-  user: ObscuredUser;
-};
+import { createApiKey } from './actions';
 
 const inputClassName =
   'w-full p-2 border border-main-300 rounded-md focus:outline-none focus:border-main-500';
 
-export default function CreateApiKeyButton({ user }: CreateApiKeyButtonProps) {
+export default function CreateApiKeyButton() {
   const router = useRouter();
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [apiKeyName, setApiKeyName] = React.useState('');
   const [plainApiKey, setPlainApiKey] = React.useState<string | null>(null);
 
   async function handleApiKeyCreation() {
-    const apiKey = await dbCreateApiKey({ userId: user.id, apiKeyName });
+    const apiKey = await createApiKey({ apiKeyName });
 
     if (apiKey === undefined) {
       console.error('Something went wrong while creating the API key');
