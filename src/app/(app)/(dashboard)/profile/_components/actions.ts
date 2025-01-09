@@ -3,7 +3,7 @@
 import { dbDeleteLink, dbGetLinkById } from '@/db/functions/link';
 import { deleteFileFromS3 } from '@/s3';
 import { getUser } from '@/utils/auth';
-import { extractFileName } from '@/utils/url';
+import { extractFileNameFromUrl } from '@/utils/url';
 
 export async function deleteLink({ linkId }: { linkId: string }) {
   const user = await getUser();
@@ -13,7 +13,7 @@ export async function deleteLink({ linkId }: { linkId: string }) {
     throw new Error('Link not found');
   }
 
-  const fileName = extractFileName(link.qrCodeUrl);
+  const fileName = extractFileNameFromUrl(link.qrCodeUrl);
 
   if (fileName !== null) {
     await deleteFileFromS3({ key: `qr-codes/${fileName}` });

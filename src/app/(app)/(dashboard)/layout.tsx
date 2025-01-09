@@ -1,3 +1,4 @@
+import { AdminProvider } from '@/components/hooks/use-admin';
 import InfoBar from '@/components/info-bar';
 import ResendVerificationButton from '@/components/resend-verification-button';
 import SidebarMenu from '@/components/sidebar';
@@ -12,7 +13,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   ]);
 
   return (
-    <>
+    <AdminProvider isSuperAdmin={obscuredUser.isSuperAdmin}>
       <SidebarMenu {...obscuredUser} avatarUrl={avatarUrl} />
       {!user.emailVerified && (
         <InfoBar className="bg-indigo-900 text-gray-200 py-2.5 px-4">
@@ -26,6 +27,6 @@ export default async function Layout({ children }: { children: React.ReactNode }
         </InfoBar>
       )}
       <main className="p-4 sm:ml-64">{children}</main>
-    </>
+    </AdminProvider>
   );
 }

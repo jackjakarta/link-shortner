@@ -8,13 +8,12 @@ import LinkIcon from '@/components/icons/link';
 import LinkChainIcon from '@/components/icons/link-chain';
 import { cw } from '@/utils/tailwind';
 import { type ObscuredUser } from '@/utils/user';
-import { signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import React from 'react';
 
 import { useSidebar } from './hooks/use-sidebar';
 import DashboardIcon from './icons/dashboard';
+import SignOutButton from './signout-button';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card';
 import SoonLabel from './ui/soon-label';
@@ -25,13 +24,11 @@ type SidebarMenuItem = {
   title: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   href: string;
-  customPathname?: boolean;
   onClick?: () => void;
 };
 
 export default function SidebarMenu({ name, email, isSuperAdmin, avatarUrl }: SidebarMenuProps) {
-  const pathname = usePathname();
-  const { isOpen, setIsOpen, sidebarRef, handleLinkClick } = useSidebar();
+  const { isOpen, setIsOpen, sidebarRef, handleLinkClick, pathname } = useSidebar();
 
   const items: SidebarMenuItem[] = [
     {
@@ -43,16 +40,11 @@ export default function SidebarMenu({ name, email, isSuperAdmin, avatarUrl }: Si
       title: 'Account',
       icon: AccountIcon,
       href: `/profile/settings`,
-      customPathname:
-        pathname === `/profile/settings` ||
-        pathname === `/profile/settings/password` ||
-        pathname === `/profile/settings/api` ||
-        pathname === `/profile/settings/api/usage`,
     },
     {
       title: 'Your Links',
       icon: LinkChainIcon,
-      href: `/profile`,
+      href: `/profile/links`,
     },
   ];
 
@@ -72,9 +64,10 @@ export default function SidebarMenu({ name, email, isSuperAdmin, avatarUrl }: Si
       <aside
         ref={sidebarRef}
         id="default-sidebar"
-        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform bg-gray-800 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        } sm:translate-x-0`}
+        className={cw(
+          'fixed top-0 left-0 z-40 w-64 h-screen transition-transform bg-gray-800 sm:translate-x-0',
+          isOpen ? 'translate-x-0' : '-translate-x-full',
+        )}
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto">
@@ -116,13 +109,13 @@ export default function SidebarMenu({ name, email, isSuperAdmin, avatarUrl }: Si
                   href={item.href}
                   className={cw(
                     'flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group',
-                    (item.customPathname ?? pathname === item.href) && 'bg-gray-700',
+                    pathname.includes(item.href) && 'bg-gray-700',
                   )}
                 >
                   <item.icon
                     className={cw(
                       'w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white',
-                      (item.customPathname ?? pathname === item.href) && 'text-white',
+                      pathname.includes(item.href) && 'text-white',
                     )}
                     aria-hidden="true"
                   />
@@ -149,16 +142,13 @@ export default function SidebarMenu({ name, email, isSuperAdmin, avatarUrl }: Si
               </HoverCard>
             </li>
             <li>
-              <button
-                onClick={() => signOut({ callbackUrl: '/' })}
-                className="flex items-center p-2 mt-2 rounded-lg text-white hover:bg-gray-700 group w-full"
-              >
+              <SignOutButton className="flex items-center p-2 mt-2 rounded-lg text-white hover:bg-gray-700 group w-full">
                 <ExitIcon
                   className="w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white"
                   aria-hidden="true"
                 />
                 <span className="ms-3">Logout</span>
-              </button>
+              </SignOutButton>
             </li>
           </ul>
         </div>
