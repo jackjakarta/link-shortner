@@ -2,18 +2,22 @@
 
 import EyeClosedIcon from '@/components/icons/eye-closed';
 import EyeOpenIcon from '@/components/icons/eye-open';
+import Spinner from '@/components/icons/spinner';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { emailSchema, passwordSchema, userNameSchema } from '@/utils/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { CheckIcon, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
+
+import { useRegisterForm } from './use-register-form';
 
 const registrationSchema = z
   .object({
@@ -31,9 +35,17 @@ const registrationSchema = z
 type RegistrationFormData = z.infer<typeof registrationSchema>;
 
 export default function RegisterForm() {
-  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = React.useState(false);
   const router = useRouter();
+
+  const {
+    isPasswordVisible,
+    isConfirmPasswordVisible,
+    isCheckingEmail,
+    isEmailValid,
+    handleEmailChange,
+    togglePasswordVisibility,
+    toggleConfirmPasswordVisibility,
+  } = useRegisterForm();
 
   const {
     register,
@@ -44,17 +56,10 @@ export default function RegisterForm() {
     resolver: zodResolver(registrationSchema),
   });
 
-  function togglePasswordVisibility() {
-    setIsPasswordVisible(!isPasswordVisible);
-  }
-
-  function toggleConfirmPasswordVisibility() {
-    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
-  }
-
   async function onSubmit(data: RegistrationFormData) {
+    toast.loading('Registering...');
+
     try {
-      toast.loading('Registering...');
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
@@ -99,7 +104,7 @@ export default function RegisterForm() {
               type="text"
               placeholder="Username"
               {...register('name')}
-              className="border border-input"
+              className="border border-input focus:outline-none"
               disabled={isSubmitting}
             />
             {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
@@ -107,14 +112,24 @@ export default function RegisterForm() {
 
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Email"
-              {...register('email')}
-              className="border border-input"
-              disabled={isSubmitting}
-            />
+            <div className="flex items-center gap-2 border">
+              <Input
+                id="email"
+                type="email"
+                placeholder="Email"
+                {...register('email')}
+                onChange={handleEmailChange}
+                className="focus:outline-none border-input"
+                disabled={isSubmitting}
+              />
+
+              {isCheckingEmail && <Spinner className="w-5 h-5 text-red-500" />}
+              {isEmailValid === true && <CheckIcon className="text-green-500 mr-2" />}
+              {isEmailValid === false && !isCheckingEmail && <X className="text-red-500 mr-2" />}
+            </div>
+            {isEmailValid === false && !isCheckingEmail && (
+              <p className="text-red-500 text-sm">There is already an account with this email</p>
+            )}
             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
 
