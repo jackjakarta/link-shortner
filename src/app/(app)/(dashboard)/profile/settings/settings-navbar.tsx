@@ -4,9 +4,10 @@ import { cw } from '@/utils/tailwind';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+const itemClassName = 'text-lg font-light text-gray-900 hover:text-gray-400';
+
 export default function SettingsNavbar() {
   const pathname = usePathname();
-  const itemClassName = 'text-lg font-light text-gray-900 hover:text-gray-400';
 
   return (
     <nav className="flex w-full gap-4 mb-8">
@@ -23,11 +24,7 @@ export default function SettingsNavbar() {
         Password
       </Link>
       <Link
-        className={cw(
-          itemClassName,
-          (pathname === `/profile/settings/api` || pathname === `/profile/settings/api/usage`) &&
-            'font-medium',
-        )}
+        className={cw(itemClassName, pathname.includes(`/profile/settings/api`) && 'font-medium')}
         href={`/profile/settings/api`}
       >
         API Keys
