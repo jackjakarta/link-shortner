@@ -123,7 +123,7 @@ export default function RegisterForm() {
                 disabled={isSubmitting}
               />
 
-              {isCheckingEmail && <Spinner className="w-5 h-5 text-red-500" />}
+              {isCheckingEmail && <Spinner className="w-5 h-5 text-red-500 mr-2" />}
               {isEmailValid === true && <CheckIcon className="text-green-500 mr-2" />}
               {isEmailValid === false && !isCheckingEmail && <X className="text-red-500 mr-2" />}
             </div>
