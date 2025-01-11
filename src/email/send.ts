@@ -21,7 +21,6 @@ export async function sendUserActionEmail({
   to: string;
   action: TokenAction;
 }): Promise<EmailActionResult> {
-  // const mailjet = Mailjet.apiConnect(env.mailJetApiKey, env.mailJetApiSecret);
   const result = await createUserActionMailTemplate(to, action);
 
   if (!result || !result.success) {
