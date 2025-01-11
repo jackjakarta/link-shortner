@@ -1,12 +1,15 @@
 'use client';
 
+import { useFormTools } from '@/components/hooks/use-form-tools';
 import EyeClosedIcon from '@/components/icons/eye-closed';
 import EyeOpenIcon from '@/components/icons/eye-open';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { passwordSchema } from '@/utils/schemas';
+import { cw } from '@/utils/tailwind';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -28,6 +31,8 @@ const schema = z
 type FormData = z.infer<typeof schema>;
 
 export default function UpdatePasswordForm({ userEmail }: { userEmail: string }) {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -37,9 +42,17 @@ export default function UpdatePasswordForm({ userEmail }: { userEmail: string })
     resolver: zodResolver(schema),
   });
 
+  const {
+    isPasswordVisible,
+    isConfirmPasswordVisible,
+    passwordStrength,
+    passwordFeedback,
+    evaluatePasswordStrength,
+    togglePasswordVisibility,
+    toggleConfirmPasswordVisibility,
+  } = useFormTools();
+
   const [isOldPasswordVisible, setIsOldPasswordVisible] = React.useState(false);
-  const [isNewPasswordVisible, setIsNewPasswordVisible] = React.useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = React.useState(false);
 
   async function onSubmit(data: FormData) {
     toast.loading('Saving...');
@@ -51,14 +64,19 @@ export default function UpdatePasswordForm({ userEmail }: { userEmail: string })
         newPassword: data.newPassword,
       });
       toast.remove();
-      reset();
       toast.success('Password updated successfully');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      reset();
-      toast.remove();
-      toast.error(error.message);
+    } catch (error) {
       console.error('Error updating password:', error);
+      toast.remove();
+
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('An unexpected error occurred');
+      }
+    } finally {
+      reset();
+      router.refresh();
     }
   }
 
@@ -88,20 +106,47 @@ export default function UpdatePasswordForm({ userEmail }: { userEmail: string })
         <Label htmlFor="newPassword">New Password</Label>
         <Input
           id="newPassword"
-          type={isNewPasswordVisible ? 'text' : 'password'}
+          type={isPasswordVisible ? 'text' : 'password'}
           {...register('newPassword')}
+          onChange={(e) => evaluatePasswordStrength(e.target.value)}
           placeholder="New Password"
           className="border border-input"
           disabled={isSubmitting}
         />
-        <button
-          type="button"
-          onClick={() => setIsNewPasswordVisible(!isNewPasswordVisible)}
-          className="absolute right-3 top-9"
-        >
-          {isNewPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
+        <button type="button" onClick={togglePasswordVisibility} className="absolute right-3 top-9">
+          {isPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
         </button>
         {errors.newPassword && <p className="text-red-500 text-sm">{errors.newPassword.message}</p>}
+        {passwordStrength > 0 && (
+          <div className="mt-2">
+            <div className="h-2 w-full bg-gray-300 rounded">
+              <div
+                className={cw(
+                  'h-2 rounded',
+                  passwordStrength === 0
+                    ? 'bg-red-500'
+                    : passwordStrength === 1
+                      ? 'bg-orange-500'
+                      : passwordStrength === 2
+                        ? 'bg-yellow-500'
+                        : passwordStrength === 3
+                          ? 'bg-blue-500'
+                          : 'bg-green-500',
+                )}
+                style={{ width: `${(passwordStrength + 1) * 20}%` }}
+              />
+            </div>
+            <p className="text-sm mt-1">
+              <p className="text-sm mt-1">
+                {passwordStrength === 3
+                  ? 'Strong enough'
+                  : passwordStrength === 4
+                    ? 'Super strong'
+                    : passwordFeedback}
+              </p>
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="space-y-2 relative">
@@ -116,7 +161,7 @@ export default function UpdatePasswordForm({ userEmail }: { userEmail: string })
         />
         <button
           type="button"
-          onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
+          onClick={toggleConfirmPasswordVisibility}
           className="absolute right-3 top-9"
         >
           {isConfirmPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}

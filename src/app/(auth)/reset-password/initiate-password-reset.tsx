@@ -42,6 +42,7 @@ export default function InitiatePasswordResetForm() {
       console.error(`User with email '${email}' not found`);
       return;
     }
+
     try {
       const result = await sendUserActionEmail({ to: user.email, action: 'reset-password' });
 

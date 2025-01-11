@@ -6,27 +6,26 @@ import React from 'react';
 
 type GithubLoginButtonProps = {
   children: React.ReactNode;
-  isFormSubmitting?: boolean;
+
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   className?: React.ComponentProps<'button'>['className'];
 };
 
 export default function DiscordLoginButton({
   children,
-  isFormSubmitting,
+  isLoading,
+  setIsLoading,
   className,
 }: GithubLoginButtonProps) {
-  const [isLoading, setIsLoading] = React.useState(false);
-
   function handleLogin() {
     setIsLoading(true);
     signIn('discord');
   }
 
-  const disabledState = isLoading || isFormSubmitting;
-
   return (
     <button
-      disabled={disabledState}
+      disabled={isLoading}
       className={cw(className, 'disabled:cursor-not-allowed')}
       onClick={handleLogin}
     >
