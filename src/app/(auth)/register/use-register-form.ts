@@ -1,6 +1,7 @@
 import { emailSchema } from '@/utils/schemas';
 import { debounce } from 'lodash';
 import React from 'react';
+import zxcvbn from 'zxcvbn';
 
 import { checkEmailExists } from './actions';
 
@@ -9,6 +10,8 @@ export function useRegisterForm() {
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = React.useState(false);
   const [isEmailValid, setIsEmailValid] = React.useState<boolean | null>(null);
   const [isCheckingEmail, setIsCheckingEmail] = React.useState(false);
+  const [passwordStrength, setPasswordStrength] = React.useState(0);
+  const [passwordFeedback, setPasswordFeedback] = React.useState('');
 
   function togglePasswordVisibility() {
     setIsPasswordVisible(!isPasswordVisible);
@@ -56,13 +59,28 @@ export function useRegisterForm() {
     }
   }
 
+  function evaluatePasswordStrength(password: string) {
+    if (password === '') {
+      setPasswordStrength(0);
+      setPasswordFeedback('');
+      return;
+    }
+
+    const { score, feedback } = zxcvbn(password);
+    setPasswordStrength(score);
+    setPasswordFeedback(feedback.suggestions.join(' '));
+  }
+
   return {
     isPasswordVisible,
     isConfirmPasswordVisible,
     isEmailValid,
     isCheckingEmail,
+    passwordStrength,
+    passwordFeedback,
     togglePasswordVisibility,
     toggleConfirmPasswordVisibility,
+    evaluatePasswordStrength,
     handleEmailChange,
   };
 }

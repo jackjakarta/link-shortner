@@ -42,9 +42,12 @@ export default function RegisterForm() {
     isConfirmPasswordVisible,
     isCheckingEmail,
     isEmailValid,
+    passwordStrength,
+    passwordFeedback,
     handleEmailChange,
     togglePasswordVisibility,
     toggleConfirmPasswordVisibility,
+    evaluatePasswordStrength,
   } = useRegisterForm();
 
   const {
@@ -130,9 +133,6 @@ export default function RegisterForm() {
             {isEmailValid === false && !isCheckingEmail && (
               <p className="text-red-500 text-sm">There is already an account with this email</p>
             )}
-            {!isEmailValid === false && !isCheckingEmail && (
-              <p className="text-green-500 text-sm">This email is available</p>
-            )}
             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
 
@@ -144,6 +144,7 @@ export default function RegisterForm() {
               placeholder="Password"
               {...register('password')}
               className="border border-input"
+              onChange={(e) => evaluatePasswordStrength(e.target.value)}
               disabled={isSubmitting}
             />
             <button
@@ -154,6 +155,35 @@ export default function RegisterForm() {
               {isPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
             </button>
             {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+            {passwordStrength > 0 && (
+              <div className="mt-2">
+                <div className="h-2 w-full bg-gray-300 rounded">
+                  <div
+                    className={`h-2 rounded ${
+                      passwordStrength === 0
+                        ? 'bg-red-500'
+                        : passwordStrength === 1
+                          ? 'bg-orange-500'
+                          : passwordStrength === 2
+                            ? 'bg-yellow-500'
+                            : passwordStrength === 3
+                              ? 'bg-blue-500'
+                              : 'bg-green-500'
+                    }`}
+                    style={{ width: `${(passwordStrength + 1) * 20}%` }}
+                  />
+                </div>
+                <p className="text-sm mt-1">
+                  <p className="text-sm mt-1">
+                    {passwordStrength === 3
+                      ? 'Strong enough'
+                      : passwordStrength === 4
+                        ? 'Super strong'
+                        : passwordFeedback}
+                  </p>
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="space-y-2 relative">
