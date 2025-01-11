@@ -61,6 +61,8 @@ export default function RegisterForm() {
   });
 
   async function onSubmit(data: RegistrationFormData) {
+    const { email, name, password, isNewsletterSub } = data;
+
     toast.loading('Registering...');
 
     try {
@@ -70,10 +72,10 @@ export default function RegisterForm() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: data.email,
-          name: data.name,
-          password: data.password,
-          isNewsletterSub: data.isNewsletterSub,
+          email,
+          name,
+          password,
+          isNewsletterSub,
         }),
       });
 
@@ -85,13 +87,14 @@ export default function RegisterForm() {
       toast.remove();
       toast.success('Registration successful! Please check your email to verify your account.');
     } catch (error) {
-      toast.remove();
-      toast.error('Failed to register');
       if (error instanceof Error) {
         setError('email', { type: 'manual', message: error.message });
       } else {
         setError('email', { type: 'manual', message: 'An unexpected error occurred' });
       }
+
+      toast.remove();
+      toast.error('Failed to register');
     }
   }
 

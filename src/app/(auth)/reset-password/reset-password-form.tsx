@@ -21,7 +21,7 @@ const resetPasswordSchema = z
   .object({
     email: emailSchema,
     password: passwordSchema,
-    passwordConfirm: passwordSchema,
+    passwordConfirm: z.string(),
   })
   .refine((data) => data.password === data.passwordConfirm, {
     message: 'The passwords do not match',
@@ -35,8 +35,7 @@ export default function ResetPasswordForm({ email, token }: ResetPasswordFormPro
     formState: { errors, isSubmitting },
   } = useForm<z.infer<typeof resetPasswordSchema>>({
     resolver: zodResolver(resetPasswordSchema),
-    // @ts-expect-error defaultValues is not in the types
-    defaultValues: { email },
+    defaultValues: { email: email ?? undefined },
   });
 
   const router = useRouter();
