@@ -112,7 +112,7 @@ export default function RegisterForm() {
 
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <div className="flex items-center gap-2 border">
+            <div className="flex items-center gap-2 border rounded-md">
               <Input
                 id="email"
                 type="email"
@@ -129,6 +129,9 @@ export default function RegisterForm() {
             </div>
             {isEmailValid === false && !isCheckingEmail && (
               <p className="text-red-500 text-sm">There is already an account with this email</p>
+            )}
+            {!isEmailValid === false && !isCheckingEmail && (
+              <p className="text-green-500 text-sm">This email is available</p>
             )}
             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>

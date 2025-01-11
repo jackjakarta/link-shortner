@@ -18,25 +18,25 @@ export function useRegisterForm() {
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
   }
 
-  async function checkEmailAvailability(email: string) {
+  const checkEmailAvailability = React.useCallback(async (email: string) => {
     try {
       const result = await checkEmailExists({ email });
-
       return !result;
     } catch (error) {
       console.error('Error checking email:', error);
       return false;
     }
-  }
+  }, []);
 
-  const debouncedCheckEmail = React.useCallback(
-    debounce(async (email: string) => {
-      setIsCheckingEmail(true);
-      const isAvailable = await checkEmailAvailability(email);
-      setIsEmailValid(isAvailable);
-      setIsCheckingEmail(false);
-    }, 700), // ms debounce
-    [],
+  const debouncedCheckEmail = React.useMemo(
+    () =>
+      debounce(async (email: string) => {
+        setIsCheckingEmail(true);
+        const isAvailable = await checkEmailAvailability(email);
+        setIsEmailValid(isAvailable);
+        setIsCheckingEmail(false);
+      }, 600),
+    [setIsCheckingEmail, checkEmailAvailability, setIsEmailValid],
   );
 
   function handleEmailChange(event: React.ChangeEvent<HTMLInputElement>) {

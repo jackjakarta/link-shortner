@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import toast, { ToastOptions } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { z } from 'zod';
 
 import { getUserByEmail } from './actions';
