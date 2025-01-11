@@ -5,7 +5,7 @@ import zxcvbn from 'zxcvbn';
 
 import { checkEmailExists } from './actions';
 
-export function useRegisterForm() {
+export function useFormTools() {
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = React.useState(false);
   const [isEmailValid, setIsEmailValid] = React.useState<boolean | null>(null);

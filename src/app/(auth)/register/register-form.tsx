@@ -1,5 +1,6 @@
 'use client';
 
+import { useFormTools } from '@/components/hooks/use-form-tools';
 import EyeClosedIcon from '@/components/icons/eye-closed';
 import EyeOpenIcon from '@/components/icons/eye-open';
 import Spinner from '@/components/icons/spinner';
@@ -17,8 +18,6 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-
-import { useRegisterForm } from './use-register-form';
 
 const registrationSchema = z
   .object({
@@ -49,7 +48,7 @@ export default function RegisterForm() {
     togglePasswordVisibility,
     toggleConfirmPasswordVisibility,
     evaluatePasswordStrength,
-  } = useRegisterForm();
+  } = useFormTools();
 
   const {
     register,

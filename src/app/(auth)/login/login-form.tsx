@@ -1,5 +1,6 @@
 'use client';
 
+import { useFormTools } from '@/components/hooks/use-form-tools';
 import DiscordIcon from '@/components/icons/discord';
 import EyeClosedIcon from '@/components/icons/eye-closed';
 import EyeOpenIcon from '@/components/icons/eye-open';
@@ -27,8 +28,9 @@ const loginFormSchema = z.object({
 type LoginFormData = z.infer<typeof loginFormSchema>;
 
 export default function LoginForm() {
-  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
   const router = useRouter();
+  const [isSocialAuthenticating, setIsSocialAuthenticating] = React.useState(false);
+
   const {
     register,
     handleSubmit,
@@ -37,6 +39,8 @@ export default function LoginForm() {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
   });
+
+  const { isPasswordVisible, togglePasswordVisibility } = useFormTools();
 
   async function onSubmit(data: LoginFormData) {
     const { email: _email, password } = data;
@@ -56,10 +60,6 @@ export default function LoginForm() {
         message: 'Wrong email or password',
       });
     }
-  }
-
-  function togglePasswordVisibility() {
-    setIsPasswordVisible(!isPasswordVisible);
   }
 
   return (
@@ -114,7 +114,8 @@ export default function LoginForm() {
         </form>
         <div className="mt-4 w-full">
           <GithubLoginButton
-            isFormSubmitting={isSubmitting}
+            isLoading={isSocialAuthenticating || isSubmitting}
+            setIsLoading={setIsSocialAuthenticating}
             className="flex items-center justify-center gap-4 w-full py-2 px-4 bg-gray-600 text-white rounded-md hover:bg-gray-500 focus:outline-none"
           >
             <GithubIcon />
@@ -123,7 +124,8 @@ export default function LoginForm() {
         </div>
         <div className="mt-2 w-full">
           <DiscordLoginButton
-            isFormSubmitting={isSubmitting}
+            isLoading={isSocialAuthenticating || isSubmitting}
+            setIsLoading={setIsSocialAuthenticating}
             className="flex items-center justify-center gap-4 w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-500 focus:outline-none"
           >
             <DiscordIcon />
