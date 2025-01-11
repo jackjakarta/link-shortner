@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { emailSchema, userNameSchema } from '@/utils/schemas';
+import { emailSchema, passwordSchema, userNameSchema } from '@/utils/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckIcon, X } from 'lucide-react';
 import Link from 'next/link';
@@ -23,7 +23,7 @@ const registrationSchema = z
   .object({
     name: userNameSchema,
     email: emailSchema,
-    password: z.string(),
+    password: passwordSchema,
     confirmPassword: z.string(),
     isNewsletterSub: z.boolean(),
   })
