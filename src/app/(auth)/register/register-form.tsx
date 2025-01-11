@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { emailSchema, passwordSchema, userNameSchema } from '@/utils/schemas';
+import { cw } from '@/utils/tailwind';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckIcon, X } from 'lucide-react';
 import Link from 'next/link';
@@ -159,7 +160,8 @@ export default function RegisterForm() {
               <div className="mt-2">
                 <div className="h-2 w-full bg-gray-300 rounded">
                   <div
-                    className={`h-2 rounded ${
+                    className={cw(
+                      'h-2 rounded',
                       passwordStrength === 0
                         ? 'bg-red-500'
                         : passwordStrength === 1
@@ -168,8 +170,8 @@ export default function RegisterForm() {
                             ? 'bg-yellow-500'
                             : passwordStrength === 3
                               ? 'bg-blue-500'
-                              : 'bg-green-500'
-                    }`}
+                              : 'bg-green-500',
+                    )}
                     style={{ width: `${(passwordStrength + 1) * 20}%` }}
                   />
                 </div>
