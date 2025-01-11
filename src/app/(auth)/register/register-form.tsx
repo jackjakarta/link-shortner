@@ -133,9 +133,6 @@ export default function RegisterForm() {
             {isEmailValid === false && !isCheckingEmail && (
               <p className="text-red-500 text-sm">There is already an account with this email</p>
             )}
-            {!isEmailValid === false && !isCheckingEmail && (
-              <p className="text-green-500 text-sm">This email is available</p>
-            )}
             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
 
