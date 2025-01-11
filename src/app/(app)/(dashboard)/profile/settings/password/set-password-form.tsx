@@ -44,6 +44,7 @@ export default function SetPasswordForm({ userEmail }: { userEmail: string }) {
     isConfirmPasswordVisible,
     passwordStrength,
     passwordFeedback,
+    evaluatePasswordStrength,
     togglePasswordVisibility,
     toggleConfirmPasswordVisibility,
   } = useFormTools();
@@ -79,6 +80,7 @@ export default function SetPasswordForm({ userEmail }: { userEmail: string }) {
           id="newPassword"
           type={isPasswordVisible ? 'text' : 'password'}
           {...register('newPassword')}
+          onChange={(e) => evaluatePasswordStrength(e.target.value)}
           placeholder="New Password"
           className="border border-input"
           disabled={isSubmitting}

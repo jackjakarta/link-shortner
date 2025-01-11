@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { passwordSchema } from '@/utils/schemas';
 import { cw } from '@/utils/tailwind';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -30,6 +31,8 @@ const schema = z
 type FormData = z.infer<typeof schema>;
 
 export default function UpdatePasswordForm({ userEmail }: { userEmail: string }) {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -44,6 +47,7 @@ export default function UpdatePasswordForm({ userEmail }: { userEmail: string })
     isConfirmPasswordVisible,
     passwordStrength,
     passwordFeedback,
+    evaluatePasswordStrength,
     togglePasswordVisibility,
     toggleConfirmPasswordVisibility,
   } = useFormTools();
@@ -60,14 +64,19 @@ export default function UpdatePasswordForm({ userEmail }: { userEmail: string })
         newPassword: data.newPassword,
       });
       toast.remove();
-      reset();
       toast.success('Password updated successfully');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      reset();
-      toast.remove();
-      toast.error(error.message);
+    } catch (error) {
       console.error('Error updating password:', error);
+      toast.remove();
+
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('An unexpected error occurred');
+      }
+    } finally {
+      reset();
+      router.refresh();
     }
   }
 
@@ -99,6 +108,7 @@ export default function UpdatePasswordForm({ userEmail }: { userEmail: string })
           id="newPassword"
           type={isPasswordVisible ? 'text' : 'password'}
           {...register('newPassword')}
+          onChange={(e) => evaluatePasswordStrength(e.target.value)}
           placeholder="New Password"
           className="border border-input"
           disabled={isSubmitting}

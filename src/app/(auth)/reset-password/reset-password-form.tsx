@@ -47,6 +47,7 @@ export default function ResetPasswordForm({ email, token }: ResetPasswordFormPro
     isConfirmPasswordVisible,
     passwordStrength,
     passwordFeedback,
+    evaluatePasswordStrength,
     togglePasswordVisibility,
     toggleConfirmPasswordVisibility,
   } = useFormTools();
@@ -96,6 +97,7 @@ export default function ResetPasswordForm({ email, token }: ResetPasswordFormPro
           type={isPasswordVisible ? 'text' : 'password'}
           placeholder="Enter your new password"
           {...register('password')}
+          onChange={(e) => evaluatePasswordStrength(e.target.value)}
           className={errors.password ? 'border-red-500' : 'border border-input'}
         />
         <button type="button" onClick={togglePasswordVisibility} className="absolute right-3 top-9">
