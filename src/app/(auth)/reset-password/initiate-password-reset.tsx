@@ -24,6 +24,7 @@ export default function InitiatePasswordResetForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -31,28 +32,32 @@ export default function InitiatePasswordResetForm() {
   const router = useRouter();
 
   async function onSubmit(data: FormData) {
+    toast.loading('Sending reset password email...');
+
     const { email } = data;
     const user = await getUserByEmail({ email });
 
     if (user === undefined) {
-      toast.error(`User with email '${email}' not found`);
+      toast.error('If an account with that email exists, we sent a password reset link');
       console.error(`User with email '${email}' not found`);
       return;
     }
-
     try {
-      const result = await sendUserActionEmail({ to: email, action: 'reset-password' });
+      const result = await sendUserActionEmail({ to: user.email, action: 'reset-password' });
 
       if (!result.success) {
         throw new Error(result.error);
       }
 
       router.push('/login');
-      toast.success('Check your email for a password reset link');
+      toast.remove();
+      toast.success('If an account with that email exists, we sent a password reset link');
     } catch (error) {
-      toast.error(`Could not send reset password email to '${email}'`);
+      toast.remove();
       toast.error('There was an error. Please try again.');
       console.error(error);
+    } finally {
+      reset();
     }
   }
 
