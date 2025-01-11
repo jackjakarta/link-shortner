@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { emailSchema, passwordSchema, userNameSchema } from '@/utils/schemas';
+import { emailSchema, userNameSchema } from '@/utils/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckIcon, X } from 'lucide-react';
 import Link from 'next/link';
@@ -23,7 +23,7 @@ const registrationSchema = z
   .object({
     name: userNameSchema,
     email: emailSchema,
-    password: passwordSchema,
+    password: z.string(),
     confirmPassword: z.string(),
     isNewsletterSub: z.boolean(),
   })
@@ -42,9 +42,12 @@ export default function RegisterForm() {
     isConfirmPasswordVisible,
     isCheckingEmail,
     isEmailValid,
+    passwordStrength,
+    passwordFeedback,
     handleEmailChange,
     togglePasswordVisibility,
     toggleConfirmPasswordVisibility,
+    evaluatePasswordStrength,
   } = useRegisterForm();
 
   const {
@@ -144,6 +147,7 @@ export default function RegisterForm() {
               placeholder="Password"
               {...register('password')}
               className="border border-input"
+              onChange={(e) => evaluatePasswordStrength(e.target.value)}
               disabled={isSubmitting}
             />
             <button
@@ -154,6 +158,35 @@ export default function RegisterForm() {
               {isPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
             </button>
             {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+            {passwordStrength > 0 && (
+              <div className="mt-2">
+                <div className="h-2 w-full bg-gray-300 rounded">
+                  <div
+                    className={`h-2 rounded ${
+                      passwordStrength === 0
+                        ? 'bg-red-500'
+                        : passwordStrength === 1
+                          ? 'bg-orange-500'
+                          : passwordStrength === 2
+                            ? 'bg-yellow-500'
+                            : passwordStrength === 3
+                              ? 'bg-blue-500'
+                              : 'bg-green-500'
+                    }`}
+                    style={{ width: `${(passwordStrength + 1) * 20}%` }}
+                  />
+                </div>
+                <p className="text-sm mt-1">
+                  <p className="text-sm mt-1">
+                    {passwordStrength === 3
+                      ? 'Strong enough'
+                      : passwordStrength === 4
+                        ? 'Super strong'
+                        : passwordFeedback}
+                  </p>
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="space-y-2 relative">
