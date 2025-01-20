@@ -2,7 +2,16 @@ import { eq } from 'drizzle-orm';
 
 import { db } from '..';
 import { createPasswordHash, generateSalt, makeHash } from '../crypto';
-import { userProfileTable, userTable, type UserInsertRow, type UserRow } from '../schema';
+import {
+  apiKeyTable,
+  apiKeyUsageTable,
+  shortLinkTable,
+  tokenTable,
+  userProfileTable,
+  userTable,
+  type UserInsertRow,
+  type UserRow,
+} from '../schema';
 
 export async function dbGetUserById(userId: string): Promise<UserRow | undefined> {
   const user = (await db.select().from(userTable).where(eq(userTable.id, userId)))[0];
@@ -140,4 +149,24 @@ export async function dbGetNewsletterSubs() {
     .where(eq(userTable.isNewsletterSub, true));
 
   return users;
+}
+
+export async function dbDeleteUser({ userId, userEmail }: { userId: string; userEmail: string }) {
+  await db.transaction(async (tx) => {
+    const userApiKeys = await tx.select().from(apiKeyTable).where(eq(apiKeyTable.userId, userId));
+
+    if (userApiKeys.length > 0) {
+      await Promise.all(
+        userApiKeys.map((apiKey) =>
+          tx.delete(apiKeyUsageTable).where(eq(apiKeyUsageTable.apiKeyId, apiKey.id)),
+        ),
+      );
+    }
+
+    await tx.delete(tokenTable).where(eq(tokenTable.email, userEmail));
+    await tx.delete(apiKeyTable).where(eq(apiKeyTable.userId, userId));
+    await tx.delete(shortLinkTable).where(eq(shortLinkTable.userId, userId));
+    await tx.delete(userProfileTable).where(eq(userProfileTable.userId, userId));
+    await tx.delete(userTable).where(eq(userTable.id, userId));
+  });
 }

@@ -1,5 +1,5 @@
 import { dbCreateUser, dbGetUserByEmail, dbGetUserByEmailAndPassword } from '@/db/functions/user';
-import { UserRow } from '@/db/schema';
+import { type UserRow } from '@/db/schema';
 import { env } from '@/env';
 import { type AuthOptions } from 'next-auth';
 import credentialsProvider from 'next-auth/providers/credentials';
@@ -51,7 +51,7 @@ export const authOptions = {
             await dbCreateUser({
               id: user.id,
               email: user.email!,
-              name: user.name || 'oAuth User',
+              name: user.name || 'oAuth-user',
               passwordHash: '',
               passwordSalt: '',
               emailVerified: true,

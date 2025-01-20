@@ -1,6 +1,7 @@
 'use server';
 
 import { dbDeleteLink, dbGetLinkById } from '@/db/functions/link';
+import { dbDeleteUser } from '@/db/functions/user';
 import { deleteFileFromS3 } from '@/s3';
 import { getUser } from '@/utils/auth';
 import { extractFileNameFromUrl } from '@/utils/url';
@@ -20,4 +21,11 @@ export async function deleteLink({ linkId }: { linkId: string }) {
   }
 
   await dbDeleteLink({ linkId: link.id, userId: user.id });
+}
+
+export async function deleteAccount() {
+  const user = await getUser();
+
+  // TODO: Send email to user with account deletion confirmation
+  await dbDeleteUser({ userId: user.id, userEmail: user.email });
 }
