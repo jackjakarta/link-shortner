@@ -1,6 +1,6 @@
 'use client';
 
-import { sendUserActionEmail } from '@/email/send';
+import { sendVerifyEmail } from '@/app/(auth)/actions';
 import toast from 'react-hot-toast';
 
 type ResendVerificationButtonProps = {
@@ -12,22 +12,22 @@ export default function ResendVerificationButton({
   userEmail,
   className,
 }: ResendVerificationButtonProps) {
-  async function resendVerification() {
+  async function handleResendVerification() {
     toast.loading('Resending email');
 
     try {
-      await sendUserActionEmail({ to: userEmail, action: 'verify-email' });
+      await sendVerifyEmail({ email: userEmail });
       toast.remove();
       toast.success('Email sent');
     } catch (error) {
+      console.error(error);
       toast.remove();
       toast.error('Failed to resend email');
-      console.error(error);
     }
   }
 
   return (
-    <button onClick={resendVerification} className={className}>
+    <button onClick={handleResendVerification} className={className}>
       Resend
     </button>
   );

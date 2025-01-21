@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { dbDeleteActionToken } from '@/db/functions/token';
 import { type TokenRow } from '@/db/schema';
-import { sendUserActionInformationEmail } from '@/email/send';
 import { emailSchema, passwordSchema } from '@/utils/schemas';
 import { cw } from '@/utils/tailwind';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,7 +16,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 
-import { updateUserPassword } from './actions';
+import { sendPasswordResetInformationEmail, updateUserPassword } from './actions';
 
 type ResetPasswordFormProps = TokenRow;
 
@@ -60,7 +59,7 @@ export default function ResetPasswordForm({ email, token }: ResetPasswordFormPro
       const email = _email.trim().toLowerCase();
 
       await updateUserPassword({ email, password });
-      await sendUserActionInformationEmail(email, { type: 'reset-password-success' });
+      await sendPasswordResetInformationEmail({ email });
 
       router.push('/login');
       toast.success('Password reset successfully');
