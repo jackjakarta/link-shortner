@@ -1,4 +1,5 @@
-export const generalTemplate = (bodyContent: string) => `
+export function generalTemplate(bodyContent: string) {
+  return `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -171,3 +172,4 @@ export const generalTemplate = (bodyContent: string) => `
   </body>
 </html>
 `;
+}

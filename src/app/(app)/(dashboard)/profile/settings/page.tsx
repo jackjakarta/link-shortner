@@ -5,6 +5,7 @@ import { getFirstCapitalLetter } from '@/utils/format';
 import { getUserAvatarUrl } from '@/utils/user';
 import Link from 'next/link';
 
+import DeleteAccountButton from '../_components/delete-account-button';
 import UserProfileSettingsForm from './edit-profile-form';
 import SettingsNavbar from './settings-navbar';
 
@@ -41,6 +42,9 @@ export default async function Page() {
       </div>
       <div className="flex w-full gap-4">
         <UserProfileSettingsForm user={user} profile={userProfile} />
+      </div>
+      <div className="flex w-full mt-2">
+        <DeleteAccountButton />
       </div>
     </div>
   );

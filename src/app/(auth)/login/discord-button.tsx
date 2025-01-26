@@ -6,7 +6,6 @@ import React from 'react';
 
 type GithubLoginButtonProps = {
   children: React.ReactNode;
-
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   className?: React.ComponentProps<'button'>['className'];

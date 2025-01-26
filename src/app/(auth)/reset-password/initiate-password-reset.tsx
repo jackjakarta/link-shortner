@@ -3,7 +3,6 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { sendUserActionEmail } from '@/email/send';
 import { emailSchema } from '@/utils/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -12,7 +11,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 
-import { getUserByEmail } from './actions';
+import { getUserByEmail, sendPasswordResetEmail } from './actions';
 
 const schema = z.object({
   email: emailSchema,
@@ -44,10 +43,10 @@ export default function InitiatePasswordResetForm() {
     }
 
     try {
-      const result = await sendUserActionEmail({ to: user.email, action: 'reset-password' });
+      const result = await sendPasswordResetEmail({ email: user.email });
 
-      if (!result.success) {
-        throw new Error(result.error);
+      if (!result?.success) {
+        throw new Error(result?.error);
       }
 
       router.push('/login');

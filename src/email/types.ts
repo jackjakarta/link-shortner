@@ -6,6 +6,9 @@ export type InformationEmailMetadata =
     }
   | {
       type: 'reset-password-success';
+    }
+  | {
+      type: 'account-delete-success';
     };
 
 export type MailTemplateResult = {

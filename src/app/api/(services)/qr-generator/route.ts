@@ -1,5 +1,6 @@
 import { moderateText } from '@/openai/moderation';
 import { uploadImageToS3 } from '@/s3';
+import { bufferToArrayBuffer } from '@/utils/files';
 import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
 import QRCode from 'qrcode';
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     const qrCodeUrl = await uploadImageToS3({
       fileName,
-      fileBuffer: qrCodeBuffer,
+      fileBuffer: bufferToArrayBuffer(qrCodeBuffer),
     });
 
     return NextResponse.json({ qrCodeUrl }, { status: 201 });

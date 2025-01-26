@@ -51,21 +51,27 @@ export async function createUserActionMailTemplate(
 }
 
 export async function createInformationMailTemplate(
-  // email: string,
   information: InformationEmailMetadata,
+  email?: string,
 ) {
   switch (information.type) {
     case 'email-verified-success':
       return buildInformationEmailTemplate(
         'Account verified',
         'Account activated',
-        `Your account has been successfully activated.`,
+        `Your account has been successfully activated. ${email !== undefined ? `You can now log in with your email address ${email}.` : ''}`,
       );
     case 'reset-password-success':
       return buildInformationEmailTemplate(
         'Password reset',
         'Password reset',
         `Your password has been successfully reset.`,
+      );
+    case 'account-delete-success':
+      return buildInformationEmailTemplate(
+        'Account deleted',
+        'Account deleted',
+        `We are sad to see you go. Your account has been successfully deleted.`,
       );
   }
 }

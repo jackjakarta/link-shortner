@@ -108,7 +108,11 @@ export default function LoginForm() {
               Sign up
             </Link>
           </div>
-          <Button type="submit" disabled={isSubmitting} className="w-full mt-4">
+          <Button
+            type="submit"
+            disabled={isSocialAuthenticating || isSubmitting}
+            className="w-full mt-4"
+          >
             Login
           </Button>
         </form>
@@ -116,7 +120,7 @@ export default function LoginForm() {
           <GithubLoginButton
             isLoading={isSocialAuthenticating || isSubmitting}
             setIsLoading={setIsSocialAuthenticating}
-            className="flex items-center justify-center gap-4 w-full py-2 px-4 bg-gray-600 text-white rounded-md hover:bg-gray-500 focus:outline-none"
+            className="flex items-center justify-center gap-4 w-full py-2 px-4 bg-gray-600 text-white rounded-md hover:bg-gray-500 disabled:bg-gray-500 focus:outline-none"
           >
             <GithubIcon />
             <span>Sign in with GitHub</span>
@@ -126,7 +130,7 @@ export default function LoginForm() {
           <DiscordLoginButton
             isLoading={isSocialAuthenticating || isSubmitting}
             setIsLoading={setIsSocialAuthenticating}
-            className="flex items-center justify-center gap-4 w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-500 focus:outline-none"
+            className="flex items-center justify-center gap-4 w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-500 disabled:bg-indigo-500 focus:outline-none"
           >
             <DiscordIcon />
             <span>Sign in with Discord</span>

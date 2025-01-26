@@ -1,5 +1,3 @@
-'use server';
-
 import { type TokenAction } from '@/db/schema';
 import { env } from '@/env';
 
@@ -82,7 +80,7 @@ export async function sendUserActionInformationEmail(
   to: string,
   information: InformationEmailMetadata,
 ) {
-  const mailTemplate = await createInformationMailTemplate(information);
+  const mailTemplate = await createInformationMailTemplate(information, to);
 
   if (mailTemplate === undefined) {
     console.warn(
@@ -94,6 +92,7 @@ export async function sendUserActionInformationEmail(
       error: 'For more information look inside the logs',
     };
   }
+
   try {
     const request = await mailjet.post('send', { version: 'v3.1' }).request({
       Messages: [
