@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 127.0.0.1",
+    "dev:db": "./dev/start-dev-db.sh",
     "build": "next build",
     "start": "next start",
     "format": "prettier --write .",
