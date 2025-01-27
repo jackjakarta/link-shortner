@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import Spinner from '@/components/ui/spinner';
 import { env } from '@/env';
 import { urlSchema } from '@/utils/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -32,6 +33,7 @@ export default function ShortenUrlForm() {
     resolver: zodResolver(urlFormSchema),
   });
 
+  const [isLoading, setIsLoading] = React.useState(false);
   const [shortenedUrl, setShortenedUrl] = React.useState<string | undefined>(undefined);
 
   function handleCopy(value: string) {
@@ -50,6 +52,8 @@ export default function ShortenUrlForm() {
   }
 
   async function onSubmit(data: FormValues) {
+    setIsLoading(true);
+
     try {
       const shortenedUrl = await shortenUrl({ url: data.url });
       setShortenedUrl(`${env.NEXT_PUBLIC_baseUrl}/${shortenedUrl.shortPath}`);
@@ -57,6 +61,8 @@ export default function ShortenUrlForm() {
     } catch (error) {
       toast.error('Failed to shorten URL');
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -70,7 +76,11 @@ export default function ShortenUrlForm() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <CardContent>
-          {shortenedUrl ? (
+          {isLoading ? (
+            <div className="flex justify-center items-center">
+              <Spinner className="border-white h-20 w-20" />
+            </div>
+          ) : shortenedUrl ? (
             <div className="flex items-center gap-3 mb-4">
               <Input
                 type="text"
@@ -113,7 +123,9 @@ export default function ShortenUrlForm() {
               <Button onClick={handleResetForm}>Shorten another URL</Button>
             </Link>
           ) : (
-            <Button type="submit">Shorten</Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Processing...' : 'Shorten'}
+            </Button>
           )}
         </CardFooter>
       </form>

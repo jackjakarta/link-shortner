@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import Spinner from '@/components/ui/spinner';
 import { cw } from '@/utils/tailwind';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
@@ -20,17 +21,18 @@ const qrFormSchema = z.object({
 type FormValues = z.infer<typeof qrFormSchema>;
 
 export default function QrGeneratorForm() {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [qrCodeUrl, setQrCodeUrl] = React.useState<string | undefined>(undefined);
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(qrFormSchema),
   });
 
   async function onSubmit(data: FormValues) {
-    toast.loading('Generating QR code...');
+    setIsLoading(true);
 
     try {
       const response = await fetch('/api/qr-generator', {
@@ -44,18 +46,16 @@ export default function QrGeneratorForm() {
       const result = await response.json();
 
       if (response.status === 418) {
-        toast.remove();
         toast.error(result.error);
         return;
       }
 
       setQrCodeUrl(result.qrCodeUrl);
-      toast.remove();
-      toast.success('QR code generated successfully');
     } catch (error) {
-      toast.remove();
-      toast.error('Failed to generate QR code');
       console.error(error);
+      toast.error('Failed to generate QR code');
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -69,7 +69,11 @@ export default function QrGeneratorForm() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <CardContent>
-          {!qrCodeUrl ? (
+          {isLoading ? (
+            <div className="flex justify-center items-center">
+              <Spinner className="border-white h-20 w-20" />
+            </div>
+          ) : !qrCodeUrl ? (
             <div className="mb-4">
               <Label htmlFor="text" className="text-gray-300 mb-2 block">
                 Enter Text
@@ -102,19 +106,16 @@ export default function QrGeneratorForm() {
 
         <CardFooter className="flex justify-center">
           {qrCodeUrl ? (
-            <Link
-              className={cw(
-                'h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-                'bg-primary text-primary-foreground hover:bg-primary/80 disabled:bg-gray-700 disabled:cursor-not-allowed',
-              )}
-              href=""
-              onClick={() => window.location.reload()}
+            <Button
+              onClick={() => {
+                setQrCodeUrl(undefined);
+              }}
             >
               Generate Another QR Code
-            </Link>
+            </Button>
           ) : (
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Generating...' : 'Generate QR Code'}
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Generating...' : 'Generate QR Code'}
             </Button>
           )}
         </CardFooter>
