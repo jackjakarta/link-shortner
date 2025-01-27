@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { checkApiKey } from '../utils';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   try {
     const authorizationHeader = req.headers.get('authorization');

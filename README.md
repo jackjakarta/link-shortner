@@ -15,10 +15,10 @@ corepack prepare
 pnpm i # installs the dependencies
 ```
 
-You can start a local postgres instance using docker compose:
+You can start a local postgres instanceby using this command:
 
 ```sh
-docker compose up -d postgres
+pnpm dev:db
 ```
 
 You will also need to bring the database up to date by migrating it:
