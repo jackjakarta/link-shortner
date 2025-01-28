@@ -52,5 +52,20 @@ jobs:
             docker build -t ${{ secrets.DOCKER_USERNAME }}/klikr:staging . && \
             docker push ${{ secrets.DOCKER_USERNAME }}/klikr:staging
 
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    needs: build
+
+    steps:
+      - name: Build and Deploy to remote server
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/jack/link-shortner
             docker compose down && \
-            docker compose up -d
+            docker compose up -d && \
+            docker system prune -f
