@@ -12,7 +12,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-// import hotToast from 'react-hot-toast';
 import { z } from 'zod';
 
 const qrFormSchema = z.object({
