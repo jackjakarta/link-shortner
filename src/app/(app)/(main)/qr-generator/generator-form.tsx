@@ -1,5 +1,6 @@
 'use client';
 
+import { useToast } from '@/components/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -11,7 +12,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import hotToast from 'react-hot-toast';
 import { z } from 'zod';
 
 const qrFormSchema = z.object({
@@ -31,6 +32,8 @@ export default function QrGeneratorForm() {
     resolver: zodResolver(qrFormSchema),
   });
 
+  const { toast } = useToast();
+
   async function onSubmit(data: FormValues) {
     setIsLoading(true);
 
@@ -46,14 +49,19 @@ export default function QrGeneratorForm() {
       const result = await response.json();
 
       if (response.status === 418) {
-        toast.error(result.error);
+        hotToast.error(result.error);
         return;
       }
+
+      toast({
+        title: 'Success',
+        description: 'QR code generated successfully',
+      });
 
       setQrCodeUrl(result.qrCodeUrl);
     } catch (error) {
       console.error(error);
-      toast.error('Failed to generate QR code');
+      hotToast.error('Failed to generate QR code');
     } finally {
       setIsLoading(false);
     }

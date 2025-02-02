@@ -1,10 +1,16 @@
+import { Toaster } from '@/components/ui/toaster';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { type Metadata } from 'next';
-import { Toaster } from 'react-hot-toast';
+import { Barlow } from 'next/font/google';
 
 import { aeonik } from './fonts/aeonik';
 
 import './globals.css';
+
+const barlow = Barlow({
+  weight: ['400', '500'],
+  subsets: ['latin'],
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -21,16 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={aeonik.className}>
-        <Toaster
-          toastOptions={{
-            className: 'border border-[1px] rounded-none border-main-900',
-            style: {
-              borderRadius: 0,
-            },
-          }}
-        />
+      <body className={barlow.className}>
         {children}
+        <Toaster />
         <SpeedInsights />
       </body>
     </html>
