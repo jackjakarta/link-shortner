@@ -1,6 +1,7 @@
 import { Toaster } from '@/components/ui/toaster';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { type Metadata } from 'next';
+import { Toaster as OldToaster } from 'react-hot-toast';
 
 import { aeonik } from './fonts/aeonik';
 
@@ -22,6 +23,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={aeonik.className}>
+        <OldToaster
+          toastOptions={{
+            className: 'border border-[1px] rounded-none border-main-900',
+            style: {
+              borderRadius: 0,
+            },
+          }}
+        />
         {children}
         <Toaster />
         <SpeedInsights />
