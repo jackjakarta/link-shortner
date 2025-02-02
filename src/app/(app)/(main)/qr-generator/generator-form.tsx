@@ -12,7 +12,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import hotToast from 'react-hot-toast';
+// import hotToast from 'react-hot-toast';
 import { z } from 'zod';
 
 const qrFormSchema = z.object({
@@ -49,19 +49,32 @@ export default function QrGeneratorForm() {
       const result = await response.json();
 
       if (response.status === 418) {
-        hotToast.error(result.error);
+        toast({
+          title: 'Error',
+          description: result.error,
+          type: 'foreground',
+          variant: 'destructive',
+        });
+
         return;
       }
 
       toast({
         title: 'Success',
         description: 'QR code generated successfully',
+        type: 'background',
+        action: <span>Try again</span>,
       });
 
       setQrCodeUrl(result.qrCodeUrl);
     } catch (error) {
       console.error(error);
-      hotToast.error('Failed to generate QR code');
+      toast({
+        title: 'Error',
+        description: 'Error generating QR code',
+        type: 'foreground',
+        variant: 'destructive',
+      });
     } finally {
       setIsLoading(false);
     }
@@ -115,6 +128,7 @@ export default function QrGeneratorForm() {
         <CardFooter className="flex justify-center">
           {qrCodeUrl ? (
             <Button
+              type="button"
               onClick={() => {
                 setQrCodeUrl(undefined);
               }}

@@ -12,6 +12,8 @@
     "format:check": "prettier --check .",
     "lint": "next lint",
     "test": "jest --verbose",
+    "getenv:dev": "./scripts/fetch-env.sh local",
+    "getenv:prod": "./scripts/fetch-env.sh prod",
     "checks": "./scripts/checks.sh",
     "db:generate": "drizzle-kit generate --config=./src/db/drizzle.config.ts",
     "db:migrate": "dotenv -e .env tsx ./src/db/migrate.ts",

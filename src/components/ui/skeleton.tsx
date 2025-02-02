@@ -1,15 +1,7 @@
-import { cn } from "@/lib/utils"
+import { cw } from '@/utils/tailwind';
 
-function Skeleton({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cn("animate-pulse rounded-md bg-muted", className)}
-      {...props}
-    />
-  )
+function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cw('animate-pulse rounded-md bg-muted', className)} {...props} />;
 }
 
-export { Skeleton }
+export { Skeleton };
