@@ -1,5 +1,6 @@
 'use client';
 
+import { useToast } from '@/components/hooks/use-toast';
 import CopyToClipboardIcon from '@/components/icons/copy';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,10 +10,10 @@ import Spinner from '@/components/ui/spinner';
 import { env } from '@/env';
 import { urlSchema } from '@/utils/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Check } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 import { z } from 'zod';
 
 import { shortenUrl } from './actions';
@@ -33,17 +34,19 @@ export default function ShortenUrlForm() {
     resolver: zodResolver(urlFormSchema),
   });
 
+  const { toast } = useToast();
+
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isCopied, setIsCopied] = React.useState(false);
   const [shortenedUrl, setShortenedUrl] = React.useState<string | undefined>(undefined);
 
-  function handleCopy(value: string) {
-    try {
-      navigator.clipboard.writeText(value);
-      toast.success('Copied to clipboard');
-    } catch (error) {
-      toast.error('Failed to copy to clipboard');
-      console.error('Error with copying:', error);
-    }
+  function handleCopy(text: string) {
+    navigator.clipboard.writeText(text);
+    setIsCopied(true);
+
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1000);
   }
 
   function handleResetForm() {
@@ -57,10 +60,20 @@ export default function ShortenUrlForm() {
     try {
       const shortenedUrl = await shortenUrl({ url: data.url });
       setShortenedUrl(`${env.NEXT_PUBLIC_baseUrl}/${shortenedUrl.shortPath}`);
-      toast.success('URL shortened successfully');
+
+      toast({
+        title: 'Success',
+        description: 'Link generated successfully',
+        type: 'background',
+      });
     } catch (error) {
-      toast.error('Failed to shorten URL');
       console.error(error);
+      toast({
+        title: 'Error',
+        description: 'Error while generating the short link code',
+        type: 'foreground',
+        variant: 'destructive',
+      });
     } finally {
       setIsLoading(false);
     }
@@ -88,14 +101,25 @@ export default function ShortenUrlForm() {
                 readOnly
                 className="w-full bg-gray-900 text-white border-none ring-0"
               />
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => handleCopy(shortenedUrl)}
-                className="text-gray-400 hover:text-gray-300 transition-colors group"
-              >
-                <CopyToClipboardIcon className="h-5 w-5 group-hover:text-black" />
-              </Button>
+              {isCopied ? (
+                <Button
+                  disabled
+                  type="button"
+                  variant="ghost"
+                  className="text-gray-400 hover:text-gray-300 transition-colors group"
+                >
+                  <Check className="h-5 w-5 group-hover:text-black" />
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => handleCopy(shortenedUrl)}
+                  className="text-gray-400 hover:text-gray-300 transition-colors group"
+                >
+                  <CopyToClipboardIcon className="h-5 w-5 group-hover:text-black" />
+                </Button>
+              )}
             </div>
           ) : (
             <div className="mb-4">

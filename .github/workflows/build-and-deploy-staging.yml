@@ -48,8 +48,8 @@ jobs:
           script: |
             cd /home/jack/link-shortner
             git pull
-            chmod +x fetch-env.sh && ./fetch-env.sh && \
-            docker build -t ${{ secrets.DOCKER_USERNAME }}/klikr:staging . && \
+            chmod +x fetch-env.sh && ./fetch-env.sh prod && \
+            docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/klikr:staging . && \
             docker push ${{ secrets.DOCKER_USERNAME }}/klikr:staging
 
   deploy:
