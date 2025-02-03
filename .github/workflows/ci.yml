@@ -22,9 +22,6 @@ jobs:
       - name: Install PNPM
         run: corepack enable && corepack prepare
 
-      - name: Clear PNPM Cache
-        run: pnpm store prune && pnpm cache clean --force
-
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
       - name: Check formatting
