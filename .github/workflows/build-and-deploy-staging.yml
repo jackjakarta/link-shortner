@@ -20,7 +20,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Install PNPM
-        run: corepack enable && corepack prepare
+        run: npm install -g pnpm@9.15.3
 
       - name: Install dependencies
         run: pnpm install
