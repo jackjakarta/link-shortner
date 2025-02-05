@@ -1,10 +1,10 @@
-FROM node:22.4.1-slim
+FROM node:22.8.0-slim
 
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml* ./
 
-RUN corepack enable && corepack prepare && \
+RUN npm install -g pnpm@9.15.3 && \
     pnpm i
 
 COPY . .
