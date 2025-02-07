@@ -66,6 +66,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/jack/link-shortner
-            docker compose down && \
-            docker compose up -d && \
+            docker compose -f docker-compose.staging.yml down && \
+            docker compose -f docker-compose.staging.yml up -d && \
             docker system prune -f
