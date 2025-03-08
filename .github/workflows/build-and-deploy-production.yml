@@ -6,6 +6,11 @@ on:
       - '1.*.*'
 
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to deploy'
+        required: true
+        default: ''
 
 jobs:
   build:
