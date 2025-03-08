@@ -1,43 +1,23 @@
 name: Build and Deploy Production
 
 on:
-  # push:
-  #   branches: [main]
+  push:
+    tags:
+      - '1.*.*'
 
   workflow_dispatch:
 
 jobs:
-  # checks:
-  #   timeout-minutes: 15
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
-
-  #     - name: Use Node.js
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version-file: '.nvmrc'
-
-  #     - name: Install PNPM
-  #       run: npm install -g pnpm@9.15.3
-
-  #     - name: Install dependencies
-  #       run: pnpm install
-  #     - name: Check formatting
-  #       run: pnpm format:check
-  #     - name: Check types
-  #       run: pnpm types
-  #     - name: Check linter
-  #       run: pnpm lint
-  #     - name: Unit tests
-  #       run: pnpm test
-
   build:
     runs-on: ubuntu-latest
     environment: production
 
     steps:
+      - name: Set up Docker image tags
+        id: vars
+        run: |
+          echo "TAG_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+
       - name: Build and Deploy to remote server
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -48,8 +28,9 @@ jobs:
             cd /home/jack/link-shortner
             git pull
             chmod +x fetch-env.sh && ./fetch-env.sh prod && \
-            docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/klikr:production-v3 . && \
-            docker push ${{ secrets.DOCKER_USERNAME }}/klikr:production-v3
+            echo "TAG_VERSION=${{ env.TAG_VERSION }}" >> .env && \
+            docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/klikr:${{ env.TAG_VERSION }} . && \
+            docker push ${{ secrets.DOCKER_USERNAME }}/klikr:${{ env.TAG_VERSION }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -65,5 +46,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/jack/link-shortner
-            docker stack deploy -c docker-compose.production.yml klikr && \
+            docker stack deploy -c docker-compose.production.yml --env-file .env klikr && \
             docker system prune -f

@@ -1,7 +1,0 @@
-services:
-  web:
-    image: jackjakarta/klikr:staging
-    container_name: klikr-staging
-    restart: always
-    ports:
-      - '3000:3000'
