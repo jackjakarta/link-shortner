@@ -46,5 +46,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/jack/link-shortner
-            docker stack deploy -c docker-compose.production.yml --env-file .env klikr && \
+            docker stack deploy -c docker-compose.production.yml klikr && \
             docker system prune -f
