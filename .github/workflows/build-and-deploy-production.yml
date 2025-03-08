@@ -48,8 +48,8 @@ jobs:
             cd /home/jack/link-shortner
             git pull
             chmod +x fetch-env.sh && ./fetch-env.sh prod && \
-            docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/klikr:production-v2 . && \
-            docker push ${{ secrets.DOCKER_USERNAME }}/klikr:production-v2
+            docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/klikr:production-v3 . && \
+            docker push ${{ secrets.DOCKER_USERNAME }}/klikr:production-v3
 
   deploy:
     runs-on: ubuntu-latest
