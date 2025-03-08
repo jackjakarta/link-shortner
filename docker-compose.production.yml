@@ -26,11 +26,18 @@ services:
       placement:
         constraints:
           - node.role == manager
+      restart_policy:
+        condition: on-failure
 
   web:
     image: jackjakarta/klikr:production-v3
     deploy:
-      replicas: 1
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 5s
+      restart_policy:
+        condition: on-failure
       labels:
         - 'traefik.enable=true'
         - 'traefik.http.routers.fastapi-app.rule=Host(`klikr.app`)'
