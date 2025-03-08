@@ -28,7 +28,7 @@ services:
           - node.role == manager
 
   web:
-    image: jackjakarta/klikr:production
+    image: jackjakarta/klikr:production-v2
     deploy:
       replicas: 1
       labels:
