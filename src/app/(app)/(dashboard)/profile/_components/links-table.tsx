@@ -116,8 +116,11 @@ export default function LinksTable({ links }: LinksTableProps) {
                         : formatDateToDayMonthYearTime(link.createdAt)}
                   </td>
                   <td className="px-6 py-4">
-                    {link.qrCodeUrl ? (
-                      <QrModal buttonClassName="hover:text-gray-900" qrCodeUrl={link.qrCodeUrl} />
+                    {link.qrCodeS3Key ? (
+                      <QrModal
+                        buttonClassName="hover:text-gray-900"
+                        qrCodeS3Key={link.qrCodeS3Key}
+                      />
                     ) : (
                       <GenerateQrCodeButton
                         className="hover:text-gray-900"

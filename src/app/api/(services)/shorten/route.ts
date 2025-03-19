@@ -1,4 +1,5 @@
 import { dbCreateLink } from '@/db/functions/link';
+import { getSignedUrlFromS3Get } from '@/s3';
 import { urlSchema } from '@/utils/schemas';
 import { buildRouteUrl } from '@/utils/url';
 import { nanoid } from 'nanoid';
@@ -45,13 +46,17 @@ export async function POST(req: NextRequest) {
 
     const shortUrl = buildRouteUrl({ route: newLink.shortPath });
 
+    const maybeQrCodeUrl = newLink.qrCodeS3Key
+      ? await getSignedUrlFromS3Get({ key: newLink.qrCodeS3Key })
+      : undefined;
+
     return NextResponse.json(
       {
         shortUrl,
         longUrl: newLink.longUrl,
         clickCount: newLink.clickCount,
         lastClickedAt: newLink.lastClickedAt,
-        qrCodeUrl: newLink.qrCodeUrl,
+        qrCodeUrl: maybeQrCodeUrl,
         createdAt: newLink.createdAt,
       },
       { status: 201 },

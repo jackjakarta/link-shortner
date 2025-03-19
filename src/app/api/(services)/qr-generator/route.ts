@@ -1,5 +1,5 @@
 import { moderateText } from '@/openai/moderation';
-import { uploadImageToS3 } from '@/s3';
+import { getSignedUrlFromS3Get, uploadFileToS3 } from '@/s3';
 import { bufferToArrayBuffer } from '@/utils/files';
 import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
@@ -28,15 +28,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const fileName = `generated-qr-codes/${nanoid(12)}.png`;
+    const fileId = nanoid(12);
+    const s3Key = `generated-qr-codes/${fileId}.png`;
     const qrCodeBuffer = await QRCode.toBuffer(body.data.text, { type: 'png', width: 500 });
 
-    const qrCodeUrl = await uploadImageToS3({
-      fileName,
+    await uploadFileToS3({
+      key: s3Key,
       fileBuffer: bufferToArrayBuffer(qrCodeBuffer),
     });
 
-    return NextResponse.json({ qrCodeUrl }, { status: 201 });
+    const signedUrl = await getSignedUrlFromS3Get({ key: s3Key });
+
+    return NextResponse.json({ signedUrl }, { status: 201 });
   } catch (error) {
     console.error('Error uploading QR code:', error);
     return NextResponse.json({ error: 'Failed to generate QR code' }, { status: 500 });

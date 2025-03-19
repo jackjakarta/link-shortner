@@ -1,6 +1,6 @@
-import { dbGetLinkById, dbUpdateLinkQrCodeUrl } from '@/db/functions/link';
-import { uploadImageToS3 } from '@/s3';
-import { getValidSession } from '@/utils/auth';
+import { dbGetLinkById, dbUpdateLinkQrCodeS3Key } from '@/db/functions/link';
+import { uploadFileToS3 } from '@/s3';
+import { getUser } from '@/utils/auth';
 import { bufferToArrayBuffer } from '@/utils/files';
 import { urlSchema } from '@/utils/schemas';
 import { nanoid } from 'nanoid';
@@ -14,7 +14,7 @@ const urlRequestSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-  await getValidSession();
+  const user = await getUser();
 
   try {
     const body = await req.json();
@@ -24,21 +24,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: parsed.error.errors }, { status: 400 });
     }
 
-    const link = await dbGetLinkById({ linkId: parsed.data.linkId });
+    const link = await dbGetLinkById({ linkId: parsed.data.linkId, userId: user.id });
 
     if (link === undefined) {
       return NextResponse.json({ error: 'Link not found' }, { status: 404 });
     }
 
-    const fileName = `qr-codes/qrcode-${nanoid(12)}.png`;
+    const s3Key = `${user.name}/qr-codes/qrcode-${nanoid(12)}.png`;
     const qrCodeBuffer = await QRCode.toBuffer(parsed.data.url, { type: 'png', width: 500 });
 
-    const qrCodeUrl = await uploadImageToS3({
-      fileName,
+    const qrCodeS3Key = await uploadFileToS3({
+      key: s3Key,
       fileBuffer: bufferToArrayBuffer(qrCodeBuffer),
     });
 
-    await dbUpdateLinkQrCodeUrl({ linkId: link.id, qrCodeUrl });
+    await dbUpdateLinkQrCodeS3Key({ linkId: link.id, qrCodeS3Key });
 
     return NextResponse.json({ message: 'QR Code saved.' }, { status: 201 });
   } catch (error) {

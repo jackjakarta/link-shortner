@@ -6,10 +6,17 @@ import { shortLinkTable, type ShortLinkInsertRow, type ShortLinkRow } from '../s
 
 export async function dbGetLinkById({
   linkId,
+  userId,
 }: {
   linkId: string;
+  userId: string;
 }): Promise<ShortLinkRow | undefined> {
-  const link = (await db.select().from(shortLinkTable).where(eq(shortLinkTable.id, linkId)))[0];
+  const link = (
+    await db
+      .select()
+      .from(shortLinkTable)
+      .where(and(eq(shortLinkTable.id, linkId), eq(shortLinkTable.userId, userId)))
+  )[0];
 
   return link;
 }
@@ -111,18 +118,18 @@ export async function dbGetTotalClickCount({ userId }: { userId: string }): Prom
   return result[0]?.totalClickCount ?? 0;
 }
 
-export async function dbUpdateLinkQrCodeUrl({
+export async function dbUpdateLinkQrCodeS3Key({
   linkId,
-  qrCodeUrl,
+  qrCodeS3Key,
 }: {
   linkId: string;
-  qrCodeUrl: string;
+  qrCodeS3Key: string;
 }) {
   const shortLink = (
     await db
       .update(shortLinkTable)
       .set({
-        qrCodeUrl,
+        qrCodeS3Key,
       })
       .where(eq(shortLinkTable.id, linkId))
       .returning()
