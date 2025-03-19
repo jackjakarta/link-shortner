@@ -23,10 +23,12 @@ type FormValues = z.infer<typeof qrFormSchema>;
 export default function QrGeneratorForm() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [qrCodeUrl, setQrCodeUrl] = React.useState<string | undefined>(undefined);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormValues>({
     resolver: zodResolver(qrFormSchema),
   });
@@ -62,10 +64,9 @@ export default function QrGeneratorForm() {
         title: 'Success',
         description: 'QR code generated successfully',
         type: 'background',
-        action: <span>Try again</span>,
       });
 
-      setQrCodeUrl(result.qrCodeUrl);
+      setQrCodeUrl(result.signedUrl);
     } catch (error) {
       console.error(error);
       toast({
@@ -77,6 +78,12 @@ export default function QrGeneratorForm() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  function handleNewQrCode(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    setQrCodeUrl(undefined);
+    reset();
   }
 
   return (
@@ -126,12 +133,7 @@ export default function QrGeneratorForm() {
 
         <CardFooter className="flex justify-center">
           {qrCodeUrl ? (
-            <Button
-              type="button"
-              onClick={() => {
-                setQrCodeUrl(undefined);
-              }}
-            >
+            <Button type="button" onClick={handleNewQrCode}>
               Generate Another QR Code
             </Button>
           ) : (

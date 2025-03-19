@@ -8,12 +8,12 @@ import {
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
+import { type BucketName } from './types';
+
 const accessKeyId = env.awsAccessKeyId;
 const secretAccessKey = env.awsSecretAccessKey;
 const endpoint = env.awsS3EndpointUrl;
 const region = env.awsRegion;
-const bucketName = env.awsBucketName;
-const bucketUrl = env.awsBucketUrl;
 
 const s3 = new S3Client({
   forcePathStyle: true,
@@ -25,26 +25,40 @@ const s3 = new S3Client({
   },
 });
 
-export async function uploadImageToS3({
-  fileName,
+export async function uploadFileToS3({
+  key,
   fileBuffer,
+  bucketName = 'media',
+  contentType = 'image/png',
 }: {
-  fileName: string;
+  key: string;
   fileBuffer: ArrayBuffer;
+  bucketName?: BucketName;
+  contentType?: string;
 }): Promise<string> {
   const uploadCommand = new PutObjectCommand({
     Bucket: bucketName,
-    Key: fileName,
+    Key: key,
     Body: Buffer.from(fileBuffer),
-    ContentType: 'image/png',
+    ContentType: contentType,
   });
 
-  await s3.send(uploadCommand);
+  const result = await s3.send(uploadCommand);
 
-  return `${bucketUrl}/${fileName}`;
+  if (result.$metadata.httpStatusCode !== 200) {
+    throw new Error('Failed to upload file to S3');
+  }
+
+  return key;
 }
 
-export async function deleteFileFromS3({ key }: { key: string }) {
+export async function deleteFileFromS3({
+  key,
+  bucketName = 'media',
+}: {
+  key: string;
+  bucketName?: BucketName;
+}) {
   const deleteParams: DeleteObjectCommandInput = {
     Bucket: bucketName,
     Key: key,
@@ -52,9 +66,13 @@ export async function deleteFileFromS3({ key }: { key: string }) {
 
   try {
     const command = new DeleteObjectCommand(deleteParams);
-    await s3.send(command);
+    const result = await s3.send(command);
+
+    if (result.$metadata.httpStatusCode !== 200) {
+      throw new Error('Failed to upload file to S3');
+    }
   } catch (error) {
-    console.error('Error deleting file from S3:', error);
+    console.error('Error deleting file from S3:', { error });
     throw error;
   }
 }
@@ -67,7 +85,7 @@ export async function getSignedUrlFromS3Get({
   attachment = true,
 }: {
   key: string;
-  bucketName?: string;
+  bucketName?: BucketName;
   filename?: string;
   contentType?: string;
   attachment?: boolean;
@@ -85,7 +103,7 @@ export async function getSignedUrlFromS3Get({
   });
 
   try {
-    // @ts-expect-error - weird typing issue with getSignedUrl
+    // @ts-expect-error - weird typing issue with getSignedUrl s3 client type
     const signedUrl = await getSignedUrl(s3, command, { expiresIn: 3600 });
     return signedUrl;
   } catch (error) {

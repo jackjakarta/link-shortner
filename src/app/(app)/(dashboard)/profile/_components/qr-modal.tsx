@@ -1,21 +1,19 @@
 'use client';
 
 import DialogWindow from '@/components/ui/dialog';
-import { extractFileNameFromUrl } from '@/utils/url';
 import Image from 'next/image';
 import React from 'react';
 
 import { getS3SignedUrlAction } from './actions';
 
 type QrModalProps = {
-  qrCodeUrl: string;
+  qrCodeS3Key: string;
   buttonName?: string;
   buttonClassName?: React.ComponentProps<'button'>['className'];
 };
 
-export default function QrModal({ qrCodeUrl, buttonClassName, buttonName }: QrModalProps) {
-  const fileName = extractFileNameFromUrl(qrCodeUrl);
-  const key = `qr-codes/${fileName}`;
+export default function QrModal({ qrCodeS3Key, buttonClassName, buttonName }: QrModalProps) {
+  const key = qrCodeS3Key;
   console.log({ key });
   const [imageUrl, setImageUrl] = React.useState<string | null>(null);
 
@@ -25,7 +23,6 @@ export default function QrModal({ qrCodeUrl, buttonClassName, buttonName }: QrMo
     try {
       const signedUrl = await getS3SignedUrlAction({ key });
       setImageUrl(signedUrl);
-      console.log({ signedUrl });
     } catch (error) {
       console.error(error);
       setImageUrl(null);

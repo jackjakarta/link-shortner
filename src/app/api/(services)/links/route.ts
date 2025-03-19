@@ -1,4 +1,5 @@
 import { dbGetLinksByUserId } from '@/db/functions/link';
+import { getSignedUrlFromS3Get } from '@/s3';
 import { buildRouteUrl } from '@/utils/url';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -27,13 +28,15 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: 'No Links for this user' }, { status: 200 });
     }
 
-    const linksWithShortUrl = links.map((link) => {
+    const linksWithShortUrl = links.map(async (link) => {
       return {
         shortUrl: buildRouteUrl({ route: link.shortPath }),
         longUrl: link.longUrl,
         clickCount: link.clickCount,
         lastClickedAt: link.lastClickedAt,
-        qrCodeUrl: link.qrCodeUrl,
+        qrCodeUrl: link.qrCodeS3Key
+          ? await getSignedUrlFromS3Get({ key: link.qrCodeS3Key })
+          : undefined,
         createdAt: link.createdAt,
       };
     });
