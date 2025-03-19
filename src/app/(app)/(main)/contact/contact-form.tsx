@@ -35,7 +35,7 @@ export default function ContactForm() {
 
     try {
       // TODO: Send the message to the server
-      console.log(data);
+      console.log({ data });
       toast.remove();
       toast.success('Message sent successfully!');
     } catch (error) {

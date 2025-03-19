@@ -14,7 +14,6 @@ type QrModalProps = {
 
 export default function QrModal({ qrCodeS3Key, buttonClassName, buttonName }: QrModalProps) {
   const key = qrCodeS3Key;
-  console.log({ key });
   const [imageUrl, setImageUrl] = React.useState<string | null>(null);
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
