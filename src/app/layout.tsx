@@ -1,5 +1,4 @@
 import { Toaster } from '@/components/ui/toaster';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import { type Metadata } from 'next';
 import { Toaster as OldToaster } from 'react-hot-toast';
 
@@ -33,7 +32,6 @@ export default function RootLayout({
         />
         {children}
         <Toaster />
-        <SpeedInsights />
       </body>
     </html>
   );
