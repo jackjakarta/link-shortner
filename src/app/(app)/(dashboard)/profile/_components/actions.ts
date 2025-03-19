@@ -3,7 +3,7 @@
 import { dbDeleteLink, dbGetLinkById } from '@/db/functions/link';
 import { dbDeleteUser } from '@/db/functions/user';
 import { sendUserActionInformationEmail } from '@/email/send';
-import { deleteFileFromS3 } from '@/s3';
+import { deleteFileFromS3, getSignedUrlFromS3Get } from '@/s3';
 import { getUser } from '@/utils/auth';
 import { devMode } from '@/utils/constants';
 import { extractFileNameFromUrl } from '@/utils/url';
@@ -33,4 +33,10 @@ export async function deleteAccount() {
   }
 
   await dbDeleteUser({ userId: user.id, userEmail: user.email });
+}
+
+export async function getS3SignedUrlAction({ key }: { key: string }) {
+  const signedUrl = await getSignedUrlFromS3Get({ key });
+
+  return signedUrl;
 }
