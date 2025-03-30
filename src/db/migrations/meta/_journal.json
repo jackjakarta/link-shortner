@@ -15,6 +15,13 @@
       "when": 1742419515227,
       "tag": "0001_wakeful_randall",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1743360822808,
+      "tag": "0002_legal_namorita",
+      "breakpoints": true
     }
   ]
 }

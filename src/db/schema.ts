@@ -60,6 +60,33 @@ export const shortLinkTable = pgTable('short_link', {
 export type ShortLinkRow = typeof shortLinkTable.$inferSelect;
 export type ShortLinkInsertRow = typeof shortLinkTable.$inferInsert;
 
+export const shortLinkSourceSchema = z.enum([
+  'email',
+  'discord',
+  'github',
+  'twitter',
+  'reddit',
+  'linkedin',
+  'facebook',
+  'other',
+]);
+export const shortLinkSourcePgEnum = pgEnum('short_link_source', shortLinkSourceSchema.options);
+export type ShortLinkSource = z.infer<typeof shortLinkSourceSchema>;
+
+export const shortLinkClickTable = pgTable('short_link_click', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  shortLinkId: uuid('short_link_id')
+    .references(() => shortLinkTable.id)
+    .notNull(),
+  source: shortLinkSourcePgEnum('source').notNull(),
+  // userAgent: text('user_agent'),
+  // ipAddress: text('ip_address'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export type ShortLinkClickRow = typeof shortLinkClickTable.$inferSelect;
+export type ShortLinkClickInsertRow = typeof shortLinkClickTable.$inferInsert;
+
 export const tokenActionSchema = z.enum(['verify-email', 'reset-password']);
 export const tokenActionPgEnum = pgEnum('token_action', tokenActionSchema.options);
 export type TokenAction = z.infer<typeof tokenActionSchema>;

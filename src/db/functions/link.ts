@@ -2,7 +2,14 @@ import { and, desc, eq, sql } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 
 import { db } from '..';
-import { shortLinkTable, type ShortLinkInsertRow, type ShortLinkRow } from '../schema';
+import {
+  shortLinkClickTable,
+  shortLinkTable,
+  type ShortLinkClickInsertRow,
+  type ShortLinkClickRow,
+  type ShortLinkInsertRow,
+  type ShortLinkRow,
+} from '../schema';
 
 export async function dbGetLinkById({
   linkId,
@@ -142,4 +149,10 @@ export async function dbDeleteLink({ linkId, userId }: { linkId: string; userId:
   await db
     .delete(shortLinkTable)
     .where(and(eq(shortLinkTable.id, linkId), eq(shortLinkTable.userId, userId)));
+}
+
+export async function dbCreateLinkClick(data: ShortLinkClickInsertRow) {
+  const click = (await db.insert(shortLinkClickTable).values(data).returning())[0];
+
+  return click;
 }
