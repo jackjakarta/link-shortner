@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 127.0.0.1",
-    "dev:db": "./dev/start-dev-db.sh",
+    "dev:db": "chmod +x $(git rev-parse --show-toplevel)/dev/start-dev-db.sh && $(git rev-parse --show-toplevel)/dev/start-dev-db.sh",
     "build": "next build",
     "start": "next start",
     "format": "prettier --write .",
@@ -12,9 +12,9 @@
     "format:check": "prettier --check .",
     "lint": "next lint",
     "test": "jest --verbose",
-    "getenv:dev": "./scripts/fetch-env.sh local",
-    "getenv:prod": "./scripts/fetch-env.sh prod",
-    "checks": "./scripts/checks.sh",
+    "getenv:dev": "chmod +x $(git rev-parse --show-toplevel)/scripts/fetch-env.sh && $(git rev-parse --show-toplevel)/scripts/fetch-env.sh local",
+    "getenv:prod": "chmod +x $(git rev-parse --show-toplevel)/scripts/fetch-env.sh && $(git rev-parse --show-toplevel)/scripts/fetch-env.sh prod",
+    "checks": "chmod +x $(git rev-parse --show-toplevel)/scripts/checks.sh && $(git rev-parse --show-toplevel)/scripts/checks.sh",
     "db:generate": "drizzle-kit generate --config=./src/db/drizzle.config.ts",
     "db:migrate": "dotenv -e .env tsx ./src/db/migrate.ts",
     "db:introspect": "dotenv -e .env -- drizzle-kit studio --config=src/db/drizzle.config.ts"
