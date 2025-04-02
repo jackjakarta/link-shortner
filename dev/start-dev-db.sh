@@ -1,6 +1,6 @@
 #!/bin/sh
 
-COMPOSE_FILE="./dev/docker-compose-dev.yml"
+COMPOSE_FILE="./dev/docker-compose.dev.yml"
 
 # Check if the Docker Compose stack is running
 if docker compose -f $COMPOSE_FILE ps | grep -q "Up"; then
