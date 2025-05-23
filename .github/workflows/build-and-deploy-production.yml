@@ -1,9 +1,9 @@
 name: Build and Deploy Production
 
 on:
-  push:
-    tags:
-      - '1.*.*'
+  # push:
+  #   tags:
+  #     - '1.*.*'
 
   workflow_dispatch:
     inputs:
